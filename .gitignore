@@ -1,10 +1,9 @@
 *.o
 *.o.d
 *make*
-./script/*
-./bin/
-./.vscode/
-./program
-./**/flex-scanner.c
-./**/bison-parser.c
-./**/bison-parser.h
+bin/
+.vscode/
+program
+**/flex-scanner.c
+**/bison-parser.c
+**/bison-parser.h
