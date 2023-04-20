@@ -47,6 +47,13 @@ whitespace		[ \f\n\r\t\v]
 {digit}+									{ return IntegerPatternAction(yytext, yyleng); }
 
 {whitespace}								{ IgnoredPatternAction(yytext, yyleng); }
+[+-]?({digit}+([.]{digit}*)?|[.]{digit}+)   { return FloatPatternAction(yytext, yyleng); }
+
+"true"|"false"                              { return BooleanPatternAction(yytext); }
+
+"top"|"bottom"|"left"|"right"|"north"|"south"|"east"|"west"             { return DirectionPatternAction(yytext); }
+
+[#[0-9A-F]{6}]|"red"|"green"|"blue"|"magenta"|"cyan"|"yellow"|"black"|"white"|"gray"|"dark_gray"|"light_gray"|"orange"|"pink" { return ColorPatternAction(yytext);}
 
 .											{ return UnknownPatternAction(yytext, yyleng); }
 
