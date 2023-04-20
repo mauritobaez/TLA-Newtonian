@@ -2,3 +2,6 @@ CMakeCache.txt
 *.o
 *.o.d
 *make*
+./script/*
+./bin/CMakeFiles/*
+./bin/CMakeCache.txt
