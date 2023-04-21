@@ -20,7 +20,12 @@
 digit			[0-9]
 endline			[\n]
 whitespace		[ \f\n\r\t\v]
-
+color           [red|blue|black|green|purple|yellow|orange]
+anchor          [top|bottom|left-side|right-side|center]
+direction_rel   [up|down|left|right]
+direction_abs   [north|south|east|west]
+string          [\"(\\.|[^\"])*\"]
+number          [\-?[0-9]*\.[0-9]*]
 %%
 
 "/*"										{ BEGIN(COMMENT); BeginCommentPatternAction(); }
@@ -28,18 +33,37 @@ whitespace		[ \f\n\r\t\v]
 <COMMENT>{endline}							{ ; }
 <COMMENT>"*/"								{ EndCommentPatternAction(); BEGIN(INITIAL); }
 
-"+"											{ return AdditionOperatorPatternAction(yytext); }
-"-"											{ return SubtractionOperatorPatternAction(yytext); }
-"*"											{ return MultiplicationOperatorPatternAction(yytext); }
-"/"											{ return DivisionOperatorPatternAction(yytext); }
-
 "{"                                         { return OpenBracketAction(yytext); }
 "}"                                         { return CloseBracketAction(yytext); }
 ","                                         { return CommaAction(yytext); }
 "Row"                                       { return RowAction(yytext); }
 "Column"                                    { return ColumnAction(yytext); }
 ":"                                         { return SemicolonAction(yytext); }
-""
+"Arrow"                                     { return ArrowAction(yytext); }
+"Spring"
+"Rope"
+"position"                                  { return PositionAction(yytext); }
+"friction"                                  { return FrictionAction(yytext); }
+"color"                                     { return ColorAction(yytext); }
+"label"                                     { return LabelAction(yytext); }
+"top"                                       { return}
+"bottom"                                    { return}
+"left"                                      { return}
+"right"                                     { return}
+"center"                                    { return}
+"direction"                                 { return DirectionAction(yytext); }
+"angle"                                     { return AngleAction(yytext); }
+"angle-label"                               { return AngleLabelAction(yytext); }
+"HorizontalPlane"                           { return HorizontalPlaneAction(yytext); }
+"VerticalPlane"                             { return VerticalPlane(yytext); }
+"Block"                                     { return BlockAction(yytext); }
+"width"                                     { return WidthAction(yytext); }
+"length"                                    { return LengthAction(yytext); }
+"reverse-arrow"                             { return BallAction(yytext);}
+"Spacer"                                    { return SpacerAction(yytext); }
+"Ball"                                      { return ReverseArrowAction(yytext); }
+"radius"                                    { return RadiusAction(yytext); }
+{color}                                     { return ColorAction(yytext); }
 
 "("											{ return OpenParenthesisPatternAction(yytext); }
 ")"											{ return CloseParenthesisPatternAction(yytext); }
