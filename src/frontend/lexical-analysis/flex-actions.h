@@ -3,7 +3,9 @@
 
 #include "../../backend/support/shared.h"
 #include "../syntactic-analysis/bison-parser.h"
+#include "../newtonian-types.h"
 #include <stdlib.h>
+#include <string.h>
 
 /**
  * Se definen las acciones a ejecutar sobre cada patrón hallado mediante el
@@ -43,14 +45,23 @@ token CommaAction(const char * lexeme);
 // Function for Semicolon
 token SemicolonAction(const char * lexeme);
 
-// Function for AlignmentKey
-token AlignmentKeyAction(const char * lexeme);
+// Function for RowKey
+token RowKeyAction(const char * lexeme);
 
-// Function for PlaneKey
-token PlaneKeyAction(const char * lexeme);
+// Function for ColumnKey
+token ColumnKeyAction(const char * lexeme);
+
+// Function for HorizontalPlaneKey
+token HorizontalPlaneKeyAction(const char * lexeme);
+
+// Function for VerticalPlaneKey
+token VerticalPlaneKeyAction(const char * lexeme);
 
 // Function for BlockKey
 token BlockKeyAction(const char * lexeme);
+
+// Function for CarKey
+token CarKeyAction(const char * lexeme);
 
 // Function for BallKey
 token BallKeyAction(const char * lexeme);
@@ -58,8 +69,11 @@ token BallKeyAction(const char * lexeme);
 // Function for ArrowKey
 token ArrowKeyAction(const char * lexeme);
 
-// Function for SpringRopeKey
-token SpringRopeKeyAction(const char * lexeme);
+// Function for SpringKey
+token SpringKeyAction(const char * lexeme);
+
+// Function for RopeKey
+token RopeKeyAction(const char * lexeme);
 
 // Function for SpacerKey
 token SpacerKeyAction(const char * lexeme);
@@ -106,26 +120,26 @@ token RadiusKeyAction(const char * lexeme);
 // Function for VisibleKey
 token VisibleKeyAction(const char * lexeme);
 
-//Function for Color
-token ColorAction(const char *lexeme);
+//Function for Custom Color
+token CustomColorAction(const char *lexeme);
+
+//Function for Default Color
+token DefaultColorAction(const char *lexeme, const char r_val, const char g_val, const char b_val);
 
 //Function for String
 token StringAction(const char *lexeme);
 
 //Function for Anchor
-token AnchorAction(const char *lexeme);
+token AnchorAction(const char *lexeme, const anchor_t anchor);
 
 //Function for Number Pattern
 token NumberAction(const char *lexeme, const int length);
 
 // Function for BooleanPattern
-token BooleanPatternAction(const char * lexeme);
+token BooleanAction(const char * lexeme, const bool_t boolean);
 
-// Function for AbsoluteDirection
-token AbsoluteDirectionAction(const char * lexeme);
-
-// Function for RelativeDirection
-token RelativeDirectionAction(const char * lexeme);
+// Function for Direction
+token DirectionAction(const char * lexeme, const direction_t direction);
 
 token UnknownPatternAction(const char * lexeme, const int length);
 

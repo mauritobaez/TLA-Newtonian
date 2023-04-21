@@ -4,6 +4,10 @@
 
 %}
 
+%code requires {
+	#include "../newtonian-types.h"
+}
+
 // Tipos de dato utilizados en las variables semánticas ($$, $1, $2, etc.).
 %union {
 	// No-terminales (backend).
@@ -23,52 +27,55 @@
 
 	// Terminales.
 	token token;
-	int integer;
 	float number;
+	anchor_t anchor;
+	direction_t direction;
+	color_t color;
+	bool_t boolean;
+	char* string;
 }
-
 // IDs y tipos de los tokens terminales generados desde Flex.
 
 %token <token> OPEN_BRACKET
 %token <token> CLOSE_BRACKET
-%token <token> COMMA
-%token <token> ALIGNMENT_KEY
-%token <token> SPRING_ROPE_KEY
-%token <token> ARROW_KEY
-%token <token> BALL_KEY
-%token <token> BLOCK_KEY
-%token <token> PLANE_KEY
-%token <token> FRICTION
-%token <token> POSITION
-%token <token> COLOR
-%token <token> LABEL
-%token <token> SEMICOLON
-%token <token> ANCHOR_A
-%token <token> ARROW
-%token <token> DIRECTION
-%token <token> CENTER
-%token <token> ANGLE
-%token <token> HORIZONTAL_PLANE
-%token <token> VERTICAL_PLANE
-%token <token> ANGLE_LABEL
-%token <token> ROPE
-%token <token> SPRING
-%token <token> BLOCK
-%token <token> HEIGHT
-%token <token> WIDTH
-%token <token> LENGTH
-%token <token> BALL
-%token <token> SPACER
-%token <token> REVERSE_ARROW
-%token <token> RADIUS
-%token <token> FLOAT
-%token <token> VISIBLE_KEY
-
 %token <token> OPEN_PARENTHESIS
 %token <token> CLOSE_PARENTHESIS
+%token <token> COMMA
+%token <token> SEMICOLON
+%token <token> ROW_KEY
+%token <token> COLUMN_KEY
+%token <token> HORIZONTAL_PLANE_KEY
+%token <token> VERTICAL_PLANE_KEY
+%token <token> BLOCK_KEY
+%token <token> CAR_KEY
+%token <token> BALL_KEY
+%token <token> ARROW_KEY
+%token <token> SPRING_KEY
+%token <token> ROPE_KEY
+%token <token> SPACER_KEY
+%token <token> POSITION_KEY
+%token <token> FRICTION_KEY
+%token <token> COLOR_KEY
+%token <token> LABEL_KEY
+%token <token> DIRECTION_KEY
+%token <token> ANGLE_KEY
+%token <token> ANGLE_LABEL_KEY
+%token <token> HEIGHT_KEY
+%token <token> WIDTH_KEY
+%token <token> LENGTH_KEY
+%token <token> REVERSE_ARROW_KEY
+%token <token> DOUBLE_ARROW_KEY
+%token <token> RADIUS_KEY
+%token <token> VISIBLE_KEY
+%token <token> YYUNDEF
 
-
-%token <integer> INTEGER
+%token <color> COLOR
+%token <string> STRING 
+%token <anchor> ANCHOR 
+%token <number> NUMBER 
+%token <boolean> BOOLEAN 
+%token <direction> DIRECTION_REL
+%token <direction> DIRECTION_ABS
 
 // Tipos de dato para los no-terminales generados desde Bison.
 %type <program> program
@@ -99,7 +106,7 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactor
 	| constant														{ $$ = ConstantFactorGrammarAction($1); }
 	;
 
-constant: INTEGER													{ $$ = IntegerConstantGrammarAction($1); }
+constant: NUMBER													{ $$ = IntegerConstantGrammarAction($1); }
 	;
 
 %%
