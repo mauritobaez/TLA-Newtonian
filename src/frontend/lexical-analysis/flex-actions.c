@@ -1,6 +1,6 @@
 #include "../../backend/support/logger.h"
 #include "flex-actions.h"
-#include <stdlib.h>
+
 
 /**
  * Implementación de "flex-actions.h".
@@ -26,11 +26,19 @@ void EndCommentPatternAction() {
 	LogDebug("EndCommentPatternAction.");
 }
 
-// empieza chatGPT
+// Function for OpenBracket
+token OpenBracketAction(const char * lexeme) {
+    LogDebug("OpenBracketAction: '%s'.", lexeme);
+    yylval.token = OPEN_BRACKET;
+    return OPEN_BRACKET;
+}
 
-
-
-
+// Function for CloseBracket
+token CloseBracketAction(const char * lexeme) {
+    LogDebug("CloseBracketAction: '%s'.", lexeme);
+    yylval.token = CLOSE_BRACKET;
+    return CLOSE_BRACKET;
+}
 
 // Function for OpenParenthesis
 token OpenParenthesisAction(const char * lexeme) {
@@ -46,95 +54,11 @@ token CloseParenthesisAction(const char * lexeme) {
     return CLOSE_PARENTHESIS;
 }
 
-// Function for OpenBracket
-token OpenBracketAction(const char * lexeme) {
-    LogDebug("OpenBracketAction: '%s'.", lexeme);
-    yylval.token = OPEN_BRACKET;
-    return OPEN_BRACKET;
-}
-
-// Function for CloseBracket
-token CloseBracketAction(const char * lexeme) {
-    LogDebug("CloseBracketAction: '%s'.", lexeme);
-    yylval.token = CLOSE_BRACKET;
-    return CLOSE_BR
-}
-
 // Function for Comma
 token CommaAction(const char * lexeme) {
     LogDebug("CommaAction: '%s'.", lexeme);
     yylval.token = COMMA;
     return COMMA;
-}
-
-// Function for Row
-token RowAction(const char * lexeme) {
-    LogDebug("RowAction: '%s'.", lexeme);
-    yylval.token = ROW;
-    return ROW;
-}
-
-// Function for Column
-token ColumnAction(const char * lexeme) {
-    LogDebug("ColumnAction: '%s'.", lexeme);
-    yylval.token = COLUMN;
-    return COLUMN;
-}
-
-// Function for Friction
-token FrictionAction(const char * lexeme) {
-    LogDebug("FrictionAction: '%s'.", lexeme);
-    yylval.token = FRICTION;
-    return FRICTION;
-}
-
-// Function for Position
-token PositionAction(const char * lexeme) {
-    LogDebug("PositionAction: '%s'.", lexeme);
-    yylval.token = POSITION;
-    return POSITION;
-}
-
-// Function for Color
-token ColorAction(const char * lexeme) {
-    LogDebug("ColorAction: '%s'.", lexeme);
-    yylval.token = COLOR;
-    return COLOR;
-}
-
-// Function for Label
-token LabelAction(const char * lexeme) {
-    LogDebug("LabelAction: '%s'.", lexeme);
-    yylval.token = LABEL;
-    return LABEL;
-}
-
-// Function for top
-token TopAction(const char * lexeme) {
-    LogDebug("TopAction: '%s'.", lexeme);
-    yylval.token = TOP;
-    return TOP;
-}
-
-// Function for bottom
-token BottomAction(const char * lexeme) {
-    LogDebug("BottomAction: '%s'.", lexeme);
-    yylval.token = BOTTOM;
-    return BOTTOM;
-}
-
-// Function for left
-token LeftAction(const char * lexeme) {
-    LogDebug("LeftAction: '%s'.", lexeme);
-    yylval.token = LEFT;
-    return LEFT;
-}
-
-// Function for right
-token RightAction(const char * lexeme) {
-    LogDebug("RightAction: '%s'.", lexeme);
-    yylval.token = RIGHT;
-    return RIGHT;
 }
 
 // Function for Semicolon
@@ -144,133 +68,197 @@ token SemicolonAction(const char * lexeme) {
     return SEMICOLON;
 }
 
-// Function for AnchorA
-token AnchorAAction(const char * lexeme) {
-    LogDebug("AnchorAAction: '%s'.", lexeme);
-    yylval.token = ANCHOR_A;
-    return ANCHOR_A;
+// Function for AlignmentKey
+token AlignmentKeyAction(const char * lexeme) {
+    LogDebug("AlignmentKeyAction: '%s'.", lexeme);
+    yylval.token = ALIGNMENT_KEY;
+    return ALIGNMENT_KEY;
 }
 
-// Function for Arrow0
-token ArrowAction(const char * lexeme) {
-    LogDebug("Arrow0Action: '%s'.", lexeme);
-    yylval.token = ARROW_0;
-    return ARROW_0;
+// Function for PlaneKey
+token PlaneKeyAction(const char * lexeme) {
+    LogDebug("PlaneKeyAction: '%s'.", lexeme);
+    yylval.token = PLANE_KEY;
+    return PLANE_KEY;
 }
 
-// Function for Direction
-token DirectionAction(const char * lexeme) {
-    LogDebug("DirectionAction: '%s'.", lexeme);
-    yylval.token = DIRECTION;
-    return DIRECTION;
+// Function for BlockKey
+token BlockKeyAction(const char * lexeme) {
+    LogDebug("BlockKeyAction: '%s'.", lexeme);
+    yylval.token = BLOCK_KEY;
+    return BLOCK_KEY;
 }
 
-// Function for center
-token CenterAction(const char * lexeme) {
-    LogDebug("CenterAction: '%s'.", lexeme);
-    yylval.token = CENTER;
-    return CENTER;
+// Function for BallKey
+token BallKeyAction(const char * lexeme) {
+    LogDebug("BallKeyAction: '%s'.", lexeme);
+    yylval.token = BALL_KEY;
+    return BALL_KEY;
 }
 
-// Function for Angle
-token AngleAction(const char * lexeme) {
-    LogDebug("AngleAction: '%s'.", lexeme);
-    yylval.token = ANGLE;
-    return ANGLE;
+// Function for ArrowKey
+token ArrowKeyAction(const char * lexeme) {
+    LogDebug("ArrowKeyAction: '%s'.", lexeme);
+    yylval.token = ARROW_KEY;
+    return ARROW_KEY;
 }
 
-// Function for HorizontalPlane
-token HorizontalPlaneAction(const char * lexeme) {
-    LogDebug("HorizontalPlaneAction: '%s'.", lexeme);
-    yylval.token = HORIZONTAL_PLANE;
-    return HORIZONTAL_PLANE;
+// Function for SpringRopeKey
+token SpringRopeKeyAction(const char * lexeme) {
+    LogDebug("SpringRopeKeyAction: '%s'.", lexeme);
+    yylval.token = SPRING_ROPE_KEY;
+    return SPRING_ROPE_KEY;
 }
 
-// Function for VerticalPlane
-token VerticalPlaneAction(const char * lexeme) {
-    LogDebug("VerticalPlaneAction: '%s'.", lexeme);
-    yylval.token = VERTICAL_PLANE;
-    return VERTICAL_PLANE;
+// Function for SpacerKey
+token SpacerKeyAction(const char * lexeme) {
+    LogDebug("SpacerKeyAction: '%s'.", lexeme);
+    yylval.token = SPACER_KEY;
+    return SPACER_KEY;
 }
 
-// Function for Angle-label
-token AngleLabelAction(const char * lexeme) {
-    LogDebug("AngleLabelAction: '%s'.", lexeme);
-    yylval.token = ANGLE_LABEL;
-    return ANGLE_LABEL;
+// Function for PositionKey
+token PositionKeyAction(const char * lexeme) {
+    LogDebug("PositionKeyAction: '%s'.", lexeme);
+    yylval.token = POSITION_KEY;
+    return POSITION_KEY;
 }
 
-// Function for RopeVG0
-token RopeAction(const char * lexeme) {
-    LogDebug("RopeVG0Action: '%s'.", lexeme);
-    yylval.token = ROPE_VG_0;
-    return ROPE_VG_0;
+// Function for FrictionKey
+token FrictionKeyAction(const char * lexeme) {
+    LogDebug("FrictionKeyAction: '%s'.", lexeme);
+    yylval.token = FRICTION_KEY;
+    return FRICTION_KEY;
 }
 
-// Function for SpringVG0
-token SpringAction(const char * lexeme) {
-    LogDebug("SpringVG0Action: '%s'.", lexeme);
-    yylval.token = SPRING_VG_0;
-    return SPRING_VG_0;
+// Function for ColorKey
+token ColorKeyAction(const char * lexeme) {
+    LogDebug("ColorKeyAction: '%s'.", lexeme);
+    yylval.token = COLOR_KEY;
+    return COLOR_KEY;
 }
 
-// Function for Block
-token BlockAction(const char * lexeme) {
-    LogDebug("BlockAction: '%s'.", lexeme);
-    yylval.token = BLOCK;
-    return BLOCK;
+// Function for LabelKey
+token LabelKeyAction(const char * lexeme) {
+    LogDebug("LabelKeyAction: '%s'.", lexeme);
+    yylval.token = LABEL_KEY;
+    return LABEL_KEY;
 }
 
-// Function for width
-token WidthAction(const char * lexeme) {
-    LogDebug("WidthAction: '%s'.", lexeme);
-    yylval.token = WIDTH;
-    return WIDTH;
+// Function for DirectionKey
+token DirectionKeyAction(const char * lexeme) {
+    LogDebug("DirectionKeyAction: '%s'.", lexeme);
+    yylval.token = DIRECTION_KEY;
+    return DIRECTION_KEY;
 }
 
-// Function for length
-token LengthAction(const char * lexeme) {
-    LogDebug("LengthAction: '%s'.", lexeme);
-    yylval.token = LENGTH;
-    return LENGTH;
+// Function for AngleKey
+token AngleKeyAction(const char * lexeme) {
+    LogDebug("AngleKeyAction: '%s'.", lexeme);
+    yylval.token = ANGLE_KEY;
+    return ANGLE_KEY;
 }
 
-// Function for Ball
-token BallAction(const char * lexeme) {
-    LogDebug("BallAction: '%s'.", lexeme);
-    yylval.token = BALL;
-    return BALL;
+// Function for AngleLabelKey
+token AngleLabelKeyAction(const char * lexeme) {
+    LogDebug("AngleLabelKeyAction: '%s'.", lexeme);
+    yylval.token = ANGLE_LABEL_KEY;
+    return ANGLE_LABEL_KEY;
 }
 
-// Function for spacer
-token SpacerAction(const char * lexeme) {
-    LogDebug("SpacerAction: '%s'.", lexeme);
-    yylval.token = SPACER;
-    return SPACER;
+// Function for HeightKey
+token HeightKeyAction(const char * lexeme) {
+    LogDebug("HeightKeyAction: '%s'.", lexeme);
+    yylval.token = HEIGHT_KEY;
+    return HEIGHT_KEY;
 }
 
-// Function for reverse-arrow
-token ReverseArrowAction(const char * lexeme) {
-    LogDebug("ReverseArrowAction: '%s'.", lexeme);
-    yylval.token = REVERSE_ARROW;
-    return REVERSE_ARROW;
+// Function for WidthKey
+token WidthKeyAction(const char * lexeme) {
+    LogDebug("WidthKeyAction: '%s'.", lexeme);
+    yylval.token = WIDTH_KEY;
+    return WIDTH_KEY;
 }
 
-// Function for radius
-token RadiusAction(const char * lexeme) {
-    LogDebug("RadiusAction: '%s'.", lexeme);
-    yylval.token = RADIUS;
-    return RADIUS;
+// Function for LengthKey
+token LengthKeyAction(const char * lexeme) {
+    LogDebug("LengthKeyAction: '%s'.", lexeme);
+    yylval.token = LENGTH_KEY;
+    return LENGTH_KEY;
 }
 
-// Function for color
-token ColorAction(const char * lexeme) {
-    LogDebug("ColorAction: '%s'.", lexeme);
-    yylval.token = COLOR;
-    return COLOR;
+// Function for reverseArrowKey
+token ReverseArrowKeyAction(const char * lexeme) {
+    LogDebug("ReverseArrowKeyAction: '%s'.", lexeme);
+    yylval.token = REVERSE_ARROW_KEY;
+    return REVERSE_ARROW_KEY;
 }
 
-//Termina chatGPT
+// Function for reverseArrowKey
+token DoubleArrowKeyAction(const char * lexeme) {
+    LogDebug("DoubleArrowKeyAction: '%s'.", lexeme);
+    yylval.token = DOUBLE_ARROW_KEY;
+    return DOUBLE_ARROW_KEY;
+}
+
+// Function for radiusKey
+token RadiusKeyAction(const char * lexeme) {
+    LogDebug("RadiusKeyAction: '%s'.", lexeme);
+    yylval.token = RADIUS_KEY;
+    return RADIUS_KEY;
+}
+
+// Function for VisibleKey
+token VisibleKeyAction(const char * lexeme) {
+    LogDebug("VisibleKeyAction: '%s'.", lexeme);
+    yylval.token = VISIBLE_KEY;
+    return VISIBLE_KEY;
+}
+
+
+//Function for Color
+token ColorAction(const char *lexeme){
+    LogDebug("ColorPatternAction: '%s'",lexeme);
+    /*TODO*/
+}
+
+//Function for String
+token StringAction(const char *lexeme){
+    LogDebug("StringPatternAction: '%s'",lexeme);
+    /*TODO*/
+}
+
+//Function for Anchor
+token AnchorAction(const char *lexeme){
+    LogDebug("AnchorPatternAction: '%s'",lexeme);
+    /*TODO*/
+}
+
+//Function for Number Pattern
+token NumberAction(const char *lexeme, const int length){
+    LogDebug("NumberPatternAction: '%s' (length = %d).",lexeme,length);
+    char *end; /*TODO: Ver si funciona*/
+    yylval.number = strtof(lexeme , &end);
+    return FLOAT;
+}
+
+// Function for BooleanPattern
+token BooleanPatternAction(const char * lexeme) {
+    LogDebug("BooleanPatternAction: '%s'.", lexeme);
+    /*TODO*/
+}
+
+// Function for AbsoluteDirection
+token AbsoluteDirectionAction(const char * lexeme) {
+    LogDebug("AbsoluteDirectionAction: '%s'.", lexeme);
+    /*TODO*/
+}
+
+// Function for RelativeDirection
+token RelativeDirectionAction(const char * lexeme) {
+    LogDebug("RelativeDirectionAction: '%s'.", lexeme);
+    /*TODO*/
+}
 
 token UnknownPatternAction(const char * lexeme, const int length) {
 	LogDebug("UnknownPatternAction: '%s' (length = %d).", lexeme, length);

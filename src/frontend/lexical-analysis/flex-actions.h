@@ -3,6 +3,7 @@
 
 #include "../../backend/support/shared.h"
 #include "../syntactic-analysis/bison-parser.h"
+#include <stdlib.h>
 
 /**
  * Se definen las acciones a ejecutar sobre cada patrón hallado mediante el
@@ -21,27 +22,113 @@
 
 // Bloque de comentarios multilínea.
 void BeginCommentPatternAction();
+
 void EndCommentPatternAction();
 
-// Patrones terminales del lenguaje diseñado.
-token AdditionOperatorPatternAction(const char *lexeme);
-token CloseParenthesisPatternAction(const char *lexeme);
-token DivisionOperatorPatternAction(const char *lexeme);
-token IntegerPatternAction(const char *lexeme, const int length);
-token MultiplicationOperatorPatternAction(const char *lexeme);
-token OpenParenthesisPatternAction(const char *lexeme);
-token SubtractionOperatorPatternAction(const char *lexeme);
+// Function for OpenBracket
+token OpenBracketAction(const char * lexeme);
 
-token FloatPatternAction(const char *lexeme, const int length);
+// Function for CloseBracket
+token CloseBracketAction(const char * lexeme);
 
-token BooleanPatternAction(const char *lexeme);
+// Function for OpenParenthesis
+token OpenParenthesisAction(const char * lexeme);
 
-token DirectionPatternAction(const char *lexeme);
+// Function for CloseParenthesis
+token CloseParenthesisAction(const char * lexeme);
 
-// Patrón desconocido, permite abortar debido a un error de sintaxis.
-token UnknownPatternAction(const char *lexeme, const int length);
+// Function for Comma
+token CommaAction(const char * lexeme);
 
-// Regla que no hace nada, permite ignorar parte de la entrada.
-void IgnoredPatternAction(const char *lexeme, const int length);
+// Function for Semicolon
+token SemicolonAction(const char * lexeme);
+
+// Function for AlignmentKey
+token AlignmentKeyAction(const char * lexeme);
+
+// Function for PlaneKey
+token PlaneKeyAction(const char * lexeme);
+
+// Function for BlockKey
+token BlockKeyAction(const char * lexeme);
+
+// Function for BallKey
+token BallKeyAction(const char * lexeme);
+
+// Function for ArrowKey
+token ArrowKeyAction(const char * lexeme);
+
+// Function for SpringRopeKey
+token SpringRopeKeyAction(const char * lexeme);
+
+// Function for SpacerKey
+token SpacerKeyAction(const char * lexeme);
+
+// Function for PositionKey
+token PositionKeyAction(const char * lexeme);
+
+// Function for FrictionKey
+token FrictionKeyAction(const char * lexeme);
+
+// Function for ColorKey
+token ColorKeyAction(const char * lexeme);
+
+// Function for LabelKey
+token LabelKeyAction(const char * lexeme);
+
+// Function for DirectionKey
+token DirectionKeyAction(const char * lexeme);
+
+// Function for AngleKey
+token AngleKeyAction(const char * lexeme);
+
+// Function for AngleLabelKey
+token AngleLabelKeyAction(const char * lexeme);
+
+// Function for HeightKey
+token HeightKeyAction(const char * lexeme);
+
+// Function for WidthKey
+token WidthKeyAction(const char * lexeme);
+
+// Function for LengthKey
+token LengthKeyAction(const char * lexeme);
+
+// Function for reverseArrowKey
+token ReverseArrowKeyAction(const char * lexeme);
+
+// Function for reverseArrowKey
+token DoubleArrowKeyAction(const char * lexeme);
+
+// Function for radiusKey
+token RadiusKeyAction(const char * lexeme);
+
+// Function for VisibleKey
+token VisibleKeyAction(const char * lexeme);
+
+//Function for Color
+token ColorAction(const char *lexeme);
+
+//Function for String
+token StringAction(const char *lexeme);
+
+//Function for Anchor
+token AnchorAction(const char *lexeme);
+
+//Function for Number Pattern
+token NumberAction(const char *lexeme, const int length);
+
+// Function for BooleanPattern
+token BooleanPatternAction(const char * lexeme);
+
+// Function for AbsoluteDirection
+token AbsoluteDirectionAction(const char * lexeme);
+
+// Function for RelativeDirection
+token RelativeDirectionAction(const char * lexeme);
+
+token UnknownPatternAction(const char * lexeme, const int length);
+
+void IgnoredPatternAction(const char * lexeme, const int length);
 
 #endif

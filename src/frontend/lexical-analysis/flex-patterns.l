@@ -20,12 +20,13 @@
 digit			[0-9]
 endline			[\n]
 whitespace		[ \f\n\r\t\v]
-color           [red|blue|black|green|purple|yellow|orange]
-anchor          [top|bottom|left-side|right-side|center]
-direction_rel   [up|down|left|right]
-direction_abs   [north|south|east|west]
+color           [#[0-9A-F]{6}|red|blue|black|green|purple|yellow|orange]
+anchor          ["top"|"bottom"|"left-side"|"right-side"|"center"]
+direction_rel   ["up"|"down"|"left"|"right"]
+direction_abs   ["north"|"south"|"east"|"west"]
 string          [\"(\\.|[^\"])*\"]
-number          [\-?[0-9]*\.[0-9]*]
+boolean         ["true"|"false"]
+
 %%
 
 "/*"										{ BEGIN(COMMENT); BeginCommentPatternAction(); }
@@ -33,52 +34,50 @@ number          [\-?[0-9]*\.[0-9]*]
 <COMMENT>{endline}							{ ; }
 <COMMENT>"*/"								{ EndCommentPatternAction(); BEGIN(INITIAL); }
 
+/* Symbols */
 "{"                                         { return OpenBracketAction(yytext); }
 "}"                                         { return CloseBracketAction(yytext); }
+"("											{ return OpenParenthesisAction(yytext); }
+")"											{ return CloseParenthesisAction(yytext); }
 ","                                         { return CommaAction(yytext); }
-"Row"                                       { return RowAction(yytext); }
-"Column"                                    { return ColumnAction(yytext); }
 ":"                                         { return SemicolonAction(yytext); }
-"Arrow"                                     { return ArrowAction(yytext); }
-"Spring"
-"Rope"
-"position"                                  { return PositionAction(yytext); }
-"friction"                                  { return FrictionAction(yytext); }
-"color"                                     { return ColorAction(yytext); }
-"label"                                     { return LabelAction(yytext); }
-"top"                                       { return}
-"bottom"                                    { return}
-"left"                                      { return}
-"right"                                     { return}
-"center"                                    { return}
-"direction"                                 { return DirectionAction(yytext); }
-"angle"                                     { return AngleAction(yytext); }
-"angle-label"                               { return AngleLabelAction(yytext); }
-"HorizontalPlane"                           { return HorizontalPlaneAction(yytext); }
-"VerticalPlane"                             { return VerticalPlane(yytext); }
-"Block"                                     { return BlockAction(yytext); }
-"width"                                     { return WidthAction(yytext); }
-"length"                                    { return LengthAction(yytext); }
-"reverse-arrow"                             { return BallAction(yytext);}
-"Spacer"                                    { return SpacerAction(yytext); }
-"Ball"                                      { return ReverseArrowAction(yytext); }
-"radius"                                    { return RadiusAction(yytext); }
+
+/* Placeable Keys */
+"Row"|"Column"                              { return AlignmentKeyAction(yytext); }
+"HorizontalPlane"|"VerticalPlane"           { return PlaneKeyAction(yytext); }
+"Block"|"Car"                               { return BlockKeyAction(yytext); }
+"Ball"|"Cylinder"                           { return BallKeyAction(yytext);  }  
+"Arrow"                                     { return ArrowKeyAction(yytext); }
+"Spring"|"Rope"                             { return SpringRopeKeyAction(yytexy); }
+"Spacer"                                    { return SpacerKeyAction(yytext); }
+
+/* Property Keys */
+"position"                                  { return PositionKeyAction(yytext); }
+"friction"                                  { return FrictionKeyAction(yytext); }
+"color"                                     { return ColorKeyAction(yytext); }
+"label"                                     { return LabelKeyAction(yytext); }
+"direction"                                 { return DirectionKeyAction(yytext); }
+"angle"                                     { return AngleKeyAction(yytext); }
+"angle-label"                               { return AngleLabelKeyAction(yytext); }
+"heigth"                                    { return HeigthKeyAction(yytext); }
+"width"                                     { return WidthKeyAction(yytext); }
+"length"                                    { return LengthKeyAction(yytext); }
+"reverse-arrow"                             { return ReverseArrowKeyAction(yytext);}
+"double-arrow"                              { return DoubleArrowKeyAction(yytext); }
+"radius"                                    { return RadiusKeyAction(yytext); }
+"visible"                                   { return VisibleKeyAction(yytext); }
+
+/* Property Values */
 {color}                                     { return ColorAction(yytext); }
+{string}                                     { return StringAction(yytext); }
+{anchor}                                     { return AnchorAction(yytext); }
+[+-]?({digit}+([.]{digit}*)?|[.]{digit}+)   { return NumberAction(yytext, yyleng); }
+{boolean}                                   { return BooleanAction(yytext); }
+{direction_abs}                             { return AbsoluteDirectionAction(yytext); }
+{direction_rel}                             { return RelativeDirectionAction(yytext); }
 
-"("											{ return OpenParenthesisPatternAction(yytext); }
-")"											{ return CloseParenthesisPatternAction(yytext); }
-
-{digit}+									{ return IntegerPatternAction(yytext, yyleng); }
-
+/* Other */
 {whitespace}								{ IgnoredPatternAction(yytext, yyleng); }
-[+-]?({digit}+([.]{digit}*)?|[.]{digit}+)   { return FloatPatternAction(yytext, yyleng); }
-
-"true"|"false"                              { return BooleanPatternAction(yytext); }
-
-"top"|"bottom"|"left"|"right"|"north"|"south"|"east"|"west"             { return DirectionPatternAction(yytext); }
-
-[#[0-9A-F]{6}]|"red"|"green"|"blue"|"magenta"|"cyan"|"yellow"|"black"|"white"|"gray"|"dark_gray"|"light_gray"|"orange"|"pink" { return ColorPatternAction(yytext);}
-
 .											{ return UnknownPatternAction(yytext, yyleng); }
 
 %%

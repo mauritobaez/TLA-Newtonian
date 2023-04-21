@@ -24,16 +24,49 @@
 	// Terminales.
 	token token;
 	int integer;
+	float number;
 }
 
 // IDs y tipos de los tokens terminales generados desde Flex.
-%token <token> ADD
-%token <token> SUB
-%token <token> MUL
-%token <token> DIV
+
+%token <token> OPEN_BRACKET
+%token <token> CLOSE_BRACKET
+%token <token> COMMA
+%token <token> ALIGNMENT_KEY
+%token <token> SPRING_ROPE_KEY
+%token <token> ARROW_KEY
+%token <token> BALL_KEY
+%token <token> BLOCK_KEY
+%token <token> PLANE_KEY
+%token <token> FRICTION
+%token <token> POSITION
+%token <token> COLOR
+%token <token> LABEL
+%token <token> SEMICOLON
+%token <token> ANCHOR_A
+%token <token> ARROW
+%token <token> DIRECTION
+%token <token> CENTER
+%token <token> ANGLE
+%token <token> HORIZONTAL_PLANE
+%token <token> VERTICAL_PLANE
+%token <token> ANGLE_LABEL
+%token <token> ROPE
+%token <token> SPRING
+%token <token> BLOCK
+%token <token> HEIGHT
+%token <token> WIDTH
+%token <token> LENGTH
+%token <token> BALL
+%token <token> SPACER
+%token <token> REVERSE_ARROW
+%token <token> RADIUS
+%token <token> FLOAT
+%token <token> VISIBLE_KEY
 
 %token <token> OPEN_PARENTHESIS
 %token <token> CLOSE_PARENTHESIS
+
 
 %token <integer> INTEGER
 
