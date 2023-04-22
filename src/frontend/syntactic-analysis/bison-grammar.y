@@ -280,7 +280,8 @@ bodyAlignment: OPEN_BRACKET bodyAlignmentNullable CLOSE_BRACKET 												{ $$
 	;
 
 //Ba' -> PL0, Ba' | lambda
-bodyAlignmentNullable: positionlessPlaceable COMMA bodyAlignmentNullable												{ $$ = Return0(); }
+bodyAlignmentNullable: positionlessPlaceable 													{ $$ = Return0(); }
+	| positionlessPlaceable COMMA bodyAlignmentNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -299,7 +300,8 @@ alignmentProperties: OPEN_PARENTHESIS alignmentPropertiesNullable CLOSE_PARENTHE
 	;
 
 //Va1' -> Pa1, Va1' | lambda
-alignmentPropertiesNullable: alignmentProperty COMMA alignmentPropertiesNullable												{ $$ = Return0(); }
+alignmentPropertiesNullable: alignmentProperty	{ $$ = Return0(); }
+	| alignmentProperty COMMA alignmentPropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -327,7 +329,8 @@ positionlessArrowProperties: OPEN_PARENTHESIS positionlessArrowPropertiesNullabl
 	;
 
 //Vw0' -> Pw0, Vw0' | lambda
-positionlessArrowPropertiesNullable: positionlessArrowProperty COMMA positionlessArrowPropertiesNullable												{ $$ = Return0(); }
+positionlessArrowPropertiesNullable: positionlessArrowProperty { $$ = Return0(); }
+	| positionlessArrowProperty COMMA positionlessArrowPropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -358,7 +361,8 @@ positionlessRopeProperties: OPEN_PARENTHESIS positionlessRopePropertiesNullable 
 	;
 
 //Vg0' -> Pg0, Vg0' | lambda
-positionlessRopePropertiesNullable: positionlessRopeProperty COMMA positionlessRopePropertiesNullable												{ $$ = Return0(); }
+positionlessRopePropertiesNullable: positionlessRopeProperty  { $$ = Return0(); }
+	| positionlessRopeProperty COMMA positionlessRopePropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -382,7 +386,8 @@ positionlessSpacerProperties: OPEN_PARENTHESIS positionlessSpacerPropertiesNulla
 	;
 
 //Ve0' -> Pe0, Ve0' | lambda
-positionlessSpacerPropertiesNullable: positionlessSpacerProperty COMMA positionlessSpacerPropertiesNullable												{ $$ = Return0(); }
+positionlessSpacerPropertiesNullable: positionlessSpacerProperty { $$ = Return0(); }
+	| positionlessSpacerProperty COMMA positionlessSpacerPropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -406,7 +411,8 @@ arrowProperties: OPEN_PARENTHESIS arrowPropertiesNullable CLOSE_PARENTHESIS 				
 	;
 
 //Vw1' -> Pw1, Vw1' | lambda
-arrowPropertiesNullable: arrowProperty COMMA arrowPropertiesNullable												{ $$ = Return0(); }
+arrowPropertiesNullable: arrowProperty { $$ = Return0(); }
+	| arrowProperty COMMA arrowPropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -433,7 +439,8 @@ ropeProperties: OPEN_PARENTHESIS ropePropertiesNullable CLOSE_PARENTHESIS							
 	;
 
 //Vg1' -> Pg1, Vg1' | lambda
-ropePropertiesNullable: ropeProperty COMMA ropePropertiesNullable												{ $$ = Return0(); }
+ropePropertiesNullable: ropeProperty { $$ = Return0(); }
+	| ropeProperty COMMA ropePropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -454,7 +461,8 @@ spacerProperties: OPEN_PARENTHESIS spacerPropertiesNullable CLOSE_PARENTHESIS			
 	;
 
 //Ve1' -> Pe1, Ve1' | lambda
-spacerPropertiesNullable: spacerProperty COMMA spacerPropertiesNullable												{ $$ = Return0(); }
+spacerPropertiesNullable: spacerProperty { $$ = Return0(); }
+	| spacerProperty COMMA spacerPropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -484,7 +492,8 @@ positionlessPlaneProperties: OPEN_PARENTHESIS positionlessPlanePropertiesNullabl
 	;
 
 //Vn0' -> Pn0, Vn0' | lambda
-positionlessPlanePropertiesNullable: positionlessPlaneProperty COMMA positionlessPlanePropertiesNullable												{ $$ = Return0(); }
+positionlessPlanePropertiesNullable: positionlessPlaneProperty { $$ = Return0(); }
+	| positionlessPlaneProperty COMMA positionlessPlanePropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -504,7 +513,8 @@ bodyPlane: OPEN_BRACKET bodyPlaneNullable CLOSE_BRACKET												{ $$ = Return
 	;
 
 //Bn' -> PL1, Bn' | lambda
-bodyPlaneNullable: placeable COMMA bodyPlaneNullable 												{ $$ = Return0(); }
+bodyPlaneNullable: placeable { $$ = Return0(); }
+	| placeable COMMA bodyPlaneNullable 												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -523,7 +533,8 @@ positionlessBlockProperties: OPEN_PARENTHESIS positionlessBlockPropertiesNullabl
 	;
 
 //Vu0' -> Pu0, Vu0' | lambda
-positionlessBlockPropertiesNullable: positionlessBlockProperty COMMA positionlessBlockPropertiesNullable												{ $$ = Return0(); }
+positionlessBlockPropertiesNullable: positionlessBlockProperty { $$ = Return0(); }
+	| positionlessBlockProperty COMMA positionlessBlockPropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -540,7 +551,8 @@ bodyBlock: OPEN_BRACKET bodyBlockNullable CLOSE_BRACKET												{ $$ = Return
 	;
 
 //Bu' -> PL1, Bu' | lambda
-bodyBlockNullable: placeable COMMA bodyBlockNullable 												{ $$ = Return0(); }
+bodyBlockNullable: placeable  { $$ = Return0(); }
+	| placeable COMMA bodyBlockNullable 												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -558,7 +570,8 @@ positionlessBallProperties: OPEN_PARENTHESIS positionlessBallPropertiesNullable 
 	;
 
 //Vc0' -> Pc0, Vc0' | lambda
-positionlessBallPropertiesNullable: positionlessBallProperty COMMA positionlessBallPropertiesNullable												{ $$ = Return0(); }
+positionlessBallPropertiesNullable: positionlessBallProperty	{ $$ = Return0(); }
+	| positionlessBallProperty COMMA positionlessBallPropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -574,7 +587,8 @@ bodyBall: OPEN_BRACKET bodyBallNullable CLOSE_BRACKET												{ $$ = Return0(
 	;
 
 //Bc' -> PL1, Bc' | lambda
-bodyBallNullable: placeable COMMA bodyBallNullable 												{ $$ = Return0(); }
+bodyBallNullable: placeable { $$ = Return0(); }
+	| placeable COMMA bodyBallNullable 												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -594,7 +608,8 @@ planeProperties: OPEN_PARENTHESIS planePropertiesNullable CLOSE_PARENTHESIS					
 	;
 
 //Vn1' -> Pn1, Vn1' | lambda
-planePropertiesNullable: planeProperty COMMA planePropertiesNullable												{ $$ = Return0(); }
+planePropertiesNullable: planeProperty	{ $$ = Return0(); }
+	| planeProperty COMMA planePropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -619,7 +634,8 @@ blockProperties: OPEN_PARENTHESIS blockPropertiesNullable CLOSE_PARENTHESIS					
 	;
 
 //Vu1' -> Pu1, Vu1' | lambda
-blockPropertiesNullable: blockProperty COMMA blockPropertiesNullable												{ $$ = Return0(); }
+blockPropertiesNullable: blockProperty { $$ = Return0(); }
+	| blockProperty COMMA blockPropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 
@@ -641,7 +657,8 @@ ballProperties: OPEN_PARENTHESIS ballPropertiesNullable CLOSE_PARENTHESIS							
 	;
 
 //Vc1' -> Pc1, Vc1' | lambda
-ballPropertiesNullable: ballProperty COMMA ballPropertiesNullable												{ $$ = Return0(); }
+ballPropertiesNullable: ballProperty { $$ = Return0(); }
+	| ballProperty COMMA ballPropertiesNullable												{ $$ = Return0(); }
 	| %empty												{ $$ = Return0(); }
 	;
 

@@ -57,7 +57,7 @@ whitespace		[ \f\n\r\t\v]
 "direction"                                 { return DirectionKeyAction(yytext); }
 "angle"                                     { return AngleKeyAction(yytext); }
 "angle-label"                               { return AngleLabelKeyAction(yytext); }
-"heigth"                                    { return HeightKeyAction(yytext); }
+"height"                                    { return HeightKeyAction(yytext); }
 "width"                                     { return WidthKeyAction(yytext); }
 "length"                                    { return LengthKeyAction(yytext); }
 "reverse-arrow"                             { return ReverseArrowKeyAction(yytext);}

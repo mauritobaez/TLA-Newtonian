@@ -7,3 +7,4 @@ program
 **/flex-scanner.c
 **/bison-parser.c
 **/bison-parser.h
+build/
