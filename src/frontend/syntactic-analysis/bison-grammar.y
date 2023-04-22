@@ -36,7 +36,7 @@
 	int keyLinear; //Kl
 
 	int positionlessAlignmentBody; // Ba
-	int positionlessAlignmentBodyNullable //Ba'
+	int positionlessAlignmentBodyNullable; //Ba'
 	int body; //B
 	int bodyNullable;  //B'
 
@@ -164,69 +164,69 @@
 %type <keyObject> keyObject
 %type <keyLinear> keyLinear
 
-%type <positionlessAlignmentBody> positionlessAlignmentBody; // Ba
-%type <pos> positionlessAlignmentBodyNullable //Ba'
-%type <> body; //B
-%type <> bodyNullable;  //B'
+%type <positionlessAlignmentBody> positionlessAlignmentBody // Ba
+%type <positionlessAlignmentBodyNullable> positionlessAlignmentBodyNullable //Ba'
+%type <body> body //B
+%type <bodyNullable> bodyNullable  //B'
 
-%type <> positionlessAlignmentProperties; //Va0
-%type <> propertiesAlignment; // Va1
-%type <> propertiesAlignmentNullable; //Va1'
-%type <> alignmentProperty; // Pa1
+%type <positionlessAlignmentProperties> positionlessAlignmentProperties //Va0
+%type <propertiesAlignment> propertiesAlignment // Va1
+%type <propertiesAlignmentNullable> propertiesAlignmentNullable //Va1'
+%type <alignmentProperty> alignmentProperty // Pa1
 
-%type <> positionlessArrow; //W0
-%type <> arrow; //W1
-%type <> positionlessArrowProperties; //VW0
-%type <> positionlessArrowPropertiesNullable; //VW0'
-%type <> positionlessArrowProperty;//PW0
-%type <> arrowProperties; //VW1
-%type <> arrowPropertiesNullable; // VW1'
-%type <> arrowProperty; //PW0
-%type <>
-%type <> positionlessRope; //G0
-%type <> rope; //G1
-%type <> keyRope; //Rope | Spring
-%type <> positionlessRopeProperties; //VG0
-%type <> positionlessRopePropertiesNullable; //VG0'
-%type <> positionlessRopeProperty; // PG0
-%type <> ropeProperties; // VG1
-%type <> ropePropertiesNullable; // VG1'
-%type <> ropeProperty; // PG1
+%type <positionlessArrow> positionlessArrow //W0
+%type <arrow> arrow //W1
+%type <positionlessArrowProperties> positionlessArrowProperties //VW0
+%type <positionlessArrowPropertiesNullable> positionlessArrowPropertiesNullable //VW0'
+%type <positionlessArrowProperty> positionlessArrowProperty//PW0
+%type <arrowProperties> arrowProperties //VW1
+%type <arrowPropertiesNullable> arrowPropertiesNullable // VW1'
+%type <arrowProperty> arrowProperty //PW0
 
-%type <> positionlessBlock;//U0
-%type <> block; // U1 
-%type <> keyBlock; // Block | Car
-%type <> positionlessBlockProperties; //VU0
-%type <> positionlessBlockPropertiesNullable; //VU0'
-%type <> positionlessBlockProperty;//PU0
-%type <> blockProperties;//VU1
-%type <> blockPropertiesNullable;//VU1'
-%type <> blockProperty;//PU1
+%type <positionlessRope> positionlessRope //G0
+%type <rope> rope //G1
+%type <keyRope> keyRope //Rope | Spring
+%type <positionlessRopeProperties> positionlessRopeProperties //VG0
+%type <positionlessRopePropertiesNullable> positionlessRopePropertiesNullable //VG0'
+%type <positionlessRopeProperty> positionlessRopeProperty; // PG0
+%type <ropeProperties> ropeProperties // VG1
+%type <ropePropertiesNullable> ropePropertiesNullable // VG1'
+%type <ropeProperty> ropeProperty // PG1
 
-%type <> positionlessBall; //C0
-%type <> ball; //C1
-%type <> keyBall; // Ball | Cylinder
-%type <> positionlessBallProperties; //VC0
-%type <> positionlessBallPropertiesNullable;//VC0'
-%type <> positionlessBallProperty; //PC0
-%type <> ballProperties; //VC1
-%type <> ballPropertiesNullable;//VC1'
-%type <> ballProperty;//PC1
+%type <positionlessBlock> positionlessBlock//U0
+%type <block> block // U1 
+%type <keyBlock> keyBlock // Block | Car
+%type <positionlessBlockProperties> positionlessBlockProperties //VU0
+%type <positionlessBlockPropertiesNullable> positionlessBlockPropertiesNullable //VU0'
+%type <positionlessBlockProperty> positionlessBlockProperty //PU0
+%type <blockProperties> blockProperties //VU1
+%type <blockPropertiesNullable> blockPropertiesNullable //VU1'
+%type <blockProperty> blockProperty //PU1
+
+%type <positionlessBall> positionlessBall //C0
+%type <ball> ball //C1
+%type <keyBall> keyBall // Ball | Cylinder
+%type <positionlessBallProperties> positionlessBallProperties //VC0
+%type <positionlessBallPropertiesNullable> positionlessBallPropertiesNullable//VC0'
+%type <positionlessBallProperty> positionlessBallProperty //PC0
+%type <ballProperties> ballProperties //VC1
+%type <ballPropertiesNullable> ballPropertiesNullable//VC1'
+%type <ballProperty> ballProperty//PC1
 
 
-%type <> positionlessPlane;//N0
-%type <> plane; // N1
-%type <> keyPlane; // HorizontalPlane | VerticalPlane
-%type <> positionlessPlaneProperties;//VN0
-%type <> positionlessPlanePropertiesNullable;//VN0'
-%type <> positionlessPlaneProperty;//PN0
-%type <> planeProperties; //VN1
-%type <> planePropertiesNullable;//VN1'
-%type <> planeProperty; // PN1
+%type <positionlessPlane> positionlessPlane//N0
+%type <plane> plane // N1
+%type <keyPlane> keyPlane // HorizontalPlane | VerticalPlane
+%type <positionlessPlaneProperties> positionlessPlaneProperties//VN0
+%type <positionlessPlanePropertiesNullable> positionlessPlanePropertiesNullable//VN0'
+%type <positionlessPlaneProperty> positionlessPlaneProperty//PN0
+%type <planeProperties> planeProperties //VN1
+%type <planePropertiesNullable> planePropertiesNullable//VN1'
+%type <planeProperty> planeProperty // PN1
 
 // Reglas de asociatividad y precedencia (de menor a mayor).
-%left ADD SUB
-%left MUL DIV
+/* %left ADD SUB
+%left MUL DIV */
 
 // El símbolo inicial de la gramatica.
 %start initial
@@ -246,19 +246,19 @@ placeable: alignment
 	| linear
 	;
 
-positionlessAlignment: Ka Va0 Ba
+positionlessAlignment: 
 	;
 
-Va0: lamda
+positionlessAlignmentBody: lambda
 	| OPEN_PARENTHESIS CLOSE_PARENTHESIS
 	;
 
 Ba: OPEN_BRACKET BaPrime CLOSE_BRACKET 
-	| lamda
+	| lambda
 	;
 
 BaPrime: positionlessPlaceable COMMA BaPrime
-	| lamda
+	| lambda
 	;
 
 Ka: ROW_KEY
@@ -269,11 +269,11 @@ alignment: Ka Va1 Ba
 	;
 
 Va1: OPEN_PARENTHESIS Va1Prime CLOSE_PARENTHESIS
-	| lamda
+	| lambda
 	;
 
 Va1Prime: Pa1 COMMA Va1Prime  /*podría poner Pa1 COMMA Va0Prime ?*/
-	| lamda
+	| lambda
 	;
 
 Pa1: POSITION_KEY SEMICOLON ANCHOR /*acá faltarían los otros*/
@@ -287,11 +287,11 @@ W0: ARROW_KEY Vw0
 	;
 
 Vw0: OPEN_PARENTHESIS Vw0Prime CLOSE_PARENTHESIS 
-	| lamda
+	| lambda
 	;
 
 Vw0Prime: Pw0 COMMA Vw0Prime
-	| lamda
+	| lambda
 	;
 
 Pw0: DIRECTION_KEY SEMICOLON DIRECTION_ABS
@@ -310,11 +310,11 @@ G0: ROPE_KEY VG0
 	;
 
 VG0: OPEN_PARENTHESIS VG0Prime CLOSE_PARENTHESIS
-	| lamda
+	| lambda
 	;
 
 VG0Prime: Pg0 COMMA VG0Prime
-	| lamda
+	| lambda
 	;
 
 Pg0: POSITION_KEY SEMICOLON DIRECTION_ABS /*abs o rel?*/
@@ -331,11 +331,11 @@ W1: ARROW_KEY Vw1
 	;
 
 Vw1: OPEN_PARENTHESIS Vw1Prime CLOSE_PARENTHESIS 
-	| lamda
+	| lambda
 	;
 
 Vw1Prime: Pw1 COMMA Vw1Prime
-	| lamda
+	| lambda
 	;
 
 Pw1: DIRECTION_KEY SEMICOLON DIRECTION_ABS
@@ -354,11 +354,11 @@ G1: ROPE_KEY VG1
 	;
 
 VG1: OPEN_PARENTHESIS VG1Prime CLOSE_PARENTHESIS
-	| lamda
+	| lambda
 	;
 
 VG1Prime: Pg1 COMMA VG1Prime
-	| lamda
+	| lambda
 	;
 
 Pg1: POSITION_KEY SEMICOLON DIRECTION_ABS /*abs o rel?*/
@@ -380,11 +380,11 @@ Kn: HORIZONTAL_PLANE_KEY
 	;
 
 Bn: OPEN_BRACKET BnPrime CLOSE_BRACKET
-	| lamda
+	| lambda
 	;
 
 BnPrime: placeable COMMA BnPrime 
-	| lamda
+	| lambda
 	;
 
 U0: Ku Vu0 Bu
@@ -395,11 +395,11 @@ Ku: BLOCK_KEY
 	;
 
 Bu: OPEN_BRACKET BuPrime CLOSE_BRACKET
-	| lamda
+	| lambda
 	;
 
 BuPrime: placeable COMMA BuPrime 
-	| lamda
+	| lambda
 	;
 
 C0: Kc Vc0 Bc
@@ -410,11 +410,11 @@ Kc: BALL_KEY
 	;
 
 Bc: OPEN_BRACKET BcPrime CLOSE_BRACKET
-	| lamda
+	| lambda
 	;
 
 BcPrime: placeable COMMA BcPrime 
-	| lamda
+	| lambda
 	;
 
 
