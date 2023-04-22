@@ -253,7 +253,7 @@
 
 %%
 // S -> PL0
-initial: positionlessPlaceable										{ $$ = Return0(); }
+initial: positionlessPlaceable										{ $$ = ProgramGrammarAction(0); }
 	;
 //PL0 -> A0 | O0 | L0
 positionlessPlaceable: positionlessAlignment							{ $$ = Return0(); }
