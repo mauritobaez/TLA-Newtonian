@@ -1,0 +1,7 @@
+Row() {
+	Block(label: "first"){},
+	Rope(),
+	Block(label: "second"){},
+	Rope(),
+	Block(label: "third"){},
+}

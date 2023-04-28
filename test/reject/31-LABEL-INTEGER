@@ -1,0 +1,6 @@
+Row {
+	Ball(
+		radius: 1,
+		label: 32
+	)
+}

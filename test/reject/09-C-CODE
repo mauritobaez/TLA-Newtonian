@@ -1,0 +1,9 @@
+#define MAX 11
+int main(void){
+	int retValue=1;
+	for(int i = 1 ; i < MAX; i++)
+	{
+		retValue*=i
+	}
+	return retValue;
+}
