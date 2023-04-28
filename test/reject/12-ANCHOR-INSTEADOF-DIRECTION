@@ -1,0 +1,7 @@
+Cylinder(
+    radius: 10,
+) {
+    Arrow (
+        direction: top,
+    )
+}

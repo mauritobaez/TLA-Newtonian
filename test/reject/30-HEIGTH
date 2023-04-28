@@ -1,0 +1,7 @@
+Car(
+    height: 30,
+) {
+    Block(
+        heigth: 60,
+    )
+}

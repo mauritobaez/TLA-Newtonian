@@ -1,0 +1,25 @@
+Ball() {
+    HorizontalPlane(
+        position: right-side,
+        angle-label: "no incline",
+        angle: 0,
+        label: "mu",
+        length: 34,
+        friction: true,
+        color: green,
+        visible: true,
+    ),
+    Row(
+        position: bottom,
+    ) {
+        VerticalPlane(
+            angle: 34,
+            angle-label: "34",
+            label: "mun't",
+            length: 3,
+            friction: false,
+            color: #FFFFFF,
+            visible: false,
+        )
+    }
+}

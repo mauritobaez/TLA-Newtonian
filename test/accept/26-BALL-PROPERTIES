@@ -1,0 +1,24 @@
+Car(
+    height: 23,
+    width: 34,
+    color: #FF0000,
+    label: "El Rayo Macqueen"
+) {
+    Block(
+        position: top,
+        height: -3,
+        width: 0,
+        color: green,
+        label: "A"
+    ),
+    Column(
+        position: bottom,
+    ) {
+        Box(
+            height: 23,
+            width: 34,
+            color: blue,
+            label: "V"
+        )
+    }
+}

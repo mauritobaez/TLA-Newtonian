@@ -1,0 +1,9 @@
+Row {
+    Cylinder {
+        Arrow (
+            position: center,
+            label: "P",
+            direction: south,
+        )
+    }
+}

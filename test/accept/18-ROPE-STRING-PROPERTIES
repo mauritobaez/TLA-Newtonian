@@ -1,0 +1,17 @@
+Block() {
+    Spring(
+        position: bottom,
+        length: -2,
+        color: black,
+        label: "-2",
+    ),
+    Column(
+        position: center,
+    ) {
+        Rope(
+            length: 0.9,
+            color: purple,
+            label: "aaaa",
+        )
+    }
+}

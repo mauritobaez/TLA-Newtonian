@@ -1,0 +1,21 @@
+Ball(
+    radius: 23,
+    color: #FF0000,
+    label: "LA BOLA"
+) {
+    Ball(
+        position: top,
+        radius: 10,
+        color: green,
+        label: "A"
+    ),
+    HorizontalPlane(
+        position: bottom,
+    ) {
+        Cylinder(
+            radius: -3,
+            color: yellow,
+            label: "A"
+        )
+    }
+}
