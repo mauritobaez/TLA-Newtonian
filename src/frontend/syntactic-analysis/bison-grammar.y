@@ -252,42 +252,58 @@
 %start initial
 
 %%
+
+/*
+	Bison Actions genericas a definir, para no hacer una para cada una y terminar en 2025:
+
+	Program* ProgramAction(Placeable* placeable);
+	Placeable* PlaceableAction(PlaceableType (enum) type, Boolean positionless, PropertyList* propertiesBody, ComposedPlaceablesList* mainBody);
+	PropertyList* PlaceablePropertyAction(Property* property, PropertyList* propertyList);
+	Property* PropertyAction(PropertyType (enum) key, PropertyValue (union) value);
+	ComposedPlaceablesList* PlaceableBodyAction(Placeable* placeable, ComposedPlaceablesList* placeableList);
+
+	Con Flex y Bison ya nos aseguramos que las propiedades son correctas para el Placeable en las que están y que 
+	los tipos de dato de los values son correctos para la key correspondiente. También nos aseguramos que los Linear 
+	no tengan Body y que los Placeable dentro de positionless no tengan Position.
+	No nos aseguramos que properties estén repetidas, pero eso lo resolvemos después.
+*/
+
 // S -> PL0
-initial: positionlessPlaceable										{ $$ = ProgramGrammarAction(0); }
+initial: positionlessPlaceable																			{ $$ = ProgramGrammarAction(0); }
 	;
 //PL0 -> A0 | O0 | L0
-positionlessPlaceable: positionlessAlignment							{ $$ = Return0(); }
-	| positionlessObject											{ $$ = Return0(); }
-	| positionlessLinear											{ $$ = Return0(); }
+positionlessPlaceable: positionlessAlignment															{ $$ = Return0(); }
+	| positionlessObject																				{ $$ = Return0(); }
+	| positionlessLinear																				{ $$ = Return0(); }
 	;
 //PL1 -> A1 | O1 | L1
-placeable: alignment												{ $$ = Return0(); }
-	| object												{ $$ = Return0(); }
-	| linear												{ $$ = Return0(); }
+placeable: alignment																					{ $$ = Return0(); }
+	| object																							{ $$ = Return0(); }
+	| linear																							{ $$ = Return0(); }
 	;
 //A0 -> Ka Va0 Ba
-positionlessAlignment: keyAlignment positionlessAlignmentProperties bodyAlignment												{ $$ = Return0(); }
+positionlessAlignment: keyAlignment positionlessAlignmentProperties bodyAlignment						{ $$ = Return0(); }
 	;
 
 //Va0 -> lambda | ()
-positionlessAlignmentProperties: %empty												{ $$ = Return0(); }
-	| OPEN_PARENTHESIS CLOSE_PARENTHESIS												{ $$ = Return0(); }
+positionlessAlignmentProperties: %empty																	{ $$ = Return0(); }
+	| OPEN_PARENTHESIS CLOSE_PARENTHESIS																{ $$ = Return0(); }
 	;
 
 //Ba -> { Ba' } | lambda
-bodyAlignment: OPEN_BRACKET bodyAlignmentNullable CLOSE_BRACKET 												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+bodyAlignment: OPEN_BRACKET bodyAlignmentNullable CLOSE_BRACKET 										{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Ba' -> PL0, Ba' | lambda
-bodyAlignmentNullable: positionlessPlaceable 													{ $$ = Return0(); }
-	| positionlessPlaceable COMMA bodyAlignmentNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+bodyAlignmentNullable: positionlessPlaceable 															{ $$ = Return0(); }
+	| positionlessPlaceable COMMA bodyAlignmentNullable													{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Ka -> Row | Column
-keyAlignment: ROW_KEY												{ $$ = Return0(); }
-	| COLUMN_KEY												{ $$ = Return0(); }
+keyAlignment: ROW_KEY																					{ $$ = Return0(); }
+	| COLUMN_KEY																						{ $$ = Return0(); }
 	;
 
 //A1 -> Ka Va1 Ba
@@ -295,81 +311,81 @@ alignment: keyAlignment alignmentProperties bodyAlignment												{ $$ = Retu
 	;
 
 //VA1 -> (VA1') | lambda
-alignmentProperties: OPEN_PARENTHESIS alignmentPropertiesNullable CLOSE_PARENTHESIS												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+alignmentProperties: OPEN_PARENTHESIS alignmentPropertiesNullable CLOSE_PARENTHESIS						{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Va1' -> Pa1, Va1' | lambda
-alignmentPropertiesNullable: alignmentProperty	{ $$ = Return0(); }
+alignmentPropertiesNullable: alignmentProperty															{ $$ = Return0(); }
 	| alignmentProperty COMMA alignmentPropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pa1 -> position: Ta
-alignmentProperty: POSITION_KEY SEMICOLON ANCHOR												{ $$ = Return0(); }
+alignmentProperty: POSITION_KEY SEMICOLON ANCHOR														{ $$ = Return0(); }
 	;
 	
 //L0 -> W0 | G0 | E0
-positionlessLinear: positionlessArrow												{ $$ = Return0(); }
-	| positionlessRope												{ $$ = Return0(); }
-	| positionlessSpacer												{ $$ = Return0(); }
+positionlessLinear: positionlessArrow																	{ $$ = Return0(); }
+	| positionlessRope																					{ $$ = Return0(); }
+	| positionlessSpacer																				{ $$ = Return0(); }
 	;
 
 //W0 -> Kw Vw0
-positionlessArrow: keyArrow positionlessArrowProperties												{ $$ = Return0(); }
+positionlessArrow: keyArrow positionlessArrowProperties													{ $$ = Return0(); }
 	;
 
 //Kw -> Arrow
-keyArrow: ARROW_KEY												{ $$ = Return0(); }
+keyArrow: ARROW_KEY																						{ $$ = Return0(); }
 	;
 
 //Vw0 -> (vW0') | lambda
-positionlessArrowProperties: OPEN_PARENTHESIS positionlessArrowPropertiesNullable CLOSE_PARENTHESIS												{ $$ = Return0(); } 
-	| %empty												{ $$ = Return0(); }
+positionlessArrowProperties: OPEN_PARENTHESIS positionlessArrowPropertiesNullable CLOSE_PARENTHESIS		{ $$ = Return0(); } 
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Vw0' -> Pw0, Vw0' | lambda
-positionlessArrowPropertiesNullable: positionlessArrowProperty { $$ = Return0(); }
-	| positionlessArrowProperty COMMA positionlessArrowPropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+positionlessArrowPropertiesNullable: positionlessArrowProperty 											{ $$ = Return0(); }
+	| positionlessArrowProperty COMMA positionlessArrowPropertiesNullable								{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pw0 -> ...
-positionlessArrowProperty: DIRECTION_KEY SEMICOLON DIRECTION_ABS												{ $$ = Return0(); }
-	| DIRECTION_KEY SEMICOLON DIRECTION_REL												{ $$ = Return0(); }
-	| ANGLE_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| ANGLE_LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
-	| LENGTH_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| COLOR_KEY SEMICOLON COLOR												{ $$ = Return0(); }
-	| LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
-	| REVERSE_ARROW_KEY SEMICOLON BOOLEAN												{ $$ = Return0(); }
-	| DOUBLE_ARROW_KEY SEMICOLON BOOLEAN												{ $$ = Return0(); }
+positionlessArrowProperty: DIRECTION_KEY SEMICOLON DIRECTION_ABS										{ $$ = Return0(); }
+	| DIRECTION_KEY SEMICOLON DIRECTION_REL																{ $$ = Return0(); }
+	| ANGLE_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
+	| ANGLE_LABEL_KEY SEMICOLON STRING																	{ $$ = Return0(); }
+	| LENGTH_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
+	| COLOR_KEY SEMICOLON COLOR																			{ $$ = Return0(); }
+	| LABEL_KEY SEMICOLON STRING																		{ $$ = Return0(); }
+	| REVERSE_ARROW_KEY SEMICOLON BOOLEAN																{ $$ = Return0(); }
+	| DOUBLE_ARROW_KEY SEMICOLON BOOLEAN																{ $$ = Return0(); }
 	;
 
 //G0 -> Kg Vg0
-positionlessRope: keyRope positionlessRopeProperties												{ $$ = Return0(); }
+positionlessRope: keyRope positionlessRopeProperties													{ $$ = Return0(); }
 	;
 
 //Kg -> Rope | Spring
-keyRope: ROPE_KEY												{ $$ = Return0(); }
-	| SPRING_KEY												{ $$ = Return0(); }
+keyRope: ROPE_KEY																						{ $$ = Return0(); }
+	| SPRING_KEY																						{ $$ = Return0(); }
 	;
 
 //Vg0 -> ( Vg0' ) | lambda
-positionlessRopeProperties: OPEN_PARENTHESIS positionlessRopePropertiesNullable CLOSE_PARENTHESIS												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+positionlessRopeProperties: OPEN_PARENTHESIS positionlessRopePropertiesNullable CLOSE_PARENTHESIS		{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Vg0' -> Pg0, Vg0' | lambda
-positionlessRopePropertiesNullable: positionlessRopeProperty  { $$ = Return0(); }
-	| positionlessRopeProperty COMMA positionlessRopePropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+positionlessRopePropertiesNullable: positionlessRopeProperty  											{ $$ = Return0(); }
+	| positionlessRopeProperty COMMA positionlessRopePropertiesNullable									{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pg0 -> ...
-positionlessRopeProperty: LENGTH_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| COLOR_KEY SEMICOLON COLOR												{ $$ = Return0(); }
-	| LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
+positionlessRopeProperty: LENGTH_KEY SEMICOLON NUMBER													{ $$ = Return0(); }
+	| COLOR_KEY SEMICOLON COLOR																			{ $$ = Return0(); }
+	| LABEL_KEY SEMICOLON STRING																		{ $$ = Return0(); }
 	;
 
 //E0 -> Ke Ve0
@@ -377,296 +393,296 @@ positionlessSpacer: keySpacer positionlessSpacerProperties												{ $$ = Ret
 	;
 
 //Ke -> Spacer
-keySpacer: SPACER_KEY												{ $$ = Return0(); }
+keySpacer: SPACER_KEY																					{ $$ = Return0(); }
 	;
 
 //Ve0 -> ( Ve0' ) | lambda
-positionlessSpacerProperties: OPEN_PARENTHESIS positionlessSpacerPropertiesNullable CLOSE_PARENTHESIS												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+positionlessSpacerProperties: OPEN_PARENTHESIS positionlessSpacerPropertiesNullable CLOSE_PARENTHESIS	{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Ve0' -> Pe0, Ve0' | lambda
-positionlessSpacerPropertiesNullable: positionlessSpacerProperty { $$ = Return0(); }
-	| positionlessSpacerProperty COMMA positionlessSpacerPropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+positionlessSpacerPropertiesNullable: positionlessSpacerProperty 										{ $$ = Return0(); }
+	| positionlessSpacerProperty COMMA positionlessSpacerPropertiesNullable								{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pg0 -> ...
-positionlessSpacerProperty: LENGTH_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
+positionlessSpacerProperty: LENGTH_KEY SEMICOLON NUMBER													{ $$ = Return0(); }
 	;
 
 //L1 -> W1 | G1 | E1
-linear: arrow												{ $$ = Return0(); }
-	| rope												{ $$ = Return0(); }
-	| spacer												{ $$ = Return0(); }
+linear: arrow																							{ $$ = Return0(); }
+	| rope																								{ $$ = Return0(); }
+	| spacer																							{ $$ = Return0(); }
 	;
 
 //W1 -> Kw Vw1
-arrow: keyArrow arrowProperties												{ $$ = Return0(); }
+arrow: keyArrow arrowProperties																			{ $$ = Return0(); }
 	;
 
 //Vw1 -> ( Vw1' ) | lambda
-arrowProperties: OPEN_PARENTHESIS arrowPropertiesNullable CLOSE_PARENTHESIS 												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+arrowProperties: OPEN_PARENTHESIS arrowPropertiesNullable CLOSE_PARENTHESIS 							{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Vw1' -> Pw1, Vw1' | lambda
-arrowPropertiesNullable: arrowProperty { $$ = Return0(); }
-	| arrowProperty COMMA arrowPropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+arrowPropertiesNullable: arrowProperty 																	{ $$ = Return0(); }
+	| arrowProperty COMMA arrowPropertiesNullable														{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pw1 -> ...
-arrowProperty: DIRECTION_KEY SEMICOLON DIRECTION_ABS												{ $$ = Return0(); }
-	| DIRECTION_KEY SEMICOLON DIRECTION_REL												{ $$ = Return0(); }
-	| ANGLE_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| ANGLE_LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
-	| POSITION_KEY SEMICOLON ANCHOR												{ $$ = Return0(); }
-	| LENGTH_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| COLOR_KEY SEMICOLON COLOR												{ $$ = Return0(); }
-	| LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
-	| REVERSE_ARROW_KEY SEMICOLON BOOLEAN												{ $$ = Return0(); }
-	| DOUBLE_ARROW_KEY SEMICOLON BOOLEAN												{ $$ = Return0(); }
+arrowProperty: DIRECTION_KEY SEMICOLON DIRECTION_ABS													{ $$ = Return0(); }
+	| DIRECTION_KEY SEMICOLON DIRECTION_REL																{ $$ = Return0(); }
+	| ANGLE_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
+	| ANGLE_LABEL_KEY SEMICOLON STRING																	{ $$ = Return0(); }
+	| POSITION_KEY SEMICOLON ANCHOR																		{ $$ = Return0(); }
+	| LENGTH_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
+	| COLOR_KEY SEMICOLON COLOR																			{ $$ = Return0(); }
+	| LABEL_KEY SEMICOLON STRING																		{ $$ = Return0(); }
+	| REVERSE_ARROW_KEY SEMICOLON BOOLEAN																{ $$ = Return0(); }
+	| DOUBLE_ARROW_KEY SEMICOLON BOOLEAN																{ $$ = Return0(); }
 	;
 
 //G1 -> Kg Vg1
-rope: keyRope ropeProperties												{ $$ = Return0(); }
+rope: keyRope ropeProperties																			{ $$ = Return0(); }
 	;
 
 //Vg1 -> ( vg1' ) | lambda
-ropeProperties: OPEN_PARENTHESIS ropePropertiesNullable CLOSE_PARENTHESIS												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+ropeProperties: OPEN_PARENTHESIS ropePropertiesNullable CLOSE_PARENTHESIS								{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Vg1' -> Pg1, Vg1' | lambda
-ropePropertiesNullable: ropeProperty { $$ = Return0(); }
-	| ropeProperty COMMA ropePropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+ropePropertiesNullable: ropeProperty 																	{ $$ = Return0(); }
+	| ropeProperty COMMA ropePropertiesNullable															{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pg1 -> ...
-ropeProperty: POSITION_KEY SEMICOLON ANCHOR												{ $$ = Return0(); }
-	| LENGTH_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| COLOR_KEY SEMICOLON COLOR												{ $$ = Return0(); }
-	| LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
+ropeProperty: POSITION_KEY SEMICOLON ANCHOR																{ $$ = Return0(); }
+	| LENGTH_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
+	| COLOR_KEY SEMICOLON COLOR																			{ $$ = Return0(); }
+	| LABEL_KEY SEMICOLON STRING																		{ $$ = Return0(); }
 	;
 
 //E1 -> Ke Ve1
-spacer: keySpacer spacerProperties												{ $$ = Return0(); }
+spacer: keySpacer spacerProperties																		{ $$ = Return0(); }
 	;
 
 //Ve1 -> ( ve1' ) | lambda
-spacerProperties: OPEN_PARENTHESIS spacerPropertiesNullable CLOSE_PARENTHESIS												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+spacerProperties: OPEN_PARENTHESIS spacerPropertiesNullable CLOSE_PARENTHESIS							{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Ve1' -> Pe1, Ve1' | lambda
-spacerPropertiesNullable: spacerProperty { $$ = Return0(); }
-	| spacerProperty COMMA spacerPropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+spacerPropertiesNullable: spacerProperty 																{ $$ = Return0(); }
+	| spacerProperty COMMA spacerPropertiesNullable														{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pe1 -> ...
-spacerProperty: POSITION_KEY SEMICOLON ANCHOR												{ $$ = Return0(); }
-	| LENGTH_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
+spacerProperty: POSITION_KEY SEMICOLON ANCHOR															{ $$ = Return0(); }
+	| LENGTH_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
 	;	
 
 //O0 -> N0 | U0 | C0
-positionlessObject: positionlessPlane												{ $$ = Return0(); }
-	| positionlessBlock												{ $$ = Return0(); }
-	| positionlessBall												{ $$ = Return0(); }
+positionlessObject: positionlessPlane																	{ $$ = Return0(); }
+	| positionlessBlock																					{ $$ = Return0(); }
+	| positionlessBall																					{ $$ = Return0(); }
 	;
 
 // N0 -> Kn Vn0 Bn
-positionlessPlane: keyPlane positionlessPlaneProperties bodyPlane												{ $$ = Return0(); }
+positionlessPlane: keyPlane positionlessPlaneProperties bodyPlane										{ $$ = Return0(); }
 	;
 
 //Kn -> HorizontalPlane | VerticalPlane
-keyPlane: HORIZONTAL_PLANE_KEY												{ $$ = Return0(); }
-	| VERTICAL_PLANE_KEY												{ $$ = Return0(); }
+keyPlane: HORIZONTAL_PLANE_KEY																			{ $$ = Return0(); }
+	| VERTICAL_PLANE_KEY																				{ $$ = Return0(); }
 	;
 
 //Vn0 -> (Vn0') | lambda
-positionlessPlaneProperties: OPEN_PARENTHESIS positionlessPlanePropertiesNullable CLOSE_PARENTHESIS												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+positionlessPlaneProperties: OPEN_PARENTHESIS positionlessPlanePropertiesNullable CLOSE_PARENTHESIS		{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Vn0' -> Pn0, Vn0' | lambda
-positionlessPlanePropertiesNullable: positionlessPlaneProperty { $$ = Return0(); }
-	| positionlessPlaneProperty COMMA positionlessPlanePropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+positionlessPlanePropertiesNullable: positionlessPlaneProperty 											{ $$ = Return0(); }
+	| positionlessPlaneProperty COMMA positionlessPlanePropertiesNullable								{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pn0 -> ...
-positionlessPlaneProperty: ANGLE_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| ANGLE_LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
-	| LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
-	| LENGTH_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| FRICTION_KEY SEMICOLON BOOLEAN												{ $$ = Return0(); }
-	| COLOR_KEY SEMICOLON COLOR												{ $$ = Return0(); }
-	| VISIBLE_KEY SEMICOLON BOOLEAN												{ $$ = Return0(); }
+positionlessPlaneProperty: ANGLE_KEY SEMICOLON NUMBER													{ $$ = Return0(); }
+	| ANGLE_LABEL_KEY SEMICOLON STRING																	{ $$ = Return0(); }
+	| LABEL_KEY SEMICOLON STRING																		{ $$ = Return0(); }
+	| LENGTH_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
+	| FRICTION_KEY SEMICOLON BOOLEAN																	{ $$ = Return0(); }
+	| COLOR_KEY SEMICOLON COLOR																			{ $$ = Return0(); }
+	| VISIBLE_KEY SEMICOLON BOOLEAN																		{ $$ = Return0(); }
 	;
 
 //Bn -> { Bn' } | lambda
-bodyPlane: OPEN_BRACKET bodyPlaneNullable CLOSE_BRACKET												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+bodyPlane: OPEN_BRACKET bodyPlaneNullable CLOSE_BRACKET													{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Bn' -> PL1, Bn' | lambda
-bodyPlaneNullable: placeable { $$ = Return0(); }
-	| placeable COMMA bodyPlaneNullable 												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+bodyPlaneNullable: placeable 																			{ $$ = Return0(); }
+	| placeable COMMA bodyPlaneNullable 																{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //U0 -> Ku Vu0 Bu
-positionlessBlock: keyBlock positionlessBlockProperties bodyBlock												{ $$ = Return0(); }
+positionlessBlock: keyBlock positionlessBlockProperties bodyBlock										{ $$ = Return0(); }
 	;
 
 //Ku -> Black | Car
-keyBlock: BLOCK_KEY												{ $$ = Return0(); }
-	| CAR_KEY												{ $$ = Return0(); }
+keyBlock: BLOCK_KEY																						{ $$ = Return0(); }
+	| CAR_KEY																							{ $$ = Return0(); }
 	;
 
 //Vu0 -> (Vu0') | lambda
-positionlessBlockProperties: OPEN_PARENTHESIS positionlessBlockPropertiesNullable CLOSE_PARENTHESIS												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+positionlessBlockProperties: OPEN_PARENTHESIS positionlessBlockPropertiesNullable CLOSE_PARENTHESIS		{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Vu0' -> Pu0, Vu0' | lambda
-positionlessBlockPropertiesNullable: positionlessBlockProperty { $$ = Return0(); }
-	| positionlessBlockProperty COMMA positionlessBlockPropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+positionlessBlockPropertiesNullable: positionlessBlockProperty 											{ $$ = Return0(); }
+	| positionlessBlockProperty COMMA positionlessBlockPropertiesNullable								{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pu0 -> ...
-positionlessBlockProperty: HEIGHT_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| WIDTH_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| COLOR_KEY SEMICOLON COLOR												{ $$ = Return0(); }
-	| LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
+positionlessBlockProperty: HEIGHT_KEY SEMICOLON NUMBER													{ $$ = Return0(); }
+	| WIDTH_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
+	| COLOR_KEY SEMICOLON COLOR																			{ $$ = Return0(); }
+	| LABEL_KEY SEMICOLON STRING																		{ $$ = Return0(); }
 	;
 
 //Bu -> { Bu' } | lambda
-bodyBlock: OPEN_BRACKET bodyBlockNullable CLOSE_BRACKET												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+bodyBlock: OPEN_BRACKET bodyBlockNullable CLOSE_BRACKET													{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Bu' -> PL1, Bu' | lambda
-bodyBlockNullable: placeable  { $$ = Return0(); }
-	| placeable COMMA bodyBlockNullable 												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+bodyBlockNullable: placeable  																			{ $$ = Return0(); }
+	| placeable COMMA bodyBlockNullable 																{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //C0 -> Kc Vc0 Bc
-positionlessBall: keyBall positionlessBallProperties bodyBall												{ $$ = Return0(); }
+positionlessBall: keyBall positionlessBallProperties bodyBall											{ $$ = Return0(); }
 	;
 
 //Kc -> Ball | Cylinder (el | está en flex porque como se dibujan igual son completamente sinónimos)
-keyBall: BALL_KEY												{ $$ = Return0(); }
+keyBall: BALL_KEY																						{ $$ = Return0(); }
 	;
 
 //Vc0 -> (Vc0') | lambda
-positionlessBallProperties: OPEN_PARENTHESIS positionlessBallPropertiesNullable CLOSE_PARENTHESIS												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+positionlessBallProperties: OPEN_PARENTHESIS positionlessBallPropertiesNullable CLOSE_PARENTHESIS		{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Vc0' -> Pc0, Vc0' | lambda
-positionlessBallPropertiesNullable: positionlessBallProperty	{ $$ = Return0(); }
-	| positionlessBallProperty COMMA positionlessBallPropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+positionlessBallPropertiesNullable: positionlessBallProperty											{ $$ = Return0(); }
+	| positionlessBallProperty COMMA positionlessBallPropertiesNullable									{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pc0 -> ...
-positionlessBallProperty: RADIUS_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| COLOR_KEY SEMICOLON COLOR												{ $$ = Return0(); }
-	| LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
+positionlessBallProperty: RADIUS_KEY SEMICOLON NUMBER													{ $$ = Return0(); }
+	| COLOR_KEY SEMICOLON COLOR																			{ $$ = Return0(); }
+	| LABEL_KEY SEMICOLON STRING																		{ $$ = Return0(); }
 	;
 
 //Bc -> { Bc' } | lambda
-bodyBall: OPEN_BRACKET bodyBallNullable CLOSE_BRACKET												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+bodyBall: OPEN_BRACKET bodyBallNullable CLOSE_BRACKET													{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Bc' -> PL1, Bc' | lambda
-bodyBallNullable: placeable { $$ = Return0(); }
-	| placeable COMMA bodyBallNullable 												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+bodyBallNullable: placeable 																			{ $$ = Return0(); }
+	| placeable COMMA bodyBallNullable 																	{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //O1 -> N1 | U1 | C1
-object: plane												{ $$ = Return0(); }
-	| block												{ $$ = Return0(); }
-	| ball												{ $$ = Return0(); }
+object: plane																							{ $$ = Return0(); }
+	| block																								{ $$ = Return0(); }
+	| ball																								{ $$ = Return0(); }
 	;
 
 // N1 -> Kn Vn1 Bn
-plane: keyPlane planeProperties bodyPlane												{ $$ = Return0(); }
+plane: keyPlane planeProperties bodyPlane																{ $$ = Return0(); }
 	;
 
 //Vn1 -> (Vn1') | lambda
-planeProperties: OPEN_PARENTHESIS planePropertiesNullable CLOSE_PARENTHESIS												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+planeProperties: OPEN_PARENTHESIS planePropertiesNullable CLOSE_PARENTHESIS								{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Vn1' -> Pn1, Vn1' | lambda
-planePropertiesNullable: planeProperty	{ $$ = Return0(); }
-	| planeProperty COMMA planePropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+planePropertiesNullable: planeProperty																	{ $$ = Return0(); }
+	| planeProperty COMMA planePropertiesNullable														{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pn1 -> ...
-planeProperty: POSITION_KEY SEMICOLON ANCHOR												{ $$ = Return0(); }
-    | ANGLE_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| ANGLE_LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
-	| LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
-	| LENGTH_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| FRICTION_KEY SEMICOLON BOOLEAN												{ $$ = Return0(); }
-	| COLOR_KEY SEMICOLON COLOR												{ $$ = Return0(); }
-	| VISIBLE_KEY SEMICOLON BOOLEAN												{ $$ = Return0(); }
+planeProperty: POSITION_KEY SEMICOLON ANCHOR															{ $$ = Return0(); }
+    | ANGLE_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
+	| ANGLE_LABEL_KEY SEMICOLON STRING																	{ $$ = Return0(); }
+	| LABEL_KEY SEMICOLON STRING																		{ $$ = Return0(); }
+	| LENGTH_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
+	| FRICTION_KEY SEMICOLON BOOLEAN																	{ $$ = Return0(); }
+	| COLOR_KEY SEMICOLON COLOR																			{ $$ = Return0(); }
+	| VISIBLE_KEY SEMICOLON BOOLEAN																		{ $$ = Return0(); }
 	;
 
 //U1 -> Ku Vu1 Bu
-block: keyBlock blockProperties bodyBlock												{ $$ = Return0(); }
+block: keyBlock blockProperties bodyBlock																{ $$ = Return0(); }
 	;
 
 //Vu1 -> (Vu1') | lambda
-blockProperties: OPEN_PARENTHESIS blockPropertiesNullable CLOSE_PARENTHESIS												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+blockProperties: OPEN_PARENTHESIS blockPropertiesNullable CLOSE_PARENTHESIS								{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Vu1' -> Pu1, Vu1' | lambda
-blockPropertiesNullable: blockProperty { $$ = Return0(); }
-	| blockProperty COMMA blockPropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+blockPropertiesNullable: blockProperty 																	{ $$ = Return0(); }
+	| blockProperty COMMA blockPropertiesNullable														{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pu1 -> ...
-blockProperty: POSITION_KEY SEMICOLON ANCHOR												{ $$ = Return0(); }
-	| HEIGHT_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| WIDTH_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| COLOR_KEY SEMICOLON COLOR												{ $$ = Return0(); }
-	| LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
+blockProperty: POSITION_KEY SEMICOLON ANCHOR															{ $$ = Return0(); }
+	| HEIGHT_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
+	| WIDTH_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
+	| COLOR_KEY SEMICOLON COLOR																			{ $$ = Return0(); }
+	| LABEL_KEY SEMICOLON STRING																		{ $$ = Return0(); }
 	;
 
 //C1 -> Kc Vc1 Bc
-ball: keyBall ballProperties bodyBall												{ $$ = Return0(); }
+ball: keyBall ballProperties bodyBall																	{ $$ = Return0(); }
 	;
 
 //Vc1 -> (Vc1') | lambda
-ballProperties: OPEN_PARENTHESIS ballPropertiesNullable CLOSE_PARENTHESIS												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+ballProperties: OPEN_PARENTHESIS ballPropertiesNullable CLOSE_PARENTHESIS								{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Vc1' -> Pc1, Vc1' | lambda
-ballPropertiesNullable: ballProperty { $$ = Return0(); }
-	| ballProperty COMMA ballPropertiesNullable												{ $$ = Return0(); }
-	| %empty												{ $$ = Return0(); }
+ballPropertiesNullable: ballProperty 																	{ $$ = Return0(); }
+	| ballProperty COMMA ballPropertiesNullable															{ $$ = Return0(); }
+	| %empty																							{ $$ = Return0(); }
 	;
 
 //Pc1 -> ...
-ballProperty: POSITION_KEY SEMICOLON ANCHOR												{ $$ = Return0(); }
-	| RADIUS_KEY SEMICOLON NUMBER												{ $$ = Return0(); }
-	| COLOR_KEY SEMICOLON COLOR												{ $$ = Return0(); }
-	| LABEL_KEY SEMICOLON STRING												{ $$ = Return0(); }
+ballProperty: POSITION_KEY SEMICOLON ANCHOR																{ $$ = Return0(); }
+	| RADIUS_KEY SEMICOLON NUMBER																		{ $$ = Return0(); }
+	| COLOR_KEY SEMICOLON COLOR																			{ $$ = Return0(); }
+	| LABEL_KEY SEMICOLON STRING																		{ $$ = Return0(); }
 	;
 
 %%
