@@ -26,6 +26,9 @@ typedef struct {
   char blue;
 } color_t;
 
-typedef char bool_t;
+typedef enum {
+	false = 0,
+	true = 1
+} boolean;
 
 #endif

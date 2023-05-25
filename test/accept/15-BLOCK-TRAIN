@@ -1,4 +1,4 @@
-Row() {
+Row {
 	Block(label: "first"){},
 	Rope(),
 	Block(label: "second"){},

@@ -1,11 +1,8 @@
 Block() {
     Spacer(
-        position: right-side,
         length: -2,
-    ),
-    Row(
-        position: bottom,
-    ) {
+    ): Right-side,
+    Row : Bottom {
         Spacer(
             length: 67.90,
         )

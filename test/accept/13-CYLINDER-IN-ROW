@@ -1,9 +1,8 @@
 Row {
     Cylinder {
         Arrow (
-            position: center,
-            label: "P",
+            label: /*esto es un comentario*/ "P",
             direction: south,
-        )
+        ) : Center
     }
 }

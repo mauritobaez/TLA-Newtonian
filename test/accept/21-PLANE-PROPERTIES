@@ -1,17 +1,14 @@
 Ball() {
     HorizontalPlane(
-        position: right-side,
         angle-label: "no incline",
         angle: 0,
-        label: "mu",
-        length: 34,
+        /*label: "mu",*/
+        length: 34, /*comment*/
         friction: true,
         color: green,
         visible: true,
-    ),
-    Row(
-        position: bottom,
-    ) {
+    ) : Right-side,
+    Row : Bottom {
         VerticalPlane(
             angle: 34,
             angle-label: "34",

@@ -1,4 +1,3 @@
 Car(
-	position: top,
 	label: "1 kg"
-)
+): Top

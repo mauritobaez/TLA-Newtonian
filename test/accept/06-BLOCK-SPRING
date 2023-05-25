@@ -1,5 +1,5 @@
 HorizontalPlane(){
-    Row(position: top){
+    Row: Top{
         Block( label: "15KG", color: red),
         Spring( label: "K=10 N/m")
     }

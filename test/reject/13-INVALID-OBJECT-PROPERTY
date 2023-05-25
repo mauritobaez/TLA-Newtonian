@@ -2,7 +2,6 @@ HorizontalPlane(
 	length: 10
 ) {
 	Car(
-		position: top,
 		label: "1 kg",
 		direction: top
 	)

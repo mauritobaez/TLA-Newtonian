@@ -5,15 +5,12 @@ Car(
     label: "El Rayo Macqueen"
 ) {
     Block(
-        position: top,
         height: -3,
         width: 0,
         color: green,
         label: "A"
-    ),
-    Column(
-        position: bottom,
-    ) {
+    ) : Top,
+    Column : Bottom {
         Box(
             height: 23,
             width: 34,

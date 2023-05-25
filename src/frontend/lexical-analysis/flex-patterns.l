@@ -50,7 +50,6 @@ whitespace		[ \f\n\r\t\v]
 "Spacer"                                    { return SpacerKeyAction(yytext); }
 
 
-"position"                                  { return PositionKeyAction(yytext); }
 "friction"                                  { return FrictionKeyAction(yytext); }
 "color"                                     { return ColorKeyAction(yytext); }
 "label"                                     { return LabelKeyAction(yytext); }
@@ -75,11 +74,11 @@ whitespace		[ \f\n\r\t\v]
 "orange"                                    { return DefaultColorAction(yytext, 255, 140, 0); }
 "purple"                                    { return DefaultColorAction(yytext, 128, 0, 128); }
 \"(\\.|[^\"])*\"                            { return StringAction(yytext); }
-"top"                                       { return AnchorAction(yytext, TOP); }
-"bottom"                                    { return AnchorAction(yytext, BOTTOM); }
-"left-side"                                 { return AnchorAction(yytext, LEFT_SIDE); }
-"right-side"                                { return AnchorAction(yytext, RIGHT_SIDE); }
-"center"                                    { return AnchorAction(yytext, CENTER); }
+"Top"                                       { return AnchorAction(yytext, TOP); }
+"Bottom"                                    { return AnchorAction(yytext, BOTTOM); }
+"Left-side"                                 { return AnchorAction(yytext, LEFT_SIDE); }
+"Right-side"                                { return AnchorAction(yytext, RIGHT_SIDE); }
+"Center"                                    { return AnchorAction(yytext, CENTER); }
 [+-]?({digit}+([.]{digit}*)?|[.]{digit}+)   { return NumberAction(yytext, yyleng); }
 "true"                                      { return BooleanAction(yytext, 1); }
 "false"                                     { return BooleanAction(yytext, 0); }

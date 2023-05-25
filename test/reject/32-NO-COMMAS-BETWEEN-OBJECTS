@@ -1,6 +1,4 @@
-Row(
-
-) {
+Row {
     Block() {
 
     }

@@ -1,14 +1,13 @@
 HorizontalPlane(angle: 30){
-    Row(){
-
+    Row{
         Car(label: "Car1", color: green ){
-            Arrow( position: center, direction: south, label: "P1", color: red , length: 3.4),
-            Arrow( position: left-side, direction: left, label: "F1", color: purple, length: 1.2)
+            Arrow( direction: south, label: "P1", color: red , length: 3.4): Center,
+            Arrow( direction: left, label: "F1", color: purple, length: 1.2): Left-side
         },
         Rope(),
         Car(label: "Car2", color: red){
-            Arrow( position: center, direction: south, label: "P2", color: red, length: 5.9),
-            Arrow(  position: right-side, direction: right, label: "F2", color: purple, length: 8.6)
+            Arrow( direction: south, label: "P2", color: red, length: 5.9): Center,
+            Arrow( direction: right, label: "F2", color: purple, length: 8.6): Right-side
         }
 
     }

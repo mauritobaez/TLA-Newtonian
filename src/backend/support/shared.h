@@ -29,13 +29,6 @@ extern int yylex(void);
 // Función global del analizador sintáctico Bison.
 extern int yyparse(void);
 
-// Emular tipo "boolean".
-typedef enum {
-
-	false = 0,
-	true = 1
-} boolean;
-
 // El tipo de los tokens emitidos por Flex.
 typedef int token;
 

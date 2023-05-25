@@ -3,6 +3,7 @@
 #include "bison-actions.h"
 #include <stdio.h>
 #include <string.h>
+#include <malloc.h>
 
 /**
  * Implementación de "bison-grammar.h".
@@ -28,8 +29,7 @@ void yyerror(const char * string) {
 * indica que efectivamente el programa de entrada se pudo generar con esta
 * gramática, o lo que es lo mismo, que el programa pertenece al lenguaje.
 */
-int ProgramGrammarAction(const int value) {
-	LogDebug("\tProgramGrammarAction(%d)", value);
+Program* ProgramAction(Placeable* placeable) {
 	/*
 	* "state" es una variable global que almacena el estado del compilador,
 	* cuyo campo "succeed" indica si la compilación fue o no exitosa, la cual
@@ -43,8 +43,26 @@ int ProgramGrammarAction(const int value) {
 	* la expresión se computa on-the-fly, y es la razón por la cual esta
 	* variable es un simple entero, en lugar de un nodo.
 	*/
-	state.result = value;
-	return value;
+	Program* program = calloc(1, sizeof(Program));
+	program->placeable = placeable;
+	state.program = program;
+	return program;
+}
+
+Placeable* PlaceableAction(PlaceableType type, boolean positionless, PropertyList* propertiesBody, PlaceableList* mainBody) {
+
+}
+
+PropertyList* PlaceablePropertyAction(Property* property, PropertyList* propertyList) {
+
+}
+
+Property* PropertyAction(PropertyType key, PropertyValue value) {
+
+}
+
+PlaceableList* PlaceableBodyAction(Placeable* placeable, PlaceableList* placeableList) {
+	
 }
 
 int Return0() {

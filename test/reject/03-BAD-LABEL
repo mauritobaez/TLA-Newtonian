@@ -1,16 +1,14 @@
 HorizontalPlane(){
-    Row(position: top){
+    Row: Top{
         Block(){
-            Arrow( position: left-side,
-                    direction: left,
+            Arrow(  direction: left,
                     color: black,
                     label: 25 ,
                     length: 1.897)
         }
         Spacer()
         Block(){
-            Arrow( position: right-side,
-                    direction: right,
+            Arrow(  direction: right,
                     color: green,
                     label: 45 ,
                     length: 3.5s)

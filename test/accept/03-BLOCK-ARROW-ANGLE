@@ -1,6 +1,5 @@
 Block(){
-    Arrow( position: center,
-            direction: left,
+    Arrow(  direction: left,
             angle: 45,
-            reverse-arrow: true)
+            reverse-arrow: true) : Center
 }

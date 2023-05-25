@@ -78,9 +78,6 @@ token RopeKeyAction(const char * lexeme);
 // Function for SpacerKey
 token SpacerKeyAction(const char * lexeme);
 
-// Function for PositionKey
-token PositionKeyAction(const char * lexeme);
-
 // Function for FrictionKey
 token FrictionKeyAction(const char * lexeme);
 
@@ -136,7 +133,7 @@ token AnchorAction(const char *lexeme, const anchor_t anchor);
 token NumberAction(const char *lexeme, const int length);
 
 // Function for BooleanPattern
-token BooleanAction(const char * lexeme, const bool_t boolean);
+token BooleanAction(const char * lexeme, const boolean boolean);
 
 // Function for Direction
 token DirectionAction(const char * lexeme, const direction_t direction);

@@ -1,12 +1,18 @@
 #ifndef ABSTRACT_SYNTAX_TREE_HEADER
 #define ABSTRACT_SYNTAX_TREE_HEADER
 
+#include "../support/shared.h"
+#include "../../frontend/newtonian-types.h"
+
+
 /**
 * Se realiza este tipo de definiciones cuando el tipo de dato debe
 * auto-referenciarse, como es el caso de una "Expression", que está compuesta
 * de otras 2 expresiones.
 */
-typedef struct Expression Expression;
+typedef struct Placeable Placeable;
+typedef struct PlaceableList PlaceableList;
+typedef struct PropertyList PropertyList;
 
 /**
 * Para cada no-terminal se define una nueva estructura que representa su tipo
@@ -25,32 +31,71 @@ typedef struct {
 * De este modo, al recorrer el AST, es posible determinar qué nodos hijos
 * posee según el valor de este enumerado.
 */
-typedef enum {
-	EXPRESSION,
-	CONSTANT
-} FactorType;
-
-typedef struct {
-	FactorType type;
-	Expression * expression;
-} Factor;
 
 typedef enum {
-	ADDITION,
-	SUBTRACTION,
-	MULTIPLICATION,
-	DIVISION,
-	FACTOR
-} ExpressionType;
+	ROW,
+	COLUMN,
+	ARROW,
+	ROPE,
+	SPRING,
+	SPACER,
+	HORIZONTAL_PLANE,
+	VERTICAL_PLANE,
+	BLOCK,
+	CAR,
+	BALL
+} PlaceableType;
 
-struct Expression {
-	ExpressionType type;
-	Expression * leftExpression;
-	Expression * rightExpression;
+typedef enum {
+	POSITION,
+	FRICTION,
+	COLOR_VALUE,
+	LABEL,
+	DIRECTION,
+	ANGLE,
+	ANGLE_LABEL,
+	HEIGHT,
+	WIDTH,
+	LENGTH,
+	REVERSE_ARROW,
+	DOUBLE_ARROW,
+	RADIUS,
+	VISIBLE
+} PropertyType;
+
+typedef union {
+	float number;
+	anchor_t anchor;
+	direction_t direction;
+	color_t color;
+	boolean boolean;
+	char* string;
+} PropertyValue;
+
+struct PlaceableList{
+	Placeable* placeable;
+	PlaceableList* next;
 };
 
 typedef struct {
-	Expression * expression;
+	PropertyType key;
+	PropertyValue value;
+} Property;
+
+struct PropertyList{
+	Property* property;
+	PropertyList* next;
+};
+
+struct Placeable{
+	PlaceableType type;
+	boolean isPositionless;
+	PropertyList* properties;
+	PlaceableList* composedPlaceables;
+};
+
+typedef struct {
+	Placeable * placeable;
 } Program;
 
 #endif

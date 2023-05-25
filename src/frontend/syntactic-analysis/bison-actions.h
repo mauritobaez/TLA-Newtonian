@@ -12,8 +12,11 @@
  * abstracta (i.e., el AST).
  */
 
-// Programa.
-int ProgramGrammarAction(const int value);
+Program* ProgramAction(Placeable* placeable);
+Placeable* PlaceableAction(PlaceableType type, boolean positionless, PropertyList* propertiesBody, PlaceableList* mainBody);
+PropertyList* PlaceablePropertyAction(Property* property, PropertyList* propertyList);
+Property* PropertyAction(PropertyType key, PropertyValue value);
+PlaceableList* PlaceableBodyAction(Placeable* placeable, PlaceableList* placeableList);
 
 int Return0();
 

@@ -1,6 +1,6 @@
 HorizontalPlane( ){{
 
-    Row( position: top ){
+    Row: Top{
         Block(width: 4.5, height: 8.9, color: purple)
         Rope()
         Block(height: 9.99999, color: blue)

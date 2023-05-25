@@ -1,7 +1,7 @@
 HorizontalPlane(angle: 30, friction:true){
-        Cylinder(position: top, radius: 2, color: red){
-            Arrow(position: center, direction: south, label: "Weight", color: #9A7A56),
-            Arrow(position: bottom, direction: right, label: "Friction", color: #B2B4B6),
-            Arrow(position: left-side, direction: right, reverse-arrow: true, label: "15N", color: #FFFFFF),
+        Cylinder(radius: 2, color: red) : Top {
+            Arrow(direction: south, label: "Weight", color: #9A7A56) : Center,
+            Arrow(direction: right, label: "Friction", color: #B2B4B6) : Bottom,
+            Arrow(direction: right, reverse-arrow: true, label: "15N", color: #FFFFFF) : Left-side,
         }
 }

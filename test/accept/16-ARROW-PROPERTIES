@@ -1,6 +1,5 @@
 Block() {
     Arrow(
-        position: top,
         direction: north,
         angle: 30,
         angle-label: "30°",
@@ -9,8 +8,8 @@ Block() {
         label: "F",
         reverse-arrow: false,
         double-arrow: false,
-    ),
-    Row() {
+    ) : Top,
+    Row {
         Arrow(
             direction: left,
             angle: 0.5,

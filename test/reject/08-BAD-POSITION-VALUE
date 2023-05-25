@@ -1,5 +1,3 @@
 HorizontalPlane() {
-    Block(
-        position: left,
-    ),
+    Block: Left
 }

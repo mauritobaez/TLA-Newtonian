@@ -1,5 +1,4 @@
 Row {
-	Row {
-		position: top
+	Row : Top {
 	}
 }

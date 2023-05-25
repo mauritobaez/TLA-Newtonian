@@ -1,5 +1,5 @@
 VerticalPlane(){
-    Column(position: top){
+    Column: Top{
         Spring(length: 5),
         Spacer(),
         Boll( radius: 0.8)

@@ -145,12 +145,6 @@ token SpacerKeyAction(const char * lexeme) {
     return SPACER_KEY;
 }
 
-// Function for PositionKey
-token PositionKeyAction(const char * lexeme) {
-    LogDebug("PositionKeyAction: '%s'.", lexeme);
-    yylval.token = POSITION_KEY;
-    return POSITION_KEY;
-}
 
 // Function for FrictionKey
 token FrictionKeyAction(const char * lexeme) {
@@ -262,6 +256,7 @@ token DefaultColorAction(const char *lexeme, const char r_val, const char g_val,
 //Function for String
 token StringAction(const char *lexeme){
     LogDebug("StringPatternAction: '%s'",lexeme);
+    //TODO: debería ser con strncpy?
     yylval.string = (char*) lexeme;
     return STRING;
 }
@@ -282,7 +277,7 @@ token NumberAction(const char *lexeme, const int length){
 }
 
 // Function for BooleanPattern
-token BooleanAction(const char * lexeme, const bool_t boolean) {
+token BooleanAction(const char * lexeme, const boolean boolean) {
     LogDebug("BooleanPatternAction: '%s'.", lexeme);
     yylval.boolean = boolean;
     return BOOLEAN;
