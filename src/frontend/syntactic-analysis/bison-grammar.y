@@ -10,7 +10,7 @@
 
 // Tipos de dato utilizados en las variables semánticas ($$, $1, $2, etc.).
 %union {
-	// No-terminales (backend).
+	// No-terminales
 	/*
 	Program program;
 	Expression expression;
@@ -18,76 +18,75 @@
 	Constant constant;
 	...
 	*/
+	
 	Program* initial;
+	Placeable* positionlessPlaceable;
+	Placeable* placeable;
+	anchor_t positionTag;
+	Placeable* alignment;
+	Placeable* positionlessAlignment;
+	PlaceableHeader* keyAlignment;
+	PlaceableList* bodyAlignment;
+	PlaceableList* bodyAlignmentNullable;
+	Placeable* object;
+	Placeable* positionlessObject;
+	PlaceableHeader* objectHeader;
+	PlaceableList* bodyObject;
+	PlaceableList* bodyObjectNullable;
+	PlaceableHeader* plane;
+	PlaceableType keyPlane;
+	PropertyList* planeProperties;
+	PropertyList* planePropertiesNullable;
+	Property* planeProperty;
+	PlaceableHeader* block;
+	PlaceableType keyBlock;
+	PropertyList* blockProperties;
+	PropertyList* blockPropertiesNullable;
+	Property* blockProperty;
+	PlaceableHeader* ball;
+	PlaceableType keyBall;
+	PropertyList* ballProperties;
+	PropertyList* ballPropertiesNullable;
+	Property* ballProperty;
+	Placeable* linear;
+	Placeable* positionlessLinear;
+	PlaceableHeader* linearHeader;
+	PlaceableHeader* arrow;
+	PlaceableType keyArrow;
+	PropertyList* arrowProperties;
+	PropertyList* arrowPropertiesNullable;
+	Property* arrowProperty;
+	PlaceableHeader* rope;
+	PlaceableType keyRope;
+	PropertyList* ropeProperties;
+	PropertyList* ropePropertiesNullable;
+	Property* ropeProperty;
+	PlaceableHeader* spacer;
+	PlaceableType keySpacer;
+	PropertyList* spacerProperties;
+	PropertyList* spacerPropertiesNullable;
+	Property* spacerProperty;
+	Property* group_generalProperty;
+	Property* group_planeProperty;
+	Property* group_straightProperty;
+	Property* group_arrowProperty;
+	Property* group_angleProperty;
+	Property* group_blockProperty;
+	Property* group_circularProperty;
 
-	// No-terminales (frontend).
-	//int initial;
-	int positionlessPlaceable;
-	int placeable;
-	int positionTag;
-	int alignment;
-	int positionlessAlignment;
-	int keyAlignment;
-	int bodyAlignment;
-	int bodyAlignmentNullable;
-	int object;
-	int positionlessObject;
-	int objectHeader;
-	int bodyObject;
-	int bodyObjectNullable;
-	int plane;
-	int keyPlane;
-	int planeProperties;
-	int planePropertiesNullable;
-	int planeProperty;
-	int block;
-	int keyBlock;
-	int blockProperties;
-	int blockPropertiesNullable;
-	int blockProperty;
-	int ball;
-	int keyBall;
-	int ballProperties;
-	int ballPropertiesNullable;
-	int ballProperty;
-	int linear;
-	int positionlessLinear;
-	int linearHeader;
-	int arrow;
-	int keyArrow;
-	int arrowProperties;
-	int arrowPropertiesNullable;
-	int arrowProperty;
-	int rope;
-	int keyRope;
-	int ropeProperties;
-	int ropePropertiesNullable;
-	int ropeProperty;
-	int spacer;
-	int keySpacer;
-	int spacerProperties;
-	int spacerPropertiesNullable;
-	int spacerProperty;
-	int group_generalProperty;
-	int group_planeProperty;
-	int group_straightProperty;
-	int group_arrowProperty;
-	int group_angleProperty;
-	int group_blockProperty;
-	int group_circularProperty;
-	int frictionPropertyKeyValue;
-	int colorPropertyKeyValue;
-	int labelPropertyKeyValue;
-	int directionPropertyKeyValue;
-	int anglePropertyKeyValue;
-	int angleLabelPropertyKeyValue;
-	int heightPropertyKeyValue;
-	int widthPropertyKeyValue;
-	int lengthPropertyKeyValue;
-	int reverseArrowPropertyKeyValue;
-	int doubleArrowPropertyKeyValue;
-	int radiusPropertyKeyValue;
-	int visiblePropertyKeyValue;
+	Property* frictionPropertyKeyValue;
+	Property* colorPropertyKeyValue;
+	Property* labelPropertyKeyValue;
+	Property* directionPropertyKeyValue;
+	Property* anglePropertyKeyValue;
+	Property* angleLabelPropertyKeyValue;
+	Property* heightPropertyKeyValue;
+	Property* widthPropertyKeyValue;
+	Property* lengthPropertyKeyValue;
+	Property* reverseArrowPropertyKeyValue;
+	Property* doubleArrowPropertyKeyValue;
+	Property* radiusPropertyKeyValue;
+	Property* visiblePropertyKeyValue;
 	
  	// Terminales.
 	token token;
@@ -238,24 +237,24 @@
 //---------------------------------------------------------
 
 // S -> PL0
-initial: positionlessPlaceable																			{ $$ = ProgramAction(0); }
+initial: positionlessPlaceable																			{ $$ = ProgramAction($1); }
 	;
 
 //PL0 -> A0 | O0 | L0
-positionlessPlaceable: positionlessAlignment															{ $$ = Return0(); }
-	| positionlessObject																				{ $$ = Return0(); }
-	| positionlessLinear																				{ $$ = Return0(); }
+positionlessPlaceable: positionlessAlignment															{ $$ = $1; }
+	| positionlessObject																				{ $$ = $1; }
+	| positionlessLinear																				{ $$ = $1; }
 	;
 
 //PL1 -> A1 | O1 | L1
-placeable: alignment																					{ $$ = Return0(); }
-	| object																							{ $$ = Return0(); }
-	| linear																							{ $$ = Return0(); }
+placeable: alignment																					{ $$ = $1; }
+	| object																							{ $$ = $1; }
+	| linear																							{ $$ = $1; }
 	;
 
 //pT
-positionTag: SEMICOLON ANCHOR																			{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+positionTag: SEMICOLON ANCHOR																			{ $$ = $2; }
+	| %empty																							{ $$ = NO_ANCHOR; }
 	; 
 
 //---------------------------------------------------------
@@ -263,27 +262,27 @@ positionTag: SEMICOLON ANCHOR																			{ $$ = Return0(); }
 //---------------------------------------------------------
 
 //A1 -> Ka pT Ba
-alignment: keyAlignment positionTag bodyAlignment														{ $$ = Return0(); }
+alignment: keyAlignment positionTag bodyAlignment														{ $$ = PlaceableAction($1, $2, $3); }
 	;
 
 //A0 -> Ka Ba
-positionlessAlignment: keyAlignment bodyAlignment														{ $$ = Return0(); }
+positionlessAlignment: keyAlignment bodyAlignment														{ $$ = PlaceableAction($1, NO_ANCHOR, $2); }
 	;
 
 //Ka -> Row | Column
-keyAlignment: ROW_KEY																					{ $$ = Return0(); }
-	| COLUMN_KEY																						{ $$ = Return0(); }
+keyAlignment: ROW_KEY																					{ $$ = PlaceableHeaderAction(ROW, NULL); }
+	| COLUMN_KEY																						{ $$ = PlaceableHeaderAction(COLUMN, NULL); }
 	;
 
 //Ba -> { Ba' } | lambda
-bodyAlignment: OPEN_BRACKET bodyAlignmentNullable CLOSE_BRACKET 										{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+bodyAlignment: OPEN_BRACKET bodyAlignmentNullable CLOSE_BRACKET 										{ $$ = $2; }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Ba' -> Ba' | PL0, Ba' | lambda
-bodyAlignmentNullable: positionlessPlaceable 															{ $$ = Return0(); }
-	| positionlessPlaceable COMMA bodyAlignmentNullable													{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+bodyAlignmentNullable: positionlessPlaceable 															{ $$ = PlaceableBodyAction($1, NULL); }
+	| positionlessPlaceable COMMA bodyAlignmentNullable													{ $$ = PlaceableBodyAction($1, $3); }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //---------------------------------------------------------
@@ -291,110 +290,110 @@ bodyAlignmentNullable: positionlessPlaceable 															{ $$ = Return0(); }
 //---------------------------------------------------------
 
 //O1 -> Ho pT Bo
-object: objectHeader positionTag bodyObject																{ $$ = Return0(); }
+object: objectHeader positionTag bodyObject																{ $$ = PlaceableAction($1, $2, $3); }
 	;
 
 //O0 -> Ho B
-positionlessObject: objectHeader bodyObject 															{ $$ = Return0(); }
+positionlessObject: objectHeader bodyObject 															{ $$ = PlaceableAction($1, NO_ANCHOR, $2); }
 	;
 
 //Ho -> N | U | C
-objectHeader: plane																						{ $$ = Return0(); }
-	| block																								{ $$ = Return0(); }
-	| ball																								{ $$ = Return0(); }
+objectHeader: plane																						{ $$ = $1; }
+	| block																								{ $$ = $1; }
+	| ball																								{ $$ = $1; }
 	;
 
 //Bo -> { Bo' } | lambda
-bodyObject: OPEN_BRACKET bodyObjectNullable CLOSE_BRACKET 												{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+bodyObject: OPEN_BRACKET bodyObjectNullable CLOSE_BRACKET 												{ $$ = $2; }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Bo' -> Bo' | PL0, Bo' | lambda
-bodyObjectNullable: placeable 																			{ $$ = Return0(); }
-	| placeable COMMA bodyObjectNullable																{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+bodyObjectNullable: placeable 																			{ $$ = PlaceableBodyAction($1, NULL); }
+	| placeable COMMA bodyObjectNullable																{ $$ = PlaceableBodyAction($1, $3); }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //------------------------- OBJECT: PLANE ----------------------------
 
 // N -> Kn Vn
-plane: keyPlane planeProperties																			{ $$ = Return0(); }
+plane: keyPlane planeProperties																			{ $$ = PlaceableHeaderAction($1, $2); }
 	;
 
 //Kn -> HorizontalPlane | VerticalPlane
-keyPlane: HORIZONTAL_PLANE_KEY																			{ $$ = Return0(); }
-	| VERTICAL_PLANE_KEY																				{ $$ = Return0(); }
+keyPlane: HORIZONTAL_PLANE_KEY																			{ $$ = HORIZONTAL_PLANE; }
+	| VERTICAL_PLANE_KEY																				{ $$ = VERTICAL_PLANE; }
 	;
 
 //Vn -> (Vn') | lambda
-planeProperties: OPEN_PARENTHESIS planePropertiesNullable CLOSE_PARENTHESIS								{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+planeProperties: OPEN_PARENTHESIS planePropertiesNullable CLOSE_PARENTHESIS								{ $$ = $2; }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Vn' -> Pn | Pn, Vn' | lambda
-planePropertiesNullable: planeProperty																	{ $$ = Return0(); }
-	| planeProperty COMMA planePropertiesNullable														{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+planePropertiesNullable: planeProperty																	{ $$ = PlaceablePropertyAction($1, NULL); }
+	| planeProperty COMMA planePropertiesNullable														{ $$ = PlaceablePropertyAction($1, $3); }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Pn -> ...
-planeProperty: group_generalProperty																	{ $$ = Return0(); }
-	| group_planeProperty																				{ $$ = Return0(); }
-	| group_straightProperty																			{ $$ = Return0(); }
-	| group_angleProperty																				{ $$ = Return0(); }
+planeProperty: group_generalProperty																	{ $$ = $1; }
+	| group_planeProperty																				{ $$ = $1; }
+	| group_straightProperty																			{ $$ = $1; }
+	| group_angleProperty																				{ $$ = $1; }
 	;	
 
 //------------------------- OBJECT: BLOCK ----------------------------
 
 //U -> Ku Vu
-block: keyBlock blockProperties																			{ $$ = Return0(); }
+block: keyBlock blockProperties																			{ $$ = PlaceableHeaderAction($1, $2); }
 	;
 
 //Ku -> Block | Car
-keyBlock: BLOCK_KEY																						{ $$ = Return0(); }
-	| CAR_KEY																							{ $$ = Return0(); }
+keyBlock: BLOCK_KEY																						{ $$ = BLOCK; }
+	| CAR_KEY																							{ $$ = CAR; }
 	;
 
 //Vu -> (Vu') | lambda
-blockProperties: OPEN_PARENTHESIS blockPropertiesNullable CLOSE_PARENTHESIS								{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+blockProperties: OPEN_PARENTHESIS blockPropertiesNullable CLOSE_PARENTHESIS								{ $$ = $2; }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Vu' -> Pu | Pu, Vu' | lambda
-blockPropertiesNullable: blockProperty 																	{ $$ = Return0(); }
-	| blockProperty COMMA blockPropertiesNullable														{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+blockPropertiesNullable: blockProperty 																	{ $$ = PlaceablePropertyAction($1, NULL); }
+	| blockProperty COMMA blockPropertiesNullable														{ $$ = PlaceablePropertyAction($1, $3); }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Pu -> ...
-blockProperty: group_generalProperty																	{ $$ = Return0(); }
-	| group_blockProperty																				{ $$ = Return0(); }
+blockProperty: group_generalProperty																	{ $$ = $1; }
+	| group_blockProperty																				{ $$ = $1; }
 	;
 
 //------------------------- OBJECT: BALL ----------------------------
 
 //C -> Kc Vc
-ball: keyBall ballProperties 																			{ $$ = Return0(); }
+ball: keyBall ballProperties 																			{ $$ = PlaceableHeaderAction($1, $2); }
 	;
 
 //Kc -> Ball | Cylinder (el | está en flex porque como se dibujan igual son completamente sinónimos)
-keyBall: BALL_KEY																						{ $$ = Return0(); }
+keyBall: BALL_KEY																						{ $$ = BALL; }
 	;
 
 //Vc -> (Vc') | lambda
-ballProperties: OPEN_PARENTHESIS ballPropertiesNullable CLOSE_PARENTHESIS								{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+ballProperties: OPEN_PARENTHESIS ballPropertiesNullable CLOSE_PARENTHESIS								{ $$ = $2; }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Vc' -> Pc | Pc, Vc' | lambda
-ballPropertiesNullable: ballProperty 																	{ $$ = Return0(); }
-	| ballProperty COMMA ballPropertiesNullable															{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+ballPropertiesNullable: ballProperty 																	{ $$ = PlaceablePropertyAction($1, NULL); }
+	| ballProperty COMMA ballPropertiesNullable															{ $$ = PlaceablePropertyAction($1, $3); }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Pc -> ...
-ballProperty: group_generalProperty																		{ $$ = Return0(); }
-	| group_circularProperty																			{ $$ = Return0(); }
+ballProperty: group_generalProperty																		{ $$ = $1; }
+	| group_circularProperty																			{ $$ = $1; }
 	;
 
 //---------------------------------------------------------
@@ -402,128 +401,128 @@ ballProperty: group_generalProperty																		{ $$ = Return0(); }
 //---------------------------------------------------------
 
 //L1 -> Hl pT
-linear: linearHeader positionTag																		{ $$ = Return0(); }
+linear: linearHeader positionTag																		{ $$ = PlaceableAction($1, $2, NULL); }
 	;
 
 //L0 -> Hl
-positionlessLinear: linearHeader																		{ $$ = Return0(); }
+positionlessLinear: linearHeader																		{ $$ = PlaceableAction($1, NO_ANCHOR, NULL); }
 	;
 
 //Hl -> W | G | E
-linearHeader: arrow																						{ $$ = Return0(); }
-	| rope																								{ $$ = Return0(); }
-	| spacer																							{ $$ = Return0(); }
+linearHeader: arrow																						{ $$ = $1; }
+	| rope																								{ $$ = $1; }
+	| spacer																							{ $$ = $1; }
 	;
 
 //---------------------- LINEAR OBJECT: ARROW ----------------------------
 
 //W -> Kw Vw
-arrow: keyArrow arrowProperties																			{ $$ = Return0(); }
+arrow: keyArrow arrowProperties																			{ $$ = PlaceableHeaderAction($1, $2); }
 	;
 
 //Kw -> Arrow
-keyArrow: ARROW_KEY																						{ $$ = Return0(); }
+keyArrow: ARROW_KEY																						{ $$ = ARROW; }
 	;
 
 //Vw -> ( Vw' ) | lambda
-arrowProperties: OPEN_PARENTHESIS arrowPropertiesNullable CLOSE_PARENTHESIS 							{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+arrowProperties: OPEN_PARENTHESIS arrowPropertiesNullable CLOSE_PARENTHESIS 							{ $$ = $2; }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Vw' -> Pw | Pw, Vw' | lambda
-arrowPropertiesNullable: arrowProperty 																	{ $$ = Return0(); }
-	| arrowProperty COMMA arrowPropertiesNullable														{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+arrowPropertiesNullable: arrowProperty 																	{ $$ = PlaceablePropertyAction($1, NULL); }
+	| arrowProperty COMMA arrowPropertiesNullable														{ $$ = PlaceablePropertyAction($1, $3); }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Pw -> ...
-arrowProperty: group_generalProperty																	{ $$ = Return0(); }
-	| group_arrowProperty																				{ $$ = Return0(); }
-	| group_straightProperty																			{ $$ = Return0(); }
-	| group_angleProperty																				{ $$ = Return0(); }
+arrowProperty: group_generalProperty																	{ $$ = $1; }
+	| group_arrowProperty																				{ $$ = $1; }
+	| group_straightProperty																			{ $$ = $1; }
+	| group_angleProperty																				{ $$ = $1; }
 	;
 
 //---------------------- LINEAR OBJECT: ROPE ----------------------------
 
 //G -> Kg Vg
-rope: keyRope ropeProperties																			{ $$ = Return0(); }
+rope: keyRope ropeProperties																			{ $$ = PlaceableHeaderAction($1, $2); }
 	;
 
 //Kg -> Rope | Spring
-keyRope: ROPE_KEY																						{ $$ = Return0(); }
-	| SPRING_KEY																						{ $$ = Return0(); }
+keyRope: ROPE_KEY																						{ $$ = ROPE; }
+	| SPRING_KEY																						{ $$ = SPRING; }
 	;
 
 //Vg -> ( vg' ) | lambda
-ropeProperties: OPEN_PARENTHESIS ropePropertiesNullable CLOSE_PARENTHESIS								{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+ropeProperties: OPEN_PARENTHESIS ropePropertiesNullable CLOSE_PARENTHESIS								{ $$ = $2; }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Vg' -> Pg | Pg, Vg' | lambda
-ropePropertiesNullable: ropeProperty 																	{ $$ = Return0(); }
-	| ropeProperty COMMA ropePropertiesNullable															{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+ropePropertiesNullable: ropeProperty 																	{ $$ = PlaceablePropertyAction($1, NULL); }
+	| ropeProperty COMMA ropePropertiesNullable															{ $$ = PlaceablePropertyAction($1, $3); }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Pg -> ...
-ropeProperty: group_generalProperty																		{ $$ = Return0(); }
-	| group_straightProperty																			{ $$ = Return0(); }
+ropeProperty: group_generalProperty																		{ $$ = $1; }
+	| group_straightProperty																			{ $$ = $1; }
 	;
 
 //---------------------- LINEAR OBJECT: SPACER ----------------------------
 
 //E -> Ke Ve
-spacer: keySpacer spacerProperties																		{ $$ = Return0(); }
+spacer: keySpacer spacerProperties																		{ $$ = PlaceableHeaderAction($1, $2); }
 	;
 
 //Ke -> Spacer
-keySpacer: SPACER_KEY																					{ $$ = Return0(); }
+keySpacer: SPACER_KEY																					{ $$ = SPACER; }
 	;
 
 //Ve -> ( ve' ) | lambda
-spacerProperties: OPEN_PARENTHESIS spacerPropertiesNullable CLOSE_PARENTHESIS							{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+spacerProperties: OPEN_PARENTHESIS spacerPropertiesNullable CLOSE_PARENTHESIS							{ $$ = $2; }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Ve' -> Pe | Pe, Ve' | lambda
-spacerPropertiesNullable: spacerProperty 																{ $$ = Return0(); }
-	| spacerProperty COMMA spacerPropertiesNullable														{ $$ = Return0(); }
-	| %empty																							{ $$ = Return0(); }
+spacerPropertiesNullable: spacerProperty 																{ $$ = PlaceablePropertyAction($1, NULL); }
+	| spacerProperty COMMA spacerPropertiesNullable														{ $$ = PlaceablePropertyAction($1, $3); }
+	| %empty																							{ $$ = NULL; }
 	;
 
 //Pe -> ...
-spacerProperty: group_straightProperty																	{ $$ = Return0(); }
+spacerProperty: group_straightProperty																	{ $$ = $1; }
 	;
 	
 //---------------------------------------------------------
 //---------------------- GROUPS ---------------------------
 //---------------------------------------------------------
 
-group_generalProperty: colorPropertyKeyValue															{ $$ = Return0(); }																	
-	| labelPropertyKeyValue																				{ $$ = Return0(); }
+group_generalProperty: colorPropertyKeyValue															{ $$ = $1; }																	
+	| labelPropertyKeyValue																				{ $$ = $1; }
 	;
 
-group_planeProperty: frictionPropertyKeyValue															{ $$ = Return0(); }
-	| visiblePropertyKeyValue																			{ $$ = Return0(); }
+group_planeProperty: frictionPropertyKeyValue															{ $$ = $1; }
+	| visiblePropertyKeyValue																			{ $$ = $1; }
 	;
 
-group_straightProperty: lengthPropertyKeyValue															{ $$ = Return0(); }
+group_straightProperty: lengthPropertyKeyValue															{ $$ = $1; }
 	;
 
-group_arrowProperty: directionPropertyKeyValue															{ $$ = Return0(); }
-	| doubleArrowPropertyKeyValue																		{ $$ = Return0(); }
-	| reverseArrowPropertyKeyValue																		{ $$ = Return0(); }
+group_arrowProperty: directionPropertyKeyValue															{ $$ = $1; }
+	| doubleArrowPropertyKeyValue																		{ $$ = $1; }
+	| reverseArrowPropertyKeyValue																		{ $$ = $1; }
 	;
 
-group_angleProperty: anglePropertyKeyValue																{ $$ = Return0(); }
-	| angleLabelPropertyKeyValue																		{ $$ = Return0(); }
+group_angleProperty: anglePropertyKeyValue																{ $$ = $1; }
+	| angleLabelPropertyKeyValue																		{ $$ = $1; }
 	;
 
-group_blockProperty: widthPropertyKeyValue																{ $$ = Return0(); }
-	| heightPropertyKeyValue																			{ $$ = Return0(); }
+group_blockProperty: widthPropertyKeyValue																{ $$ = $1; }
+	| heightPropertyKeyValue																			{ $$ = $1; }
 	;
 
-group_circularProperty: radiusPropertyKeyValue															{ $$ = Return0(); }
+group_circularProperty: radiusPropertyKeyValue															{ $$ = $1; }
 	;
 
 
@@ -531,44 +530,44 @@ group_circularProperty: radiusPropertyKeyValue															{ $$ = Return0(); }
 //-------------------- PROPERTIES -------------------------
 //---------------------------------------------------------
 
-frictionPropertyKeyValue: FRICTION_KEY SEMICOLON BOOLEAN												{ $$ = Return0(); }
+frictionPropertyKeyValue: FRICTION_KEY SEMICOLON BOOLEAN												{ $$ = PropertyAction(FRICTION, (void*) &($3)); }
 	;
 
-colorPropertyKeyValue: COLOR_KEY SEMICOLON COLOR														{ $$ = Return0(); }
+colorPropertyKeyValue: COLOR_KEY SEMICOLON COLOR														{ $$ = PropertyAction(COLOR_PROP, (void*) &($3)); }
 	;
 
-labelPropertyKeyValue: LABEL_KEY SEMICOLON STRING														{ $$ = Return0(); }
+labelPropertyKeyValue: LABEL_KEY SEMICOLON STRING														{ $$ = PropertyAction(LABEL, (void*) &($3)); }
 	;
 
-directionPropertyKeyValue: DIRECTION_KEY SEMICOLON DIRECTION_ABS										{ $$ = Return0(); }
-	| DIRECTION_KEY SEMICOLON DIRECTION_REL																{ $$ = Return0(); }
+directionPropertyKeyValue: DIRECTION_KEY SEMICOLON DIRECTION_ABS										{ $$ = PropertyAction(DIRECTION, (void*) &($3)); }
+	| DIRECTION_KEY SEMICOLON DIRECTION_REL																{ $$ = PropertyAction(DIRECTION, (void*) &($3)); }
 	;
 
-anglePropertyKeyValue: ANGLE_KEY SEMICOLON NUMBER														{ $$ = Return0(); }
+anglePropertyKeyValue: ANGLE_KEY SEMICOLON NUMBER														{ $$ = PropertyAction(ANGLE, (void*) &($3)); }
 	;
 	
-angleLabelPropertyKeyValue: ANGLE_LABEL_KEY SEMICOLON STRING											{ $$ = Return0(); }
+angleLabelPropertyKeyValue: ANGLE_LABEL_KEY SEMICOLON STRING											{ $$ = PropertyAction(ANGLE_LABEL, (void*) &($3)); }
 	;
 	
-heightPropertyKeyValue: HEIGHT_KEY SEMICOLON NUMBER														{ $$ = Return0(); }
+heightPropertyKeyValue: HEIGHT_KEY SEMICOLON NUMBER														{ $$ = PropertyAction(HEIGHT, (void*) &($3)); }
 	;
 
-widthPropertyKeyValue: WIDTH_KEY SEMICOLON NUMBER														{ $$ = Return0(); }
+widthPropertyKeyValue: WIDTH_KEY SEMICOLON NUMBER														{ $$ = PropertyAction(WIDTH, (void*) &($3)); }
 	;
 
-lengthPropertyKeyValue: LENGTH_KEY SEMICOLON NUMBER														{ $$ = Return0(); }
+lengthPropertyKeyValue: LENGTH_KEY SEMICOLON NUMBER														{ $$ = PropertyAction(LENGTH, (void*) &($3)); }
 	;
 
-reverseArrowPropertyKeyValue: REVERSE_ARROW_KEY SEMICOLON BOOLEAN										{ $$ = Return0(); }
+reverseArrowPropertyKeyValue: REVERSE_ARROW_KEY SEMICOLON BOOLEAN										{ $$ = PropertyAction(REVERSE_ARROW, (void*) &($3)); }
 	;
 
-doubleArrowPropertyKeyValue: DOUBLE_ARROW_KEY SEMICOLON BOOLEAN											{ $$ = Return0(); }
+doubleArrowPropertyKeyValue: DOUBLE_ARROW_KEY SEMICOLON BOOLEAN											{ $$ = PropertyAction(DOUBLE_ARROW, (void*) &($3)); }
 	;
 
-radiusPropertyKeyValue: RADIUS_KEY SEMICOLON NUMBER														{ $$ = Return0(); }
+radiusPropertyKeyValue: RADIUS_KEY SEMICOLON NUMBER														{ $$ = PropertyAction(RADIUS, (void*) &($3)); }
 	;
 
-visiblePropertyKeyValue: VISIBLE_KEY SEMICOLON BOOLEAN													{ $$ = Return0(); }
+visiblePropertyKeyValue: VISIBLE_KEY SEMICOLON BOOLEAN													{ $$ = PropertyAction(VISIBLE, (void*) &($3)); }
 	;
 
 %%

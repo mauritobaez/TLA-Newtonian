@@ -13,25 +13,12 @@
  */
 
 Program* ProgramAction(Placeable* placeable);
-Placeable* PlaceableAction(PlaceableType type, boolean positionless, PropertyList* propertiesBody, PlaceableList* mainBody);
+Placeable* PlaceableAction(PlaceableHeader* header, anchor_t position, PlaceableList* mainBody);
+PlaceableHeader* PlaceableHeaderAction(PlaceableType type, PropertyList* propertiesBody);
 PropertyList* PlaceablePropertyAction(Property* property, PropertyList* propertyList);
-Property* PropertyAction(PropertyType key, PropertyValue value);
+Property* PropertyAction(PropertyType key, void* value);
 PlaceableList* PlaceableBodyAction(Placeable* placeable, PlaceableList* placeableList);
 
-int Return0();
-
-// Expresión.
-int AdditionExpressionGrammarAction(const int leftValue, const int rightValue);
-int SubtractionExpressionGrammarAction(const int leftValue, const int rightValue);
-int MultiplicationExpressionGrammarAction(const int leftValue, const int rightValue);
-int DivisionExpressionGrammarAction(const int leftValue, const int rightValue);
-int FactorExpressionGrammarAction(const int value);
-
-// Factores.
-int ExpressionFactorGrammarAction(const int value);
-int ConstantFactorGrammarAction(const int value);
-
-// Constantes.
-int IntegerConstantGrammarAction(const int value);
+void FreeProgram(Program* program);
 
 #endif

@@ -49,62 +49,111 @@ Program* ProgramAction(Placeable* placeable) {
 	return program;
 }
 
-Placeable* PlaceableAction(PlaceableType type, boolean positionless, PropertyList* propertiesBody, PlaceableList* mainBody) {
+Placeable* PlaceableAction(PlaceableHeader* header, anchor_t position, PlaceableList* mainBody) {
+	Placeable* placeable = calloc(1, sizeof(Placeable));
+	placeable->position = position;
+	placeable->composedPlaceables = mainBody;
+	if(header!=NULL) {
+		placeable->type = header->type;
+		placeable->properties = header->properties;
+		free(header);
+	}
+	return placeable;
+}
 
+PlaceableHeader* PlaceableHeaderAction(PlaceableType type, PropertyList* propertiesBody) {
+	PlaceableHeader* header = calloc(1, sizeof(PlaceableHeader));
+	header->type = type;
+	header->properties = propertiesBody;
+	return header;
 }
 
 PropertyList* PlaceablePropertyAction(Property* property, PropertyList* propertyList) {
-
+	PropertyList* propertyListNode = calloc(1, sizeof(PropertyList));
+	propertyListNode->next = propertyList;
+	propertyListNode->property = property;
+	return propertyListNode;
 }
 
-Property* PropertyAction(PropertyType key, PropertyValue value) {
-
+Property* PropertyAction(PropertyType key, void* value) {
+	Property* property = calloc(1, sizeof(Property));
+	switch (key) {
+		case COLOR_PROP:
+			property->value.color = *((color_t*) value);
+			break;
+		case DIRECTION: 
+			property->value.direction = *((direction_t*) value);
+			break;
+		case FRICTION:
+		case REVERSE_ARROW:
+		case DOUBLE_ARROW:
+		case VISIBLE:
+			property->value.boolean = *((boolean*) value);
+			break;
+		case LABEL:
+		case ANGLE_LABEL:
+			// quizás deba ser un strncpy
+			property->value.string = *((char**) value);
+			break;
+		case HEIGHT:
+		case WIDTH:
+		case LENGTH:
+		case RADIUS:
+		case ANGLE:
+			property->value.number = *((float*) value);
+			break;
+		
+	}
+	property->key = key;
+	return property;
 }
 
 PlaceableList* PlaceableBodyAction(Placeable* placeable, PlaceableList* placeableList) {
-	
+	PlaceableList* placeableListNode = calloc(1, sizeof(PlaceableList));
+	placeableListNode->next = placeableList;
+	placeableListNode->placeable = placeable;
+	return placeableListNode;
 }
 
-int Return0() {
-	return 0;
+void FreePlaceable(Placeable* placeable);
+void FreePropertyList(PropertyList* propertyList);
+void FreePlaceableList(PlaceableList* placeableList);
+void FreeProperty(Property* property);
+
+void FreeProgram(Program* program) {
+	if(program->placeable != NULL)
+		FreePlaceable(program->placeable);
+	free(program);
 }
 
-int AdditionExpressionGrammarAction(const int leftValue, const int rightValue) {
-	LogDebug("\tAdditionExpressionGrammarAction(%d, %d)", leftValue, rightValue);
-	return Add(leftValue, rightValue);
+void FreePlaceable(Placeable* placeable) {
+	if(placeable->properties != NULL)
+		FreePropertyList(placeable->properties);
+	if(placeable->composedPlaceables != NULL)
+		FreePlaceableList(placeable->composedPlaceables);
+	free(placeable);
 }
 
-int SubtractionExpressionGrammarAction(const int leftValue, const int rightValue) {
-	LogDebug("\tSubtractionExpressionGrammarAction(%d, %d)", leftValue, rightValue);
-	return Subtract(leftValue, rightValue);
+void FreePropertyList(PropertyList* propertyList) {
+	if(propertyList->next != NULL)
+		FreePropertyList(propertyList->next);
+	if(propertyList->property != NULL)
+		FreeProperty(propertyList->property);
+	free(propertyList);
 }
 
-int MultiplicationExpressionGrammarAction(const int leftValue, const int rightValue) {
-	LogDebug("\tMultiplicationExpressionGrammarAction(%d, %d)", leftValue, rightValue);
-	return Multiply(leftValue, rightValue);
+void FreePlaceableList(PlaceableList* placeableList) {
+	if(placeableList->next != NULL)
+		FreePlaceableList(placeableList->next);
+	if(placeableList->placeable != NULL)
+		FreePlaceable(placeableList->placeable);
+	free(placeableList);
 }
 
-int DivisionExpressionGrammarAction(const int leftValue, const int rightValue) {
-	LogDebug("\tDivisionExpressionGrammarAction(%d, %d)", leftValue, rightValue);
-	return Divide(leftValue, rightValue);
-}
-
-int FactorExpressionGrammarAction(const int value) {
-	LogDebug("\tFactorExpressionGrammarAction(%d)", value);
-	return value;
-}
-
-int ExpressionFactorGrammarAction(const int value) {
-	LogDebug("\tExpressionFactorGrammarAction(%d)", value);
-	return value;
-}
-
-int ConstantFactorGrammarAction(const int value) {
-	LogDebug("\tConstantFactorGrammarAction(%d)", value);
-	return value;
-}
-
-int IntegerConstantGrammarAction(const int value) {
-	LogDebug("\tIntegerConstantGrammarAction(%d)", value);
-	return value;
+void FreeProperty(Property* property) {
+	/* TODO: está bien hacer esto? (si es q el malloc esta en flex)
+	if((property->key == LABEL || property->key == ANGLE_LABEL) && (property->value.string != NULL)) {
+		free(property->value.string);
+	}*/
+	free(property);
 }

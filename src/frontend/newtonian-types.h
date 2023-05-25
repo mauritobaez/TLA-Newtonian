@@ -2,6 +2,7 @@
 #define NEWTONIAN_TYPES_H
 
 typedef enum {
+  NO_ANCHOR,
   TOP,
   BOTTOM,
   LEFT_SIDE,

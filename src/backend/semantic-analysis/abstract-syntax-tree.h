@@ -47,25 +47,23 @@ typedef enum {
 } PlaceableType;
 
 typedef enum {
-	POSITION,
-	FRICTION,
-	COLOR_VALUE,
-	LABEL,
-	DIRECTION,
-	ANGLE,
-	ANGLE_LABEL,
-	HEIGHT,
-	WIDTH,
-	LENGTH,
-	REVERSE_ARROW,
-	DOUBLE_ARROW,
-	RADIUS,
-	VISIBLE
+	COLOR_PROP,		//color
+	DIRECTION,		//direction
+	FRICTION,		//boolean
+	REVERSE_ARROW,	//boolean
+	DOUBLE_ARROW,	//boolean
+	VISIBLE,		//boolean
+	LABEL,			//string
+	ANGLE_LABEL, 	//string
+	HEIGHT,			//number
+	WIDTH,			//number
+	LENGTH,			//number
+	RADIUS,			//number
+	ANGLE,			//number
 } PropertyType;
 
 typedef union {
 	float number;
-	anchor_t anchor;
 	direction_t direction;
 	color_t color;
 	boolean boolean;
@@ -89,10 +87,15 @@ struct PropertyList{
 
 struct Placeable{
 	PlaceableType type;
-	boolean isPositionless;
+	anchor_t position;
 	PropertyList* properties;
 	PlaceableList* composedPlaceables;
 };
+
+typedef struct {
+	PlaceableType type;
+	PropertyList* properties;
+} PlaceableHeader;
 
 typedef struct {
 	Placeable * placeable;
