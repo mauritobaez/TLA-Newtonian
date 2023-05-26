@@ -5,6 +5,12 @@
 #include <string.h>
 #include <malloc.h>
 
+
+void printProperties(PropertyList* props,  char* identation);
+void printPlaceable(PlaceableList * pl, int indentation);
+void printPlaceableNode(Placeable * placeable, int indentation);
+void printTree(Program * program);
+
 /**
  * Implementación de "bison-grammar.h".
  */
@@ -46,6 +52,7 @@ Program* ProgramAction(Placeable* placeable) {
 	Program* program = calloc(1, sizeof(Program));
 	program->placeable = placeable;
 	state.program = program;
+	printTree(program);
 	return program;
 }
 
@@ -157,3 +164,110 @@ void FreeProperty(Property* property) {
 	}*/
 	free(property);
 }
+
+
+void printProperties(PropertyList* props, char* identation) {
+	if(props!=NULL) {
+		PropertyType key = props->property->key;
+		PropertyValue val = props->property->value;
+		switch(key) {
+			case COLOR_PROP:
+				// habría que ver de traducir algo como 'purple' al RGB
+				printf("%sType: %d value: %c %c %c\n", identation,key,val.color.red,val.color.blue,val.color.blue);
+				break;
+			case DIRECTION: 
+				printf("%sType: %d value: %d\n", identation, key, val.direction);
+				break;
+			case FRICTION:
+			case REVERSE_ARROW:
+			case DOUBLE_ARROW:
+			case VISIBLE:
+				printf("%sType: %d value: %d\n", identation, key, val.boolean);
+				break;
+			case LABEL:
+			case ANGLE_LABEL:
+				// quizás deba ser un strncpy
+				printf("%sType: %d value: %s\n", identation, key, val.string);
+				break;
+			case HEIGHT:
+			case WIDTH:
+			case LENGTH:
+			case RADIUS:
+			case ANGLE:
+				printf("%sType: %d value: %f\n", identation, key, val.number);
+				break;
+		}
+		printProperties(props->next, identation);
+	}
+}
+
+void printPlaceable(PlaceableList * pl, int indentation) {
+	while(pl!=NULL) {
+		printPlaceableNode(pl->placeable, indentation);
+		pl = pl->next;
+	}
+}
+
+void typeToString(PlaceableType type, char* typeString) {
+	switch (type) {
+	case 0:
+		strcpy(typeString, "Row");
+		break;
+	case 1:
+		strcpy(typeString, "Cplumn");
+		break;
+	case 2:
+		strcpy(typeString, "Arrow");
+		break;
+	case 3:
+		strcpy(typeString, "Rope");
+		break;
+	case 4:
+		strcpy(typeString, "Spring");
+		break;
+	case 5:
+		strcpy(typeString, "Spacer");
+		break;
+	case 6:
+		strcpy(typeString, "Horizontal Plane");
+		break;
+	case 7:
+		strcpy(typeString, "Vertical Plane");
+		break;
+	case 8:
+		strcpy(typeString, "Block");
+		break;
+	case 9:
+		strcpy(typeString, "Car");
+		break;
+	case 10:
+		strcpy(typeString, "Ball");
+		break;
+	default:
+		break;
+	}
+}
+
+void printPlaceableNode(Placeable * placeable, int indentation) {
+	char tabs[10];
+	int i=0;
+	while(i<indentation) tabs[i++] = '\t';
+	tabs[i] = 0;
+	char typeString[20];
+	typeToString(placeable->type, typeString);
+	printf("%sPlaceable type: %s | position: %d\n", tabs, typeString, placeable->position);
+	printf("%sProperties: \n", tabs);
+	tabs[i] = '\t';
+	tabs[i+1] = 0;
+	printProperties(placeable->properties, tabs);
+	tabs[i]=0;
+	printf("%sComposable Shit: \n", tabs);
+	printPlaceable(placeable->composedPlaceables, indentation+1);
+}
+
+void printTree(Program * program) {
+	printf("PROGRAM NODE\n");
+	printPlaceableNode(program->placeable, 1);
+}
+
+
