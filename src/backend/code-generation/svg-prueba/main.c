@@ -27,8 +27,13 @@ int main(void)
 
     block_opt o = {
         .color = {255, 255, 255},
-        .height = 200,
-        .width = 200,
+        .height = 1000,
+        .width = 1000,
+    };
+
+    ball_opt ob = {
+        .color = {255, 150, 150},
+        .radius = 100,
     };
 
     draw_block(canvas, go, o);
@@ -36,13 +41,13 @@ int main(void)
     go = (general_opt) {
         .draw_from = f_CENTER,
         .starting_point = {0, 0},
-        .rotation = 360,
+        .rotation = 45,
     };
 
     o = (block_opt) {
         .color = {255, 255, 0},
-        .height = 100,
-        .width = 50,
+        .height = 250,
+        .width = 250,
     };
 
     object_t block = draw_block(canvas, go, o);
@@ -50,7 +55,7 @@ int main(void)
     go = (general_opt) {
         .draw_from = f_BOTTOM,
         .starting_point = {block.top.x, block.top.y},
-        .rotation = 0,
+        .rotation = 45,
     };
 
     o = (block_opt) {
@@ -64,7 +69,7 @@ int main(void)
     go = (general_opt) {
         .draw_from = f_CENTER,
         .starting_point = {0, 0},
-        .rotation = 0,
+        .rotation = 45,
     };
 
     o = (block_opt) {
@@ -74,6 +79,13 @@ int main(void)
     };
 
     draw_block(canvas, go, o);
+      go = (general_opt){
+        .draw_from = f_TOP,
+        .starting_point = {block.bottom.x, block.bottom.y},
+        .rotation = 45,
+    };
+
+    draw_ball(canvas, go, ob);
     
     save_canvas(canvas);
     free_canvas(canvas);

@@ -44,7 +44,7 @@ void save_canvas(canvas_t canvas_object) {
 object_t draw_block(canvas_t canvas, general_opt go, block_opt o) {
     point_t center;
     double angle = go.rotation * M_PI / 180.0;
-
+    
     switch(go.draw_from) {
         case f_TOP:
             center.x = go.starting_point.x + (o.height / 2) * sin(angle);
@@ -89,11 +89,64 @@ object_t draw_block(canvas_t canvas, general_opt go, block_opt o) {
     char* color = color_to_svg_color(o.color);
 
     svg_rectangle(canvas->canvas, o.width, o.height, topLeft.x, topLeft.y, color, "black", 1, 0, 0, go.rotation);
-    
+    //TODO: Label
     free(color);
     update_canvas_edges(canvas, (point_t) {.x = center.x + hyp, .y = center.y + hyp});
     update_canvas_edges(canvas, (point_t) {.x = center.x - hyp, .y = center.y - hyp});
 
     printf("Draw Rectangle: {top: (%d,%d), bottom: (%d,%d), left: (%d,%d), right: (%d,%d), center: (%d,%d), topLeft: (%d,%d)}\n", ans.top.x, ans.top.y, ans.bottom.x, ans.bottom.y, ans.left.x, ans.left.y, ans.right.x, ans.right.y, ans.center.x, ans.center.y, topLeft.x, topLeft.y);
+    return ans;
+}
+
+object_t draw_ball(canvas_t canvas, general_opt go, ball_opt o){
+    point_t center;
+    double angle = go.rotation * M_PI / 180.0;
+
+    switch(go.draw_from) {
+        case f_TOP:
+            center.x = go.starting_point.x + (o.radius) * sin(angle);
+            center.y = go.starting_point.y + (o.radius) * cos(angle);
+            break;
+        case f_BOTTOM:
+            center.x = go.starting_point.x - (o.radius) * sin(angle);
+            center.y = go.starting_point.y - (o.radius) * cos(angle);
+            break;
+        case f_LEFT:
+            center.x = go.starting_point.x + (o.radius) * cos(angle);
+            center.y = go.starting_point.y - (o.radius) * sin(angle);
+            break;
+        case f_RIGHT:
+            center.x = go.starting_point.x - (o.radius) * cos(angle);
+            center.y = go.starting_point.y + (o.radius) * sin(angle);
+            break;
+        case f_CENTER:
+            center.x = go.starting_point.x;
+            center.y = go.starting_point.y;
+            break;
+        default:
+            //TODO:ERROR
+        break;
+    }
+
+    object_t ans = {
+        .top =    { .x = center.x - (o.radius) *  sin(angle), .y = center.y - (o.radius) * cos(angle)},
+        .bottom = { .x = center.x + (o.radius) *  sin(angle), .y = center.y + (o.radius) * cos(angle)},
+        .right =  { .x = center.x + (o.radius) *  cos(angle), .y = center.y - (o.radius) * sin(angle)},
+        .left =   { .x = center.x - (o.radius) *  cos(angle), .y = center.y + (o.radius) * sin(angle)},
+        .center = center,
+        .rotation = angle
+    };
+
+    char* color = color_to_svg_color(o.color);
+
+    svg_circle(canvas->canvas, "black",0,color,o.radius,center.x,center.y);
+    
+    //TODO:LABEL
+
+    free(color);
+    update_canvas_edges(canvas, (point_t) {.x = center.x + (o.radius)*cos(M_PI/4), .y = center.y + (o.radius)*sin(M_PI/4)});
+    
+    printf("Draw Circle: {top: (%d,%d), bottom: (%d,%d), left: (%d,%d), right: (%d,%d), center: (%d,%d)}\n", ans.top.x, ans.top.y, ans.bottom.x, ans.bottom.y, ans.left.x, ans.left.y, ans.right.x, ans.right.y, ans.center.x, ans.center.y);
+
     return ans;
 }
