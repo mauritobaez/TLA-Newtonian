@@ -4,7 +4,7 @@
 #include<time.h>
 #include<stdlib.h>
 
-#include"svg.h"
+#include"draw.h"
 
 
 //--------------------------------------------------------
@@ -12,22 +12,71 @@
 //--------------------------------------------------------
 int main(void)
 {
-    svg* psvg;
-    psvg = svg_create(1024, 1024);
-    if(psvg == NULL)
+    canvas_t canvas = create_canvas();
+    if(canvas == NULL)
     {
-        puts("psvg is NULL");
+        puts("canvas is NULL");
         return EXIT_FAILURE;
     }
 
-    svg_rectangle(psvg, 400, 400, 0, 0, "white", "black", 2, 0, 0, 0);
-    svg_rectangle(psvg, 100, 70, 50, 50, "green", "green", 0, 0, 0, 0);
-    svg_car(psvg, 50, 50, 100, 70, "blue", "gray", 0);
-    
+    general_opt go = {
+        .draw_from = f_CENTER,
+        .starting_point = {0, 0},
+        .rotation = 0,
+    };
 
-    svg_finalize(psvg);
-    svg_save(psvg, "image.svg");
-    svg_free(psvg);
+    block_opt o = {
+        .color = {255, 255, 255},
+        .height = 200,
+        .width = 200,
+    };
+
+    draw_block(canvas, go, o);
+
+    go = (general_opt) {
+        .draw_from = f_CENTER,
+        .starting_point = {0, 0},
+        .rotation = 360,
+    };
+
+    o = (block_opt) {
+        .color = {255, 255, 0},
+        .height = 100,
+        .width = 50,
+    };
+
+    object_t block = draw_block(canvas, go, o);
+
+    go = (general_opt) {
+        .draw_from = f_BOTTOM,
+        .starting_point = {block.top.x, block.top.y},
+        .rotation = 0,
+    };
+
+    o = (block_opt) {
+        .color = {0, 255, 0},
+        .height = 20,
+        .width = 40,
+    };
+
+    draw_block(canvas, go, o);
+
+    go = (general_opt) {
+        .draw_from = f_CENTER,
+        .starting_point = {0, 0},
+        .rotation = 0,
+    };
+
+    o = (block_opt) {
+        .color = {255, 0, 0},
+        .height = 5,
+        .width = 5,
+    };
+
+    draw_block(canvas, go, o);
+    
+    save_canvas(canvas);
+    free_canvas(canvas);
 
     return EXIT_SUCCESS;
 }

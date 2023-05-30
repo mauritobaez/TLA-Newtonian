@@ -21,10 +21,12 @@ typedef enum {
   WEST
 } direction_t;
 
+typedef unsigned char byte_t;
+
 typedef struct {
-  char red;
-  char green;
-  char blue;
+  byte_t red;
+  byte_t green;
+  byte_t blue;
 } color_t;
 
 typedef enum {

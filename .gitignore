@@ -8,3 +8,5 @@ program
 **/bison-parser.c
 **/bison-parser.h
 build/
+*.out
+*.svg

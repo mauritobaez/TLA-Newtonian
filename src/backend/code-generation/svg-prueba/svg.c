@@ -13,14 +13,11 @@
 static void appendstringtosvg(svg* psvg, char* text)
 {
     int l = strlen(psvg->svg) + strlen(text) + 1;
-
     char* p = realloc(psvg->svg, l);
-
     if(p)
     {
         psvg->svg = p;
     }
-
     strcat(psvg->svg, text);
 }
 
@@ -37,36 +34,39 @@ static void appendnumbertosvg(svg* psvg, int n)
 }
 
 // Append rotation to SVG element
-static void appendrotationtosvg(svg* psvg, double rotation)
+static void appendrotationtosvg(svg* psvg, double rotation, int x, int y)
 {
-    char srotation[24];
-    sprintf(srotation, "rotate(%.2f)", rotation);
+    char srotation[64];
+    sprintf(srotation, "rotate(%.2f, %d, %d)", -rotation, x, y);
     appendstringtosvg(psvg, " transform='");
     appendstringtosvg(psvg, srotation);
     appendstringtosvg(psvg, "'");
 }
 
+static void preppendstringtosvg(svg* psvg, char *text) {
+    int l = strlen(psvg->svg) + strlen(text) + 1;
+    text = realloc(text, l);    
+
+    if(text)
+    {
+        strcat(text, psvg->svg);
+        free(psvg->svg);
+        psvg->svg = text;
+    }
+}
+
 // --------------------------------------------------------
 // FUNCTION svg_create
 // --------------------------------------------------------
-svg* svg_create(int width, int height)
+svg* svg_create()
 {
     svg* psvg = malloc(sizeof(svg));
 
     if(psvg != NULL)
     {
-        *psvg = (svg){.svg = NULL, .width = width, .height = height, .finalized = false};
-
-        psvg->svg = malloc(1);
-
+        *psvg = (svg){.svg = NULL, .finalized = false};
+        psvg->svg = malloc(2);
         sprintf(psvg->svg, "%s", "\0");
-
-        appendstringtosvg(psvg, "<svg width='");
-        appendnumbertosvg(psvg, width);
-        appendstringtosvg(psvg, "px' height='");
-        appendnumbertosvg(psvg, height);
-        appendstringtosvg(psvg, "px' xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink'>\n");
-
         return psvg;
     }
     else
@@ -78,8 +78,11 @@ svg* svg_create(int width, int height)
 // --------------------------------------------------------
 // FUNCTION svg_finalize
 // --------------------------------------------------------
-void svg_finalize(svg* psvg)
+void svg_finalize(svg* psvg, int width, int height)
 {
+    char* header = malloc(500);
+    sprintf(header, "<svg viewBox=\"%d %d %d %d\" xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink'>\n", -width/2, -height/2, width, height);
+    preppendstringtosvg(psvg, header);
     appendstringtosvg(psvg, "</svg>");
 
     psvg->finalized = true;
@@ -100,7 +103,7 @@ void svg_save(svg* psvg, char* filepath)
 {
     if(!psvg->finalized)
     {
-        svg_finalize(psvg);
+        return;
     }
 
     FILE* fp;
@@ -189,16 +192,8 @@ void svg_rectangle(svg* psvg, int width, int height, int x, int y, char* fill, c
     appendstringtosvg(psvg, "' rx='");
     appendnumbertosvg(psvg, radiusx);
     appendstringtosvg(psvg, "' \n");
-    appendrotationtosvg(psvg, rotation);
+    appendrotationtosvg(psvg, rotation, x, y);
     appendstringtosvg(psvg, " />\n");
-}
-
-// --------------------------------------------------------
-// FUNCTION svg_fill
-// --------------------------------------------------------
-void svg_fill(svg* psvg, char* Fill)
-{
-    svg_rectangle(psvg, psvg->width, psvg->height, 0, 0, Fill, Fill, 0, 0, 0, 0);
 }
 
 //----------------------------------------------------------------
@@ -243,7 +238,7 @@ void svg_ellipse(svg* psvg, int cx, int cy, int rx, int ry, char* fill, char* st
     appendstringtosvg(psvg, "' stroke-width='");
     appendnumbertosvg(psvg, strokewidth);
     appendstringtosvg(psvg, "' \n");
-    appendrotationtosvg(psvg, rotation);
+    appendrotationtosvg(psvg, rotation, cx, cy);
     appendstringtosvg(psvg, " />\n");
 }
 
@@ -285,8 +280,6 @@ void svg_arrow(svg* psvg, char* fill, char* stroke, int strokewidth, int start_x
     double angle = atan2(end_y - start_y, end_x - start_x);
     double tip_x = end_x - arrow_length * cos(angle);
     double tip_y = end_y - arrow_length * sin(angle);
-
-    printf("%.2f", angle*(180/M_PI));
 
     // Draw the arrow line
     svg_line(psvg, stroke, strokewidth, start_x, start_y, end_x, end_y);
