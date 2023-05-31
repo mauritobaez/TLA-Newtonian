@@ -38,54 +38,37 @@ int main(void)
 
     draw_block(canvas, go, o);
 
-    go = (general_opt) {
-        .draw_from = f_CENTER,
-        .starting_point = {0, 0},
-        .rotation = 45,
-    };
+    object_t block = draw_block(
+        canvas, 
+        (general_opt) { .draw_from = f_CENTER, .rotation = 10, .starting_point = {0,0}}, 
+        (block_opt) {.color={23,243,85}, .height=100, .width=50}
+    );
 
-    o = (block_opt) {
-        .color = {255, 255, 0},
-        .height = 250,
-        .width = 250,
-    };
+    object_t arr = draw_arrow(
+        canvas,
+        (general_opt) { .draw_from = f_START, .rotation = 10, .starting_point = {0,0}},
+        (arrow_opt) {.color={0,0,0}, .angle= 30, .direction= NORTH, .double_arrow = false, .reverse_arrow = true, .length = 50} 
+    );
 
-    object_t block = draw_block(canvas, go, o);
 
-    go = (general_opt) {
-        .draw_from = f_BOTTOM,
-        .starting_point = {block.top.x, block.top.y},
-        .rotation = 45,
-    };
+    draw_spring(
+        canvas,
+        (general_opt) { .draw_from = f_START, .rotation = arr.rotation, .starting_point = arr.end},
+        (rope_opt) {.color={100,100,100}, .length = 100} 
+    );
 
-    o = (block_opt) {
-        .color = {0, 255, 0},
-        .height = 20,
-        .width = 40,
-    };
+    draw_horizontal_plane(
+        canvas,
+        (general_opt) { .draw_from = f_RIGHT, .rotation = block.rotation, .starting_point = block.bottom},
+        (plane_opt) {.angle = 0, .color = {17, 130, 200}, .friction = true, .length = 200, .visible = true}
+    );
 
-    draw_block(canvas, go, o);
-
-    go = (general_opt) {
-        .draw_from = f_CENTER,
-        .starting_point = {0, 0},
-        .rotation = 45,
-    };
-
-    o = (block_opt) {
-        .color = {255, 0, 0},
-        .height = 5,
-        .width = 5,
-    };
-
-    draw_block(canvas, go, o);
-      go = (general_opt){
-        .draw_from = f_TOP,
-        .starting_point = {block.bottom.x, block.bottom.y},
-        .rotation = 45,
-    };
-
-    draw_ball(canvas, go, ob);
+    draw_vertical_plane(
+        canvas,
+        (general_opt) { .draw_from = f_RIGHT, .rotation = block.rotation, .starting_point = block.right},
+        (plane_opt) {.angle = 0, .color = {0, 0, 0}, .friction = true, .length = 200, .visible = true}
+    );
+    
     
     save_canvas(canvas);
     free_canvas(canvas);

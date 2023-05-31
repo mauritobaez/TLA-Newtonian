@@ -168,6 +168,24 @@ void svg_line(svg* psvg, char* stroke, int strokewidth, int x1, int y1, int x2, 
     appendstringtosvg(psvg, "' />\n");
 }
 
+void svg_line_dashed(svg* psvg, char* stroke, int strokewidth, int x1, int y1, int x2, int y2, char* dasharray) {
+    appendstringtosvg(psvg, "    <line stroke='");
+    appendstringtosvg(psvg, stroke);
+    appendstringtosvg(psvg, "' stroke-width='");
+    appendnumbertosvg(psvg, strokewidth);
+    appendstringtosvg(psvg, "px' y2='");
+    appendnumbertosvg(psvg, y2);
+    appendstringtosvg(psvg, "' x2='");
+    appendnumbertosvg(psvg, x2);
+    appendstringtosvg(psvg, "' y1='");
+    appendnumbertosvg(psvg, y1);
+    appendstringtosvg(psvg, "' x1='");
+    appendnumbertosvg(psvg, x1);
+    appendstringtosvg(psvg, "' stroke-dasharray='");
+    appendstringtosvg(psvg, dasharray);
+    appendstringtosvg(psvg, "' />\n");
+}
+
 //----------------------------------------------------------------
 // FUNCTION svg_rectangle
 //----------------------------------------------------------------

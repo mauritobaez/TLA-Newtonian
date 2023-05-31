@@ -33,5 +33,5 @@ void svg_triangle(svg* psvg, char* fill, char* stroke, int strokewidth, int x1, 
 void svg_arrow(svg* psvg, char* fill, char* stroke, int strokewidth, int start_x, int start_y, int end_x, int end_y);
 void svg_spring(svg* psvg, char* stroke, int strokewidth, int start_x, int start_y, int end_x, int end_y, int num_segments, int amplitude, int straight_segment);
 void svg_car(svg* psvg, int x, int y, int width, int height, char* bodyColor, char* wheelColor, double rotation);
-
+void svg_line_dashed(svg* psvg, char* stroke, int strokewidth, int x1, int y1, int x2, int y2, char* dasharray);
 #endif
