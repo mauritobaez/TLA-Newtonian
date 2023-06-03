@@ -14,6 +14,9 @@ const int main(const int argumentCount, const char ** arguments) {
 	state.result = 0;
 	state.succeed = false;
 
+	state.object_scope_stack = newList();
+	state.alignment_scope_stack_list = newList();
+
 	// Mostrar parámetros recibidos por consola.
 	for (int i = 0; i < argumentCount; ++i) {
 		LogInfo("Argumento %d: '%s'", i, arguments[i]);

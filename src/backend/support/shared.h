@@ -2,6 +2,7 @@
 #define SHARED_HEADER
 
 #include <stdio.h>
+#include "ddlADT.h"
 #include "../semantic-analysis/abstract-syntax-tree.h"
 
 // Descriptor del archivo de entrada que utiliza Bison.
@@ -48,6 +49,10 @@ typedef struct {
 	// Agregar una pila para manipular scopes.
 	// Agregar una tabla de símbolos.
 	// ...
+
+	ddlADT * object_scope_stack;
+
+	ddlADT * alignment_scope_stack_list;
 
 } CompilerState;
 
