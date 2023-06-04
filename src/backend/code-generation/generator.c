@@ -241,9 +241,6 @@ int calculate_width(Placeable *placeable) {
 			plane_opt plane_vertical_options = get_plane_options(propertyNode);
 			return plane_vertical_options.length * sin(plane_vertical_options.angle * M_PI/180) + 1;
 		case BLOCK:
-			;
-			block_opt block_options = get_block_options(propertyNode);
-			return block_options.width;
 		case CAR:
 			;
 			block_opt car_options = get_block_options(propertyNode);
@@ -256,33 +253,62 @@ int calculate_width(Placeable *placeable) {
 }
 
 
-// TODO: ARREGLAR ROW
 void handle_row(canvas_t canvas, general_opt general_options, PlaceableList* list) {
-	PlaceableList *start_list = list;
-	anchor_t anchor = BOTTOM;
+	float rotation_needed_for_draw_from[] = {-180.0f, 0.0f, -90.0f, 90.0f, 0.0f, 0.0f, 0.0f};	PlaceableList *start_list = list;
+	anchor_t anchor = TOP;
 	int total_width = 0;
+	
+	int first_children_width = 0;
+
 	while (start_list != NULL) {
-		total_width += calculate_width(start_list->placeable);
+		int child_width = calculate_width(start_list->placeable);
+		total_width += child_width;
+		if (first_children_width == 0) first_children_width += child_width;
 		start_list = start_list->next;
 	}
+
+	total_width -= first_children_width;
+
+	general_options.rotation = rotation_needed_for_draw_from[general_options.draw_from] + general_options.rotation;
+
+	point_t starting_point = general_options.starting_point;
+
+	float total_rotation = (general_options.rotation) * M_PI/180;
+
 	general_options.starting_point = (point_t) {
-		.x = general_options.starting_point.x - total_width / 2 * cos(general_options.rotation * M_PI/180),
-		.y = general_options.starting_point.y - total_width / 2 * sin(general_options.rotation * M_PI/180),
+		.x = general_options.starting_point.x - total_width / 2 * cos(total_rotation),
+		.y = general_options.starting_point.y + total_width / 2 * sin(total_rotation),
+	};
+
+
+	object_t last = {
+		.center = general_options.starting_point,
+		.top = general_options.starting_point,
+		.bottom = general_options.starting_point,
+		.right = general_options.starting_point,
+		.left = general_options.starting_point,
+		.rotation = general_options.rotation,
 	};
 
 	while (list != NULL) {
-		handle_placeable(
+		last = handle_placeable(
 			list->placeable, 
 			anchor, 
 			canvas, 
-			(object_t) { 
-				.rotation = general_options.rotation, 
-				.right = general_options.starting_point, 
-		});
+			last
+		);
+		if(IS_LINEAR_OBJECT(list->placeable->type)) {
+			last = (object_t) {
+				.center = last.end,
+				.top = last.end,
+				.bottom = last.end,
+				.right = last.end,
+				.left = last.end,
+			};
+		}
+		anchor = RIGHT_SIDE;
+		last.rotation = general_options.rotation;
 
-		int width = calculate_width(list->placeable);
-		general_options.starting_point.x += width * cos(general_options.rotation);
-		general_options.starting_point.y += width * sin(general_options.rotation);
 		list = list->next;
 	}
 }
