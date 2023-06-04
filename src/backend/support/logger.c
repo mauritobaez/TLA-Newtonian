@@ -1,6 +1,4 @@
 #include "logger.h"
-#include <stdarg.h>
-#include <stdio.h>
 
 /**
  * Implementación de "logger.h".
@@ -40,4 +38,7 @@ void LogInfo(const char * const format, ...) {
 	va_start(arguments, format);
 	Log(stdout, "[INFO ] ", format, "\n", arguments);
 	va_end(arguments);
+}
+void add_error(char* error){
+	add(state.error_list, error);
 }

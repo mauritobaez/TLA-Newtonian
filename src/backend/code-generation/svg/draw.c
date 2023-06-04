@@ -7,6 +7,12 @@ struct canvas_cdt {
     int max_x, max_y;
 };
 
+void draw_label(canvas_t canvas, point_t point, char* label, int size) {
+    if(label != NULL){
+        svg_text(canvas->canvas,point.x,point.y,"Arial",size,"black","black",label,"middle");
+    }
+}
+
 void update_canvas_edges(canvas_t canvas, point_t point) {
     canvas->max_x = abs(point.x) > canvas->max_x ? abs(point.x) : canvas->max_x;
     canvas->max_y = abs(point.y) > canvas->max_y ? abs(point.y) : canvas->max_y;
@@ -91,6 +97,7 @@ object_t draw_block(canvas_t canvas, general_opt go, block_opt o) {
     char* color = color_to_svg_color(o.color);
 
     svg_rectangle(canvas->canvas, o.width, o.height, topLeft.x, topLeft.y, color, "black", 1, 0, 0, go.rotation);
+    draw_label(canvas, ans.center, o.label, 18);
     //TODO: Label
     free(color);
     update_canvas_edges(canvas, (point_t) {.x = center.x + hyp, .y = center.y + hyp});
@@ -148,7 +155,7 @@ object_t draw_car(canvas_t canvas, general_opt go, block_opt o) {
     char* color = color_to_svg_color(o.color);
 
     svg_car(canvas->canvas, topLeft.x, topLeft.y, o.width, o.height, color, "gray", go.rotation);
-    
+    draw_label(canvas, ans.center, o.label, 18);
     free(color);
     update_canvas_edges(canvas, (point_t) {.x = center.x + hyp, .y = center.y + hyp});
     update_canvas_edges(canvas, (point_t) {.x = center.x - hyp, .y = center.y - hyp});
@@ -199,7 +206,7 @@ object_t draw_ball(canvas_t canvas, general_opt go, ball_opt o){
     char* color = color_to_svg_color(o.color);
 
     svg_circle(canvas->canvas, "black", 1, color, o.radius, center.x, center.y);
-    
+    draw_label(canvas, ans.center, o.label, 18);
     //TODO:LABEL
 
     free(color);
@@ -253,6 +260,9 @@ object_t draw_horizontal_plane(canvas_t canvas, general_opt go, plane_opt opt) {
             svg_line(canvas->canvas, color, 1, ans.left.x, ans.left.y, ans.right.x, ans.right.y);
         }
     }
+    //TODO:ANGLE LABEL
+
+    draw_label(canvas, ans.center, opt.label, 18);
 
     free(color);
     update_canvas_edges(canvas, (point_t) {.x = ans.left.x, .y = ans.left.y });
@@ -305,6 +315,7 @@ object_t draw_vertical_plane(canvas_t canvas, general_opt go, plane_opt opt) {
             svg_line(canvas->canvas, color, 1, ans.top.x, ans.top.y, ans.bottom.x, ans.bottom.y);
         }
     }
+    draw_label(canvas, ans.center, opt.label, 18);
 
     free(color);
     update_canvas_edges(canvas, (point_t) {.x = ans.top.x, .y = ans.top.y });
@@ -361,7 +372,6 @@ object_t draw_arrow(canvas_t canvas, general_opt go, arrow_opt o) {
             //TODO: error
             break;
     }
-
     object_t ans = {
         .start = { .x = start.x, .y = start.y },
         .center = { .x = start.x + (o.length / 2) * cos(angle), .y = start.y - (o.length / 2) * sin(angle) },
@@ -376,6 +386,9 @@ object_t draw_arrow(canvas_t canvas, general_opt go, arrow_opt o) {
     if(o.double_arrow || !o.reverse_arrow)
         svg_arrow(canvas->canvas, color, color, 1, ans.start.x, ans.start.y, ans.end.x, ans.end.y);
     
+    //TODO ANGLE LABEL
+    draw_label(canvas, ans.center, o.label, 18);
+
     free(color);
     update_canvas_edges(canvas, (point_t) {.x = ans.start.x, .y = ans.start.y });
     update_canvas_edges(canvas, (point_t) {.x = ans.end.x, .y = ans.end.y });
@@ -387,7 +400,6 @@ object_t draw_arrow(canvas_t canvas, general_opt go, arrow_opt o) {
 object_t draw_spring(canvas_t canvas, general_opt go, rope_opt o) {
     point_t start;    
     double angle = go.rotation * M_PI / 180.0;
-
     switch(go.draw_from) {
         case f_START:
             start.x = go.starting_point.x;
@@ -416,7 +428,8 @@ object_t draw_spring(canvas_t canvas, general_opt go, rope_opt o) {
     int dx = ans.end.x - ans.start.x;
     int length = hypot(dx, dy);
     svg_spring(canvas->canvas, color, 1, ans.start.x, ans.start.y, ans.end.x, ans.end.y, 8, length*0.1, length*0.15);
-    
+    draw_label(canvas, ans.center, o.label, 18);
+
     free(color);
     update_canvas_edges(canvas, (point_t) {.x = ans.start.x, .y = ans.start.y });
     update_canvas_edges(canvas, (point_t) {.x = ans.end.x, .y = ans.end.y });
@@ -428,7 +441,6 @@ object_t draw_spring(canvas_t canvas, general_opt go, rope_opt o) {
 object_t draw_rope(canvas_t canvas, general_opt go, rope_opt o) {
     point_t start;    
     double angle = go.rotation * M_PI / 180.0;
-
     switch(go.draw_from) {
         case f_START:
             start.x = go.starting_point.x;
@@ -456,7 +468,8 @@ object_t draw_rope(canvas_t canvas, general_opt go, rope_opt o) {
     int dx = ans.end.x - ans.start.x;
     int length = hypot(dx, dy);
     svg_line(canvas->canvas, color, 1, ans.start.x, ans.start.y, ans.end.x, ans.end.y);
-    
+    draw_label(canvas, ans.center, o.label, 18);
+
     free(color);
     update_canvas_edges(canvas, (point_t) {.x = ans.start.x, .y = ans.start.y });
     update_canvas_edges(canvas, (point_t) {.x = ans.end.x, .y = ans.end.y });
@@ -497,3 +510,4 @@ object_t draw_spacer(canvas_t canvas, general_opt go, spacer_opt o) {
     printf("Draw spacer: {start: (%d, %d), end: (%d, %d), center: (%d,%d)}\n", ans.start.x, ans.start.y, ans.end.x, ans.end.y, ans.center.x, ans.center.y);
     return ans;
 }
+

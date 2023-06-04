@@ -217,7 +217,7 @@ void svg_rectangle(svg* psvg, int width, int height, int x, int y, char* fill, c
 //----------------------------------------------------------------
 // FUNCTION svg_text
 //----------------------------------------------------------------
-void svg_text(svg* psvg, int x, int y, char* fontfamily, int fontsize, char* fill, char* stroke, char* text)
+void svg_text(svg* psvg, int x, int y, char* fontfamily, int fontsize, char* fill, char* stroke, char* text, char* text_anchor)
 {
     appendstringtosvg(psvg, "    <text x='");
     appendnumbertosvg(psvg, x);
@@ -231,7 +231,10 @@ void svg_text(svg* psvg, int x, int y, char* fontfamily, int fontsize, char* fil
     appendstringtosvg(psvg, fill);
     appendstringtosvg(psvg, "' font-size='");
     appendnumbertosvg(psvg, fontsize);
-    appendstringtosvg(psvg, "px'>");
+    appendstringtosvg(psvg, "px' ");
+    appendstringtosvg(psvg, " text-anchor='");
+    appendstringtosvg(psvg, text_anchor);
+    appendstringtosvg(psvg, "' >");
     appendstringtosvg(psvg, text);
     appendstringtosvg(psvg, "</text>\n");
 }

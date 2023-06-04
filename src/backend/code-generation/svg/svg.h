@@ -27,7 +27,7 @@ void svg_free(svg* psvg);
 void svg_circle(svg* psvg, char* stroke, int strokewidth, char* fill, int r, int cx, int cy);
 void svg_line(svg* psvg, char* stroke, int strokewidth, int x1, int y1, int x2, int y2);
 void svg_rectangle(svg* psvg, int width, int height, int x, int y, char* fill, char* stroke, int strokewidth, int radiusx, int radiusy, double rotation);
-void svg_text(svg* psvg, int x, int y, char* fontfamily, int fontsize, char* fill, char* stroke, char* text);
+void svg_text(svg* psvg, int x, int y, char* fontfamily, int fontsize, char* fill, char* stroke, char* text, char* text_anchor);
 void svg_ellipse(svg* psvg, int cx, int cy, int rx, int ry, char* fill, char* stroke, int strokewidth, double rotation);
 void svg_triangle(svg* psvg, char* fill, char* stroke, int strokewidth, int x1, int y1, int x2, int y2, int x3, int y3);
 void svg_arrow(svg* psvg, char* fill, char* stroke, int strokewidth, int start_x, int start_y, int end_x, int end_y);

@@ -8,6 +8,10 @@
 
 char* alignment_nesting_error_message= "Una Row no puede ser hijo directo de otra Row";
 
+char* unexpected_error_message = "Error inesperado";
+
+char* expected_placeable_object = "Se esperaba un objeto en el diagrama y no se encontró";
+
 #define SET_PROPERTY(property_type, options_key, property_value) \
     case property_type: \
         options.options_key = list->property->value.property_value; \
@@ -147,7 +151,9 @@ void generate_svg(){
 	canvas_t canvas = create_canvas();
 	Program* program = state.program; //Root del AST
 	if(state.program->placeable == NULL){
-		//unexpected error TODO
+		add_error(expected_placeable_object);
+		free(canvas);
+		return;
 	}
 	handle_placeable(state.program->placeable, state.program->placeable->position, canvas, (object_t) {
 		.center = {0,0},
@@ -174,7 +180,8 @@ void handle_column(canvas_t canvas, general_opt general_options, PlaceableList* 
 	anchor_t draw_from_to_anchor[] = {BOTTOM, TOP, RIGHT_SIDE, LEFT_SIDE, CENTER, CENTER, CENTER};
 	float rotation_needed_for_draw_from[] = {270.0f, 90.0f, 180.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 	if(general_options.draw_from < f_TOP || general_options.draw_from > f_END) {
-		//TODO: unexpected error
+		add_error(unexpected_error_message);
+		return;
 	}
 	anchor_t anchor = draw_from_to_anchor[general_options.draw_from];
 	object_t last = {
@@ -188,7 +195,7 @@ void handle_column(canvas_t canvas, general_opt general_options, PlaceableList* 
 	};
 	while(list!=NULL) {
 		if(IS_ALIGNMENT_OBJECT(list->placeable->type)) {
-			add(state.error_list, (elemType) alignment_nesting_error_message);
+			add_error(alignment_nesting_error_message);
 		}
 		last.rotation = general_options.rotation + ((IS_LINEAR_OBJECT(list->placeable->type)) ? rotation_needed_for_draw_from[general_options.draw_from] : 0.0f);
 		last = handle_placeable(list->placeable, anchor, canvas, last);
@@ -211,10 +218,10 @@ int calculate_width(Placeable *placeable) {
 	PropertyList * propertyNode = placeable->properties;
 	switch (placeable->type) {
 		case ROW:
-			add(state.error_list, (elemType) alignment_nesting_error_message);
+			add_error(alignment_nesting_error_message);
 		    return 0;
 		case COLUMN:
-			add(state.error_list, (elemType) alignment_nesting_error_message);
+			add_error(alignment_nesting_error_message);
 			return 0;
 		case ARROW:
 			;
@@ -385,7 +392,8 @@ object_t handle_placeable(Placeable* placeable, anchor_t anchor, canvas_t canvas
 	PlaceableList* children = placeable->composedPlaceables;
 	while(children!=NULL) {
 		if(children->placeable == NULL) {
-			//TODO unexpected error
+			add_error(expected_placeable_object);
+			return object;
 		}
 		handle_placeable(children->placeable, children->placeable->position, canvas, object);
 		children = children->next;
