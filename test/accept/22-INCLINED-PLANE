@@ -1,0 +1,18 @@
+HorizontalPlane(angle: 20) {
+    Row: Top{
+        Car,
+        Spring,
+        Car
+    },
+    HorizontalPlane(angle: -110, length: 1.7): Right-side {
+        HorizontalPlane(angle: -90, length: 4.5): Right-side {
+            Row: Top {
+                Ball {
+                    Arrow(label: "holaaaaa", color: red)
+                },
+                Spacer,
+                Ball
+            }
+        }
+    }
+}

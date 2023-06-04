@@ -356,14 +356,17 @@ void svg_car(svg* psvg, int x, int y, int width, int height, char* bodyColor, ch
     int wheelX1 = x + width * 0.2;
     int wheelX2 = x + width * 0.8;
     int wheelY = y + roofHeight - height * 0.1 + bodyHeight;
-
+    appendstringtosvg(psvg, "<g ");
+    appendrotationtosvg(psvg, rotation, x, y);
+    appendstringtosvg(psvg, ">\n");
     // Draw car body
-    svg_rectangle(psvg, width, bodyHeight, x, y + roofHeight - (height * 0.1), bodyColor, "none", 0, 10, 10, rotation);
+    svg_rectangle(psvg, width, bodyHeight, x, y + roofHeight - (height * 0.1), bodyColor, "none", 0, 10, 10, 0);
 
     // Draw car roof
-    svg_rectangle(psvg, width * 0.6, roofHeight, x + width * 0.2, y, bodyColor, "none", 0, 5, 5, rotation);
+    svg_rectangle(psvg, width * 0.6, roofHeight, x + width * 0.2, y, bodyColor, "none", 0, 5, 5, 0);
 
     // Draw car wheels
     svg_circle(psvg, wheelColor, 0, wheelColor, wheelRadius, wheelX1, wheelY);
     svg_circle(psvg, wheelColor, 0, wheelColor, wheelRadius, wheelX2, wheelY);
+    appendstringtosvg(psvg, "</g>\n");
 }
