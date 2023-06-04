@@ -1,5 +1,5 @@
 HorizontalPlane(){
-    Row : Top {
+    Row : Right-side {
         Block(width: 4.5,color: purple),
         Rope(),
         Block(height: 9.99999, color: blue )
