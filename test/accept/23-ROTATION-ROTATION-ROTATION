@@ -1,0 +1,49 @@
+HorizontalPlane(angle: 30) {
+    Block:Top {
+        HorizontalPlane(angle: 30): Top {
+            Block:Top {
+                HorizontalPlane(angle: 30): Top {
+                    Block:Top {
+                        HorizontalPlane(angle: 30): Top {
+                            Block:Top {
+                                HorizontalPlane(angle: 30): Top {
+                                    Block:Top {
+                                        HorizontalPlane(angle: 30): Top {
+                                            Block:Top {
+                                                HorizontalPlane(angle: 30): Top {
+                                                    Block:Top {
+                                                        HorizontalPlane(angle: 30): Top {
+                                                            Block:Top {
+                                                                HorizontalPlane(angle: 30): Top {
+                                                                    Block:Top {
+                                                                        HorizontalPlane(angle: 30): Top {
+                                                                            Block:Top {
+                                                                                HorizontalPlane(angle: 30): Top {
+                                                                                    Block:Top {
+                                                                                        HorizontalPlane(angle: 30): Top {
+                                                                                            Block:Top {
+                                                                                                
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
