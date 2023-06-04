@@ -23,8 +23,10 @@ char* color_to_svg_color(color_t color) {
 }
 
 canvas_t create_canvas() {
-    canvas_t canvas_object = calloc(1, sizeof(struct canvas_cdt));
+    canvas_t canvas_object = malloc(sizeof(struct canvas_cdt));
     canvas_object->canvas = svg_create();
+    canvas_object->max_x = 1;
+    canvas_object->max_y = 1;
     return canvas_object;
 }
 
@@ -134,7 +136,7 @@ object_t draw_car(canvas_t canvas, general_opt go, block_opt o) {
         .bottom = { .x = center.x + (o.height / 2) * sin(angle), .y = center.y + (o.height / 2) * cos(angle)},
         .right =  { .x = center.x + (o.width / 2) *  cos(angle), .y = center.y - (o.width / 2)  * sin(angle)},
         .left =   { .x = center.x - (o.width / 2) *  cos(angle), .y = center.y + (o.width / 2)  * sin(angle)},
-        .rotation = angle
+        .rotation = go.rotation
     };
     double hyp = hypot(o.width/2, o.height/2);
     double alpha = atan2(o.width/2, o.height/2);
@@ -191,7 +193,7 @@ object_t draw_ball(canvas_t canvas, general_opt go, ball_opt o){
         .right =  { .x = center.x + (o.radius) *  cos(angle), .y = center.y - (o.radius) * sin(angle)},
         .left =   { .x = center.x - (o.radius) *  cos(angle), .y = center.y + (o.radius) * sin(angle)},
         .center = center,
-        .rotation = angle
+        .rotation = go.rotation
     };
 
     char* color = color_to_svg_color(o.color);
@@ -202,6 +204,7 @@ object_t draw_ball(canvas_t canvas, general_opt go, ball_opt o){
 
     free(color);
     update_canvas_edges(canvas, (point_t) {.x = center.x + o.radius, .y = center.y + o.radius});
+    update_canvas_edges(canvas, (point_t) {.x = center.x - o.radius, .y = center.y - o.radius});
     
     printf("Draw Circle: {top: (%d,%d), bottom: (%d,%d), left: (%d,%d), right: (%d,%d), center: (%d,%d)}\n", ans.top.x, ans.top.y, ans.bottom.x, ans.bottom.y, ans.left.x, ans.left.y, ans.right.x, ans.right.y, ans.center.x, ans.center.y);
 
@@ -239,7 +242,7 @@ object_t draw_horizontal_plane(canvas_t canvas, general_opt go, plane_opt opt) {
         .right =  { .x = center.x + (opt.length/2) *  cos(angle), .y = center.y - (opt.length/2) * sin(angle)},
         .left =   { .x = center.x - (opt.length/2) *  cos(angle), .y = center.y + (opt.length/2) * sin(angle)},
         .center = center,
-        .rotation = angle
+        .rotation = angle_degrees
     };
     
     if (opt.visible) {
@@ -291,7 +294,7 @@ object_t draw_vertical_plane(canvas_t canvas, general_opt go, plane_opt opt) {
         .bottom =  { .x = center.x + (opt.length / 2) * sin(angle), .y = center.y + (opt.length / 2) * cos(angle)},
         .top =   { .x = center.x - (opt.length / 2) * sin(angle), .y = center.y - (opt.length / 2) * cos(angle)},
         .center = center,
-        .rotation = angle
+        .rotation = angle_degrees
     };
     
     if (opt.visible) {

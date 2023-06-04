@@ -73,7 +73,7 @@ whitespace		[ \f\n\r\t\v]
 "yellow"                                    { return DefaultColorAction(yytext, 255, 255, 0); }
 "orange"                                    { return DefaultColorAction(yytext, 255, 140, 0); }
 "purple"                                    { return DefaultColorAction(yytext, 128, 0, 128); }
-\"(\\.|[^\"])*\"                            { return StringAction(yytext); }
+\"(\\.|[^\"])*\"                            { return StringAction(yytext, yyleng); }
 "Top"                                       { return AnchorAction(yytext, TOP); }
 "Bottom"                                    { return AnchorAction(yytext, BOTTOM); }
 "Left-side"                                 { return AnchorAction(yytext, LEFT_SIDE); }

@@ -31,8 +31,8 @@ block_opt get_block_options(PropertyList* list) {
 	while(list != NULL){
 		switch (list->property->key){
 			SET_PROPERTY(COLOR_PROP, color, color)
-			SET_PROPERTY(HEIGHT, height, number)
-			SET_PROPERTY(WIDTH, width, number)
+			SET_PROPERTY(HEIGHT, height, number * 100)
+			SET_PROPERTY(WIDTH, width, number * 100)
 			SET_PROPERTY(LABEL, label, string)
 		}
 		list = list->next;
@@ -50,10 +50,11 @@ ball_opt get_ball_options(PropertyList* list) {
 		switch(list->property->key) {
 			SET_PROPERTY(COLOR_PROP, color, color)
 			SET_PROPERTY(LABEL, label, string)
-			SET_PROPERTY(RADIUS, radius, number)
+			SET_PROPERTY(RADIUS, radius, number * 100)
 		}
 		list = list->next;
 	}
+	return options;
 }
 
 plane_opt get_plane_options(PropertyList* list){
@@ -71,7 +72,7 @@ plane_opt get_plane_options(PropertyList* list){
 			SET_PROPERTY(COLOR_PROP, color, color)
 			SET_PROPERTY(LABEL, label, string)
 			SET_PROPERTY(ANGLE_LABEL, angle_label, string)
-			SET_PROPERTY(LENGTH, length, number)
+			SET_PROPERTY(LENGTH, length, number * 100)
 			SET_PROPERTY(FRICTION, friction, boolean)
 			SET_PROPERTY(VISIBLE, visible, boolean)
 			SET_PROPERTY(ANGLE, angle, number)
@@ -103,10 +104,11 @@ arrow_opt get_arrow_options(PropertyList* list) {
 			SET_PROPERTY(DIRECTION, direction, direction)
 			SET_PROPERTY(DOUBLE_ARROW, double_arrow, boolean)
 			SET_PROPERTY(REVERSE_ARROW, reverse_arrow, boolean)
-			SET_PROPERTY(LENGTH, length, number)			
+			SET_PROPERTY(LENGTH, length, number * 100)			
 		}
 		list = list->next;
 	}
+	return options;
 }
 
 rope_opt get_rope_options(PropertyList* list){
@@ -119,7 +121,7 @@ rope_opt get_rope_options(PropertyList* list){
 		switch(list->property->key){
 			SET_PROPERTY(COLOR_PROP, color, color)
 			SET_PROPERTY(LABEL, label, string)
-			SET_PROPERTY(LENGTH, length, number)
+			SET_PROPERTY(LENGTH, length, number * 100)
 		}
 		list = list->next;
 	}
@@ -132,7 +134,7 @@ spacer_opt get_spacer_options(PropertyList* list) {
 	};
 	while(list != NULL){
 		switch(list->property->key){
-			SET_PROPERTY(LENGTH, length, number)
+			SET_PROPERTY(LENGTH, length, number * 100)
 		}
 		list = list->next;
 	}
@@ -168,25 +170,13 @@ void generate_svg(){
 }
 
 void handle_column(canvas_t canvas, general_opt general_options, PlaceableList* list){
-	anchor_t anchor;
-	switch(general_options.draw_from) {
-		case f_TOP:
-			anchor = BOTTOM;
-			break;
-		case f_BOTTOM:
-			anchor = TOP;
-			break;
-		case f_LEFT:
-			anchor = RIGHT_SIDE;
-			break;
-		case f_RIGHT:
-			anchor = LEFT_SIDE;
-			break;
-		case f_CENTER:
-		default:
-			anchor = CENTER;
-			break;
+	
+	anchor_t draw_from_to_anchor[] = {BOTTOM, TOP, RIGHT_SIDE, LEFT_SIDE, CENTER, CENTER, CENTER};
+	float rotation_needed_for_draw_from[] = {270.0f, 90.0f, 180.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+	if(general_options.draw_from < f_TOP || general_options.draw_from > f_END) {
+		//TODO: unexpected error
 	}
+	anchor_t anchor = draw_from_to_anchor[general_options.draw_from];
 	object_t last = {
 		.center = general_options.starting_point,
 		.top = general_options.starting_point,
@@ -200,6 +190,7 @@ void handle_column(canvas_t canvas, general_opt general_options, PlaceableList* 
 		if(IS_ALIGNMENT_OBJECT(list->placeable->type)) {
 			add(state.error_list, (elemType) alignment_nesting_error_message);
 		}
+		last.rotation = general_options.rotation + ((IS_LINEAR_OBJECT(list->placeable->type)) ? rotation_needed_for_draw_from[general_options.draw_from] : 0.0f);
 		last = handle_placeable(list->placeable, anchor, canvas, last);
 		if(IS_LINEAR_OBJECT(list->placeable->type)) {
 			last = (object_t) {
@@ -211,6 +202,7 @@ void handle_column(canvas_t canvas, general_opt general_options, PlaceableList* 
 			};
 		}
 		last.rotation = general_options.rotation;
+		list = list->next;
 	}
 		
 }
@@ -225,30 +217,39 @@ int calculate_width(Placeable *placeable) {
 			add(state.error_list, (elemType) alignment_nesting_error_message);
 			return 0;
 		case ARROW:
+			;
 			arrow_opt arrow_options = get_arrow_options(propertyNode);
 			return arrow_options.length *  cos(arrow_options.angle * M_PI/180);
 		case ROPE:
+			;
 			rope_opt rope_options = get_rope_options(propertyNode);
 			return rope_options.length;
 		case SPRING:
+			;
 			rope_opt spring_options = get_rope_options(propertyNode);
 			return spring_options.length;
 		case SPACER:
+			;
 			spacer_opt spacer_options = get_spacer_options(propertyNode);
 			return spacer_options.length;
 		case HORIZONTAL_PLANE:
+			;
 			plane_opt plane_horizontal_options= get_plane_options(propertyNode);
 			return plane_horizontal_options.length * cos(plane_horizontal_options.angle * M_PI/180);
 		case VERTICAL_PLANE:
+			;
 			plane_opt plane_vertical_options = get_plane_options(propertyNode);
 			return plane_vertical_options.length * sin(plane_vertical_options.angle * M_PI/180) + 1;
 		case BLOCK:
+			;
 			block_opt block_options = get_block_options(propertyNode);
 			return block_options.width;
 		case CAR:
+			;
 			block_opt car_options = get_block_options(propertyNode);
 			return car_options.width;
 		case BALL:
+			;
 			ball_opt ball_options = get_ball_options(propertyNode);
 			return ball_options.radius * 2;
 	}
@@ -335,38 +336,47 @@ object_t handle_placeable(Placeable* placeable, anchor_t anchor, canvas_t canvas
 			
 			break;
 		case ARROW:
+			;
 			arrow_opt arrow_options = get_arrow_options(propertyNode);
 			object = draw_arrow(canvas, general_options, arrow_options);
 			break;
 		case ROPE:
+			;
 			rope_opt rope_options = get_rope_options(propertyNode);
 			object = draw_rope(canvas, general_options, rope_options);
 			break;
 		case SPRING:
+			;
 			rope_opt spring_options = get_rope_options(propertyNode);
 			object = draw_spring(canvas, general_options, spring_options);
 			break;
 		case SPACER:
+			;
 			spacer_opt spacer_options = get_spacer_options(propertyNode);
 			object = draw_spacer(canvas, general_options, spacer_options);	
 			break;
 		case HORIZONTAL_PLANE:
+			;
 			plane_opt plane_horizontal_options= get_plane_options(propertyNode);
 			object = draw_horizontal_plane(canvas,general_options, plane_horizontal_options);
 			break;
 		case VERTICAL_PLANE:
+			;
 			plane_opt plane_vertical_options= get_plane_options(propertyNode);
 			object = draw_vertical_plane(canvas,general_options, plane_vertical_options);
 			break;
 		case BLOCK:
+			;
 			block_opt block_options = get_block_options(propertyNode);
 			object = draw_block(canvas, general_options, block_options);
 			break;
 		case CAR:
+			;
 			block_opt car_options = get_block_options(propertyNode);
 			object = draw_car(canvas, general_options, car_options);
 			break;
 		case BALL:
+			;
 			ball_opt ball_options = get_ball_options(propertyNode);
 			object = draw_ball(canvas, general_options, ball_options);
 			break;

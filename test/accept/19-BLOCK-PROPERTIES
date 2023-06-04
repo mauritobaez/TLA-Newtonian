@@ -10,7 +10,7 @@ Ball(
     ) : Top,
     HorizontalPlane : Bottom {
         Cylinder(
-            radius: -3,
+            radius: 3,
             color: yellow,
             label: "A"
         )

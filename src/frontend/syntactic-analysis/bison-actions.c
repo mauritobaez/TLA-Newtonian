@@ -158,10 +158,10 @@ void FreePlaceableList(PlaceableList* placeableList) {
 }
 
 void FreeProperty(Property* property) {
-	/* TODO: está bien hacer esto? (si es q el malloc esta en flex)
+	//hay un malloc en flex cuando es string
 	if((property->key == LABEL || property->key == ANGLE_LABEL) && (property->value.string != NULL)) {
 		free(property->value.string);
-	}*/
+	}
 	free(property);
 }
 
@@ -261,7 +261,7 @@ void printPlaceableNode(Placeable * placeable, int indentation) {
 	tabs[i+1] = 0;
 	printProperties(placeable->properties, tabs);
 	tabs[i]=0;
-	printf("%sComposable Shit: \n", tabs);
+	printf("%sComposed Placeables: \n", tabs);
 	printPlaceable(placeable->composedPlaceables, indentation+1);
 }
 

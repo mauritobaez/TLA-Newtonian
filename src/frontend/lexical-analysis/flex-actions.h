@@ -124,7 +124,7 @@ token CustomColorAction(const char *lexeme);
 token DefaultColorAction(const char *lexeme, const char r_val, const char g_val, const char b_val);
 
 //Function for String
-token StringAction(const char *lexeme);
+token StringAction(const char *lexeme, const int length);
 
 //Function for Anchor
 token AnchorAction(const char *lexeme, const anchor_t anchor);

@@ -5,8 +5,8 @@ Car(
     label: "El Rayo Macqueen"
 ) {
     Block(
-        height: -3,
-        width: 0,
+        height: 3,
+        width: 10,
         color: green,
         label: "A"
     ) : Top,
