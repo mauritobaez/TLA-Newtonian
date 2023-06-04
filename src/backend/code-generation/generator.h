@@ -6,4 +6,6 @@
 
 void Generator(int result);
 
+void generate_svg();
+
 #endif

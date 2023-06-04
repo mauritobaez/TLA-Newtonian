@@ -63,6 +63,9 @@ add_executable(Compiler
 	src/backend/code-generation/generator.c
 	src/backend/domain-specific/calculator.c
 	src/backend/support/logger.c
+	src/backend/support/ddlADT.c
+	src/backend/code-generation/svg/draw.c
+	src/backend/code-generation/svg/svg.c
 	src/frontend/lexical-analysis/flex-actions.c
 	src/frontend/lexical-analysis/flex-scanner.c
 	src/frontend/syntactic-analysis/bison-actions.c
@@ -72,4 +75,4 @@ add_executable(Compiler
 )
 
 # Linkear el proyecto y sus librerías.
-target_link_libraries(Compiler)
+target_link_libraries(Compiler m)

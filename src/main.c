@@ -2,6 +2,7 @@
 #include "backend/support/logger.h"
 #include "backend/support/shared.h"
 #include "frontend/syntactic-analysis/bison-parser.h"
+#include "frontend/syntactic-analysis/bison-actions.h"
 #include <stdio.h>
 
 // Estado de la aplicación.
@@ -14,8 +15,8 @@ const int main(const int argumentCount, const char ** arguments) {
 	state.result = 0;
 	state.succeed = false;
 
-	state.object_scope_stack = newList();
-	state.alignment_scope_stack_list = newList();
+	state.error_list = newList();
+	state.warning_list = newList();
 
 	// Mostrar parámetros recibidos por consola.
 	for (int i = 0; i < argumentCount; ++i) {
@@ -31,7 +32,7 @@ const int main(const int argumentCount, const char ** arguments) {
 			// inicial de la gramática satisfactoriamente.
 			if (state.succeed) {
 				LogInfo("La compilacion fue exitosa.");
-				Generator(state.result);
+				generate_svg();
 			}
 			else {
 				LogError("Se produjo un error en la aplicacion.");
@@ -48,5 +49,10 @@ const int main(const int argumentCount, const char ** arguments) {
 			LogError("Error desconocido mientras se ejecutaba el analizador Bison (codigo %d).", result);
 	}
 	LogInfo("Fin.");
+
+	freeList(state.error_list);
+	freeList(state.warning_list);
+	FreeProgram(state.program);
+	
 	return result;
 }

@@ -49,12 +49,13 @@ typedef struct {
 	// Agregar una pila para manipular scopes.
 	// Agregar una tabla de símbolos.
 	// ...
+	ddlADT error_list;
 
-	ddlADT * object_scope_stack;
-
-	ddlADT * alignment_scope_stack_list;
+	ddlADT warning_list;
 
 } CompilerState;
+
+
 
 // El estado se define e inicializa en el archivo "main.c".
 extern CompilerState state;

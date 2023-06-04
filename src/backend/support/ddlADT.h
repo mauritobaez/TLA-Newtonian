@@ -31,7 +31,7 @@ elemType next(ddlADT list);
 
 /*Es necesario llamarlo luego de un next, y borra lo que devuelve dicho next, NO ES POSIBLE
 LLARMARLO DOS VECES SEGUIDAS, es necesario realizar un next antes */
-void remove(ddlADT list);
+void removeDDL(ddlADT list);
 
 /* Libera la memoria reservada por la lista */
 void freeList(ddlADT list);

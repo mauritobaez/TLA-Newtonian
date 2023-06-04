@@ -173,7 +173,7 @@ void printProperties(PropertyList* props, char* identation) {
 		switch(key) {
 			case COLOR_PROP:
 				// habría que ver de traducir algo como 'purple' al RGB
-				printf("%sType: %d value: %c %c %c\n", identation,key,val.color.red,val.color.blue,val.color.blue);
+				printf("%sType: %d value: %d %d %d\n", identation,key,val.color.red,val.color.blue,val.color.blue);
 				break;
 			case DIRECTION: 
 				printf("%sType: %d value: %d\n", identation, key, val.direction);

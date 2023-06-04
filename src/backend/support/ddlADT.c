@@ -86,7 +86,7 @@ void remove(ddlADT list)
         {
             list->toRemove->next->prev = list->toRemove->prev;
         }
-        memfree(list->toRemove);
+        free(list->toRemove);
         list->toRemove = NULL;
         list->size -= 1;
     }
