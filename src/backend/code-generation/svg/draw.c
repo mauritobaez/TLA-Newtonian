@@ -49,6 +49,27 @@ void save_canvas(canvas_t canvas_object) {
     svg_save(canvas_object->canvas, "image.svg");
 }
 
+void draw_angle_label(canvas_t canvas, int cx, int cy, int r, double angle_start, double angle_end, char* label) {
+    double angle_start_rad = angle_start * M_PI / 180.0;
+    double angle_end_rad = angle_end * M_PI / 180.0;
+
+    int start_x = cx + r * cos(angle_start_rad);
+    int start_y = cy - r * sin(angle_start_rad);
+
+    int middle_x = cx + r * cos((angle_start_rad + angle_end_rad) / 2);
+    int middle_y = cy - r * sin((angle_start_rad + angle_end_rad) / 2);
+
+    int end_x = cx + r * cos(angle_end_rad);
+    int end_y = cy - r * sin(angle_end_rad);
+
+    svg_arc(canvas->canvas, "black", 1, cx, cy, r, angle_start, angle_end);
+    svg_line_dashed(canvas->canvas, "black", 1, cx, cy, start_x, start_y, "5,5");
+    draw_label(canvas, (point_t){.x = middle_x, .y= middle_y}, label, 18);
+
+    update_canvas_edges(canvas, (point_t){.x=cx + r, .y=cy + r});
+    update_canvas_edges(canvas, (point_t){.x=cx - r, .y=cy - r});
+}
+
 object_t draw_block(canvas_t canvas, general_opt go, block_opt o) {
     point_t center;
     double angle = go.rotation * M_PI / 180.0;
@@ -260,7 +281,10 @@ object_t draw_horizontal_plane(canvas_t canvas, general_opt go, plane_opt opt) {
             svg_line(canvas->canvas, color, 1, ans.left.x, ans.left.y, ans.right.x, ans.right.y);
         }
     }
-    //TODO:ANGLE LABEL
+
+    if(opt.angle_label != NULL) {
+        draw_angle_label(canvas, ans.left.x, ans.left.y, opt.length/5, go.rotation, angle_degrees, opt.angle_label);
+    }
 
     draw_label(canvas, ans.center, opt.label, 18);
 
@@ -315,6 +339,11 @@ object_t draw_vertical_plane(canvas_t canvas, general_opt go, plane_opt opt) {
             svg_line(canvas->canvas, color, 1, ans.top.x, ans.top.y, ans.bottom.x, ans.bottom.y);
         }
     }
+
+    if(opt.angle_label != NULL) {
+        draw_angle_label(canvas, ans.bottom.x, ans.bottom.y, opt.length/5, go.rotation + 90.0, angle_degrees + 90.0, opt.angle_label);
+    }
+
     draw_label(canvas, ans.center, opt.label, 18);
 
     free(color);
@@ -386,7 +415,11 @@ object_t draw_arrow(canvas_t canvas, general_opt go, arrow_opt o) {
     if(o.double_arrow || !o.reverse_arrow)
         svg_arrow(canvas->canvas, color, color, 1, ans.start.x, ans.start.y, ans.end.x, ans.end.y);
     
-    //TODO ANGLE LABEL
+    
+    if(o.angle_label != NULL) {
+        draw_angle_label(canvas, ans.start.x, ans.start.y, o.length/5, angle_degrees - o.angle, angle_degrees, o.angle_label);
+    }
+
     draw_label(canvas, ans.center, o.label, 18);
 
     free(color);

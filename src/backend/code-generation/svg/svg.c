@@ -370,3 +370,38 @@ void svg_car(svg* psvg, int x, int y, int width, int height, char* bodyColor, ch
     svg_circle(psvg, wheelColor, 0, wheelColor, wheelRadius, wheelX2, wheelY);
     appendstringtosvg(psvg, "</g>\n");
 }
+
+// ----------------------------------------------------------
+// FUNCTION svg_arc
+// ----------------------------------------------------------
+void svg_arc(svg* psvg, char* stroke, int stroke_width, int cx, int cy, int r, double angle_start, double angle_end) {
+    double angle_start_rad = angle_start * M_PI / 180.0;
+    double angle_end_rad = angle_end * M_PI / 180.0;
+
+    int start_x = cx + r * cos(angle_start_rad);
+    int start_y = cy - r * sin(angle_start_rad);
+
+    int end_x = cx + r * cos(angle_end_rad);
+    int end_y = cy - r * sin(angle_end_rad);
+
+    appendstringtosvg(psvg, "    <path d=' M ");
+    appendnumbertosvg(psvg, start_x);
+    appendstringtosvg(psvg, " ");
+    appendnumbertosvg(psvg, start_y);
+    appendstringtosvg(psvg, " A ");
+    appendnumbertosvg(psvg, r);
+    appendstringtosvg(psvg, " ");
+    appendnumbertosvg(psvg, r);
+    appendstringtosvg(psvg, " 0");
+    appendstringtosvg(psvg, angle_end - angle_start <= 180.0 ? " 0" : " 1");
+    appendstringtosvg(psvg, angle_end >= 0.0 ? " 0" : " 1");
+    appendnumbertosvg(psvg, end_x);
+    appendstringtosvg(psvg, " ");
+    appendnumbertosvg(psvg, end_y);
+    appendstringtosvg(psvg, "' stroke='");
+    appendstringtosvg(psvg, stroke);
+    appendstringtosvg(psvg, "' stroke-width='");
+    appendnumbertosvg(psvg, stroke_width);
+    appendstringtosvg(psvg, "px' fill='transparent' />\n");
+
+}
