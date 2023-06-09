@@ -5,7 +5,7 @@
 #include <string.h>
 #include <malloc.h>
 
-
+void validateRepeatedProperties(PropertyList* propertyList);
 void printProperties(PropertyList* props,  char* identation);
 void printPlaceable(PlaceableList * pl, int indentation);
 void printPlaceableNode(Placeable * placeable, int indentation);
@@ -52,7 +52,30 @@ Program* ProgramAction(Placeable* placeable) {
 	Program* program = calloc(1, sizeof(Program));
 	program->placeable = placeable;
 	state.program = program;
-	printTree(program);
+	if(state.program->placeable == NULL){
+		error_warning* ew = malloc(sizeof(error_warning));
+		ew->linenumber = 0;
+		ew->type = NO_PLACEABLE;
+		add(state.error_list, ew);
+	}
+	if(getSize(state.error_list)){
+		state.succeed = false;
+		toBegin(state.error_list);
+		while(hasNext(state.error_list)){
+			error_warning * nextError = next(state.error_list);
+			LogError("Error of type %d in line: %d\n", nextError->type, nextError->linenumber);
+		}
+	} else {
+		if(getSize(state.warning_list)) {
+			toBegin(state.warning_list);
+			while(hasNext(state.warning_list)){
+				error_warning * nextWarning = next(state.warning_list);
+				LogWarning("Warning of type %d in line: %d\n", nextWarning->type, nextWarning->linenumber);
+			}
+		}
+		printTree(program);
+	}
+	
 	return program;
 }
 
@@ -79,6 +102,7 @@ PropertyList* PlaceablePropertyAction(Property* property, PropertyList* property
 	PropertyList* propertyListNode = calloc(1, sizeof(PropertyList));
 	propertyListNode->next = propertyList;
 	propertyListNode->property = property;
+	validateRepeatedProperties(propertyList);
 	return propertyListNode;
 }
 
@@ -99,14 +123,27 @@ Property* PropertyAction(PropertyType key, void* value) {
 			break;
 		case LABEL:
 		case ANGLE_LABEL:
-			// quizás deba ser un strncpy
 			property->value.string = *((char**) value);
+			break;
+		case ANGLE:
+			if(property->value.number >360.0f || property->value.number < -360.0f) {
+				error_warning* ew = malloc(sizeof(error_warning));
+				ew->linenumber = yylineno;
+				ew->type = INVALID_ANGLE;
+                add(state.error_list, ew);
+            }
+			property->value.number = *((float*) value);
 			break;
 		case HEIGHT:
 		case WIDTH:
 		case LENGTH:
 		case RADIUS:
-		case ANGLE:
+			if(property->value.number<0.0f) {
+				error_warning* ew = malloc(sizeof(error_warning));
+				ew->linenumber = yylineno;
+				ew->type = INVALID_ANGLE;
+                add(state.error_list, ew);
+			}
 			property->value.number = *((float*) value);
 			break;
 		
@@ -268,6 +305,19 @@ void printPlaceableNode(Placeable * placeable, int indentation) {
 void printTree(Program * program) {
 	printf("PROGRAM NODE\n");
 	printPlaceableNode(program->placeable, 1);
+}
+
+void validateRepeatedProperties(PropertyList* propertyList) {
+	char types[AMOUNT_PROPERTIES] = {0};
+	while(propertyList!=NULL) {
+		if(types[propertyList->property->key]++) {
+			error_warning* ew = malloc(sizeof(error_warning));
+			ew->linenumber = yylineno;
+			ew->type = REPEATED_PROPERTIES;
+			add(state.warning_list, ew);
+		}
+		propertyList = propertyList->next;
+	}
 }
 
 

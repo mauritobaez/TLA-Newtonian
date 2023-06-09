@@ -14,6 +14,8 @@ void LogDebug(const char * const format, ...);
 
 void LogError(const char * const format, ...);
 
+void LogWarning(const char * const format, ...);
+
 void LogErrorRaw(const char * const format, ...);
 
 void LogInfo(const char * const format, ...);

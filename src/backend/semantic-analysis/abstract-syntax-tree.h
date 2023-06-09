@@ -62,6 +62,8 @@ typedef enum {
 	ANGLE,			//number
 } PropertyType;
 
+#define AMOUNT_PROPERTIES 13
+
 typedef union {
 	float number;
 	direction_t direction;

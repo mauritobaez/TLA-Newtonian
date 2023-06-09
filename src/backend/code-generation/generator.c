@@ -150,11 +150,6 @@ spacer_opt get_spacer_options(PropertyList* list) {
 void generate_svg(){
 	canvas_t canvas = create_canvas();
 	Program* program = state.program; //Root del AST
-	if(state.program->placeable == NULL){
-		add_error(expected_placeable_object);
-		free(canvas);
-		return;
-	}
 	handle_placeable(state.program->placeable, state.program->placeable->position, canvas, (object_t) {
 		.center = {0,0},
 		.top = {0,0},
@@ -163,15 +158,7 @@ void generate_svg(){
 		.left = {0,0},
 		.rotation = 0.0,
 	});
-	if(getSize(state.error_list)>0){
-		toBegin(state.error_list);
-		while(hasNext(state.error_list)){
-			char* nextError = next(state.error_list);
-			LogError("Error: %s", nextError);
-		}
-	}else{
-		save_canvas(canvas);
-	}
+	save_canvas(canvas);
 	free_canvas(canvas);
 }
 

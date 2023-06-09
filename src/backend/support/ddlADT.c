@@ -98,6 +98,7 @@ void freeList(ddlADT list)
     while (head != NULL)
     {
         TList aux = head->next;
+        free(head->elem);
         free(head);
         head = aux;
     }

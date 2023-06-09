@@ -7,6 +7,18 @@
 
 typedef struct ddlCDT *ddlADT;
 
+typedef enum {
+    INVALID_ANGLE,
+    INVALID_VALUE,
+    REPEATED_PROPERTIES,
+    NO_PLACEABLE
+} error_warning_type;
+
+typedef struct {
+    int linenumber;
+    error_warning_type type;
+} error_warning;
+
 typedef void *elemType;
 
 // Retorna una lista vacía.
