@@ -50,9 +50,11 @@ const int main(const int argumentCount, const char ** arguments) {
 	}
 	LogInfo("Fin.");
 
+	if(state.succeed) 
+		FreeProgram(state.program);
+
 	freeList(state.error_list);
 	freeList(state.warning_list);
-	FreeProgram(state.program);
 	
 	return result;
 }

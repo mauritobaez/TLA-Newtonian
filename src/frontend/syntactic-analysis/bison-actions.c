@@ -1,15 +1,13 @@
-#include "../../backend/domain-specific/calculator.h"
-#include "../../backend/support/logger.h"
-#include "bison-actions.h"
-#include <stdio.h>
-#include <string.h>
-#include <malloc.h>
 
-void validateRepeatedProperties(PropertyList* propertyList);
-void printProperties(PropertyList* props,  char* identation);
-void printPlaceable(PlaceableList * pl, int indentation);
-void printPlaceableNode(Placeable * placeable, int indentation);
+#include "bison-actions.h"
+
 void printTree(Program * program);
+
+// Funciones aparte para validar ciertos errores/warnings
+void checkForNestedAlignments(PlaceableList* list);
+void validateRepeatedProperties(PropertyList* propertyList);
+
+void ErrorWarningMessage(error_warning_type type, int line, problem problem);
 
 /**
  * Implementación de "bison-grammar.h".
@@ -59,18 +57,18 @@ Program* ProgramAction(Placeable* placeable) {
 		add(state.error_list, ew);
 	}
 	if(getSize(state.error_list)){
-		state.succeed = false;
+		state.succeed = false;			// No llega a generateSVG() en main
 		toBegin(state.error_list);
 		while(hasNext(state.error_list)){
 			error_warning * nextError = next(state.error_list);
-			LogError("Error of type %d in line: %d\n", nextError->type, nextError->linenumber);
+			ErrorWarningMessage(nextError->type, nextError->linenumber, ERROR);
 		}
 	} else {
 		if(getSize(state.warning_list)) {
 			toBegin(state.warning_list);
 			while(hasNext(state.warning_list)){
 				error_warning * nextWarning = next(state.warning_list);
-				LogWarning("Warning of type %d in line: %d\n", nextWarning->type, nextWarning->linenumber);
+				ErrorWarningMessage(nextWarning->type, nextWarning->linenumber, WARNING);
 			}
 		}
 		printTree(program);
@@ -88,6 +86,8 @@ Placeable* PlaceableAction(PlaceableHeader* header, anchor_t position, Placeable
 		placeable->properties = header->properties;
 		free(header);
 	}
+	// No podemos tener inmediatamente otra ROW o COLUMN
+	if(placeable->type==ROW || placeable->type==COLUMN) checkForNestedAlignments(mainBody);
 	return placeable;
 }
 
@@ -126,13 +126,14 @@ Property* PropertyAction(PropertyType key, void* value) {
 			property->value.string = *((char**) value);
 			break;
 		case ANGLE:
+			property->value.number = *((float*) value);
+			printf("\n\nChecking angle %f\n\n",  property->value.number);
 			if(property->value.number >360.0f || property->value.number < -360.0f) {
 				error_warning* ew = malloc(sizeof(error_warning));
 				ew->linenumber = yylineno;
 				ew->type = INVALID_ANGLE;
                 add(state.error_list, ew);
             }
-			property->value.number = *((float*) value);
 			break;
 		case HEIGHT:
 		case WIDTH:
@@ -152,17 +153,39 @@ Property* PropertyAction(PropertyType key, void* value) {
 	return property;
 }
 
+
+
 PlaceableList* PlaceableBodyAction(Placeable* placeable, PlaceableList* placeableList) {
 	PlaceableList* placeableListNode = calloc(1, sizeof(PlaceableList));
 	placeableListNode->next = placeableList;
 	placeableListNode->placeable = placeable;
+	if(placeable->type==ROW || placeable->type==COLUMN) checkForNestedAlignments(placeableList);
 	return placeableListNode;
 }
 
+
+
+// No se puede tener un column directamente dentro de otra row o column
+// Tampoco una row directamente dentro de otra row o column
+void checkForNestedAlignments(PlaceableList* list) {
+	PlaceableList* aux = list;
+	while(aux!=NULL) {
+		if(aux->placeable->type==ROW || aux->placeable->type==COLUMN){
+			error_warning* ew = malloc(sizeof(error_warning));
+			ew->linenumber = yylineno;
+			ew->type = NESTED_ALIGNMENTS;
+			add(state.error_list, ew);
+		}
+		aux = aux->next;
+	}
+}
+
+// Funciones para recursivamente hacer los free de toda memoria allocada (allocar: Proveniente de un malloc, está bastante cuerda)
 void FreePlaceable(Placeable* placeable);
 void FreePropertyList(PropertyList* propertyList);
 void FreePlaceableList(PlaceableList* placeableList);
 void FreeProperty(Property* property);
+void FreeProgram(Program* program);
 
 void FreeProgram(Program* program) {
 	if(program->placeable != NULL)
@@ -202,6 +225,10 @@ void FreeProperty(Property* property) {
 	free(property);
 }
 
+// Funciones para recursivamente hacer un print del árbol (AST) que se crea
+void printProperties(PropertyList* props,  char* identation);
+void printPlaceable(PlaceableList * pl, int indentation);
+void printPlaceableNode(Placeable * placeable, int indentation);
 
 void printProperties(PropertyList* props, char* identation) {
 	if(props!=NULL) {
@@ -209,7 +236,6 @@ void printProperties(PropertyList* props, char* identation) {
 		PropertyValue val = props->property->value;
 		switch(key) {
 			case COLOR_PROP:
-				// habría que ver de traducir algo como 'purple' al RGB
 				printf("%sType: %d value: %d %d %d\n", identation,key,val.color.red,val.color.blue,val.color.blue);
 				break;
 			case DIRECTION: 
@@ -223,7 +249,6 @@ void printProperties(PropertyList* props, char* identation) {
 				break;
 			case LABEL:
 			case ANGLE_LABEL:
-				// quizás deba ser un strncpy
 				printf("%sType: %d value: %s\n", identation, key, val.string);
 				break;
 			case HEIGHT:
@@ -321,3 +346,32 @@ void validateRepeatedProperties(PropertyList* propertyList) {
 }
 
 
+void ErrorWarningMessage(error_warning_type type, int line, problem problem) {
+	char* ew_message;
+	switch (type)
+	{
+	case INVALID_ANGLE:
+		ew_message = "Ángulo Inválido";
+		break;
+	case INVALID_VALUE:
+		ew_message = "Valor Inválido";
+		break;
+	case REPEATED_PROPERTIES:
+		ew_message = "Propiedades Repetidas";
+		break;
+	case NO_PLACEABLE:
+		ew_message = "Falta Un Placeable Inicial";
+		break;
+	case NESTED_ALIGNMENTS:
+		ew_message = "Alineamientos Anidados";
+		break;
+	default:
+		break;
+	}
+	if(problem == ERROR) {
+		LogError("Error of type %s in line: %d\n", ew_message, line);
+	} else if(problem == WARNING) {
+		LogWarning("Warning of type %s in line: %d\n", ew_message, line);
+
+	}
+}

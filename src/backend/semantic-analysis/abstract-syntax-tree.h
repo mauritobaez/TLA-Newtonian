@@ -103,4 +103,22 @@ typedef struct {
 	Placeable * placeable;
 } Program;
 
+typedef enum {
+    INVALID_ANGLE,
+    INVALID_VALUE,
+    REPEATED_PROPERTIES,
+    NO_PLACEABLE,
+    NESTED_ALIGNMENTS
+} error_warning_type;
+
+typedef struct {
+    int linenumber;
+    error_warning_type type;
+} error_warning;
+
+typedef enum {
+	ERROR,
+	WARNING
+} problem;
+
 #endif

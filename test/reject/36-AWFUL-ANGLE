@@ -1,0 +1,24 @@
+Block() {
+    Arrow(
+        direction: north,
+        angle: 30000,
+        angle-label: "30°",
+        length: 45.7,
+        color: red,
+        label: "F",
+        reverse-arrow: false,
+        double-arrow: false,
+    ) : Top,
+    Row {
+        Arrow(
+            direction: left,
+            angle: 0.5,
+            angle-label: "",
+            length: 0,
+            color: #56FF78,
+            label: "AAAAA",
+            reverse-arrow: true,
+            double-arrow: true
+        )
+    }
+}
