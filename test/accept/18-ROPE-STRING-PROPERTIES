@@ -1,6 +1,6 @@
 Block() {
     Spring(
-        length: -2,
+        length: 2,
         color: black,
         label: "-2",
     ) : Bottom,
