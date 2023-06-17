@@ -127,7 +127,6 @@ Property* PropertyAction(PropertyType key, void* value) {
 			break;
 		case ANGLE:
 			property->value.number = *((float*) value);
-			printf("\n\nChecking angle %f\n\n",  property->value.number);
 			if(property->value.number >360.0f || property->value.number < -360.0f) {
 				error_warning* ew = malloc(sizeof(error_warning));
 				ew->linenumber = yylineno;
@@ -139,13 +138,13 @@ Property* PropertyAction(PropertyType key, void* value) {
 		case WIDTH:
 		case LENGTH:
 		case RADIUS:
+			property->value.number = *((float*) value);
 			if(property->value.number<0.0f) {
 				error_warning* ew = malloc(sizeof(error_warning));
 				ew->linenumber = yylineno;
-				ew->type = INVALID_ANGLE;
+				ew->type = INVALID_VALUE;
                 add(state.error_list, ew);
 			}
-			property->value.number = *((float*) value);
 			break;
 		
 	}
@@ -351,19 +350,19 @@ void ErrorWarningMessage(error_warning_type type, int line, problem problem) {
 	switch (type)
 	{
 	case INVALID_ANGLE:
-		ew_message = "Ángulo Inválido";
+		ew_message = "Invalid Angle";
 		break;
 	case INVALID_VALUE:
-		ew_message = "Valor Inválido";
+		ew_message = "Invalid Value";
 		break;
 	case REPEATED_PROPERTIES:
-		ew_message = "Propiedades Repetidas";
+		ew_message = "Repeated Properties";
 		break;
 	case NO_PLACEABLE:
-		ew_message = "Falta Un Placeable Inicial";
+		ew_message = "Initial Placeable is Missing";
 		break;
 	case NESTED_ALIGNMENTS:
-		ew_message = "Alineamientos Anidados";
+		ew_message = "Nested Alignments";
 		break;
 	default:
 		break;

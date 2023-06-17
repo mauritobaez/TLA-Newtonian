@@ -393,7 +393,7 @@ void svg_arc(svg* psvg, char* stroke, int stroke_width, int cx, int cy, int r, d
     appendstringtosvg(psvg, " ");
     appendnumbertosvg(psvg, r);
     appendstringtosvg(psvg, " 0");
-    appendstringtosvg(psvg, angle_end - angle_start <= 180.0 ? " 0" : " 1");
+    appendstringtosvg(psvg, fmod(fabs(angle_end - angle_start), 360.0) <= 180.0 ? " 0" : " 1");
     appendstringtosvg(psvg, angle_end >= 0.0 ? " 0" : " 1");
     appendnumbertosvg(psvg, end_x);
     appendstringtosvg(psvg, " ");

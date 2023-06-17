@@ -1,0 +1,11 @@
+HorizontalPlane(){
+    Row: Bottom{
+        Car(width: -5, height: -5){
+            Arrow(direction: right, color: red, label:"V=100 m/s"): Center
+        },
+        Spacer(),
+        Car(width: -9, height: -38){
+            Arrow(direction: left, color: green, label:"V=150 m/s"): Center
+        }
+    }
+}
