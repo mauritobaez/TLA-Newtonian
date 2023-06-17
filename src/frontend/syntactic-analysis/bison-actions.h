@@ -19,17 +19,22 @@
 
 Program* ProgramAction(Placeable* placeable);
 
-// Función para alginments y objects
+// Función para alignments y objects
 Placeable* PlaceableAction(PlaceableHeader* header, anchor_t position, PlaceableList* mainBody);
 
-//
+// Función auxiliar para guardar el tipo y las propiedades de un objeto, el header es deshecho cuando se junta con el body
 PlaceableHeader* PlaceableHeaderAction(PlaceableType type, PropertyList* propertiesBody);
 
-// Función para las properties
+// Función utilizada al concatenar todas las properties de una acción
 PropertyList* PlaceablePropertyAction(Property* property, PropertyList* propertyList);
+
+// Función la cual le atribuye el valor establecido por el usuario a una property de un objeto
 Property* PropertyAction(PropertyType key, void* value);
+
+// Función en la cual se junta el header con lo que está dentro del objeto
 PlaceableList* PlaceableBodyAction(Placeable* placeable, PlaceableList* placeableList);
 
+//Tipica funcion free para que no haya memory leaks
 void FreeProgram(Program* program);
 
 #endif

@@ -14,7 +14,7 @@ const int main(const int argumentCount, const char ** arguments) {
 	state.program = NULL;
 	state.result = 0;
 	state.succeed = false;
-
+	//Inicializamos las listas de errores y warning
 	state.error_list = newList();
 	state.warning_list = newList();
 
@@ -32,6 +32,7 @@ const int main(const int argumentCount, const char ** arguments) {
 			// inicial de la gramática satisfactoriamente.
 			if (state.succeed) {
 				LogInfo("La compilacion fue exitosa.");
+				//Correr la funcion que usa el state.program para generar el SVG
 				generate_svg();
 			}
 			else {

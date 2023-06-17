@@ -7,7 +7,7 @@
  */
 
 
-
+//Macro para facilitar la modificacion de propiedades de un placeable
 #define SET_PROPERTY(property_type, options_key, property_value) \
     case property_type: \
         options.options_key = list->property->value.property_value; \
@@ -18,9 +18,11 @@
 #define IS_ALIGNMENT_OBJECT(placeable_type) \
 	(placeable_type == ROW || placeable_type == COLUMN)
 
+//Funcion principal que se encarga de llamar a la funciones de generacion de codigo para cada tipo de placeable 
+//Esto lo realiza de manera recursiva, llamando la funcion para los hijos
 object_t handle_placeable(Placeable* placeable, anchor_t anchor, canvas_t canvas, object_t parent);
 
-
+//Estas fuciones de options devuelve el struct completado con las properties presentes y las que no estan presentes con sus defaults
 block_opt get_block_options(PropertyList* list) {
 	block_opt options = (block_opt) {
 		.color = {255,255,255},
@@ -142,7 +144,8 @@ spacer_opt get_spacer_options(PropertyList* list) {
 	return options;
 }
 
-
+//Funcion principal, crea el ADT del SVG y empieza la llamada al handle_placeable desde la raiz del AST
+//Luego libera todos los recursos usados y guarda el archivo SVG escrito
 void generate_svg(){
 	canvas_t canvas = create_canvas();
 	Program* program = state.program; //Root del AST
@@ -159,7 +162,7 @@ void generate_svg(){
 }
 
 void handle_column(canvas_t canvas, general_opt general_options, PlaceableList* list){
-	
+	//Esto sirve para rapidamente saber cuanto hay que rotar a la columna para dibujar desde cada anchor
 	anchor_t draw_from_to_anchor[] = {BOTTOM, TOP, RIGHT_SIDE, LEFT_SIDE, CENTER, CENTER, CENTER};
 	float rotation_needed_for_draw_from[] = {270.0f, 90.0f, 180.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 
@@ -174,9 +177,10 @@ void handle_column(canvas_t canvas, general_opt general_options, PlaceableList* 
 		.rotation = general_options.rotation,
 	};
 	while(list!=NULL) {
+		//Seteamos la rotacion en base a donde se puso la position
 		last.rotation = general_options.rotation + ((IS_LINEAR_OBJECT(list->placeable->type)) ? rotation_needed_for_draw_from[general_options.draw_from] : 0.0f);
 		last = handle_placeable(list->placeable, anchor, canvas, last);
-		if(IS_LINEAR_OBJECT(list->placeable->type)) {
+		if(IS_LINEAR_OBJECT(list->placeable->type)) {//Si el que dibujo es un linear object hacemos que se dibuje desde la punta
 			last = (object_t) {
 				.center = last.end,
 				.top = last.end,
@@ -190,7 +194,7 @@ void handle_column(canvas_t canvas, general_opt general_options, PlaceableList* 
 	}
 		
 }
-
+//Funcion para como dice el nombre calcular el width de un object especifico para el manejo correcto de las filas
 int calculate_width(Placeable *placeable) {
 	PropertyList * propertyNode = placeable->properties;
 	switch (placeable->type) {
@@ -297,7 +301,7 @@ object_t handle_placeable(Placeable* placeable, anchor_t anchor, canvas_t canvas
 	general_opt general_options = {
 		.rotation = parent.rotation
 	};
-
+	//Seteamos las opciones con las que se dibujaran en base al padre
 	switch(anchor) {
 		case TOP:
 			general_options.draw_from = f_BOTTOM;
@@ -328,6 +332,7 @@ object_t handle_placeable(Placeable* placeable, anchor_t anchor, canvas_t canvas
 	}
 	PropertyList * propertyNode = placeable->properties;
 	object_t object;
+	//Revisamos el tipo, obtenemos las properties y llamamos a la funcion correspondiente de draw.c
 	switch(placeable->type){
 		case ROW:
 			handle_row(canvas, general_options, placeable->composedPlaceables);
@@ -387,6 +392,7 @@ object_t handle_placeable(Placeable* placeable, anchor_t anchor, canvas_t canvas
 	}
 
 	PlaceableList* children = placeable->composedPlaceables;
+	//Iteramos a los hijos y llamamos de manera recursiva a la funcion
 	while(children!=NULL) {
 		handle_placeable(children->placeable, children->placeable->position, canvas, object);
 		children = children->next;

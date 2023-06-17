@@ -64,6 +64,7 @@ Program* ProgramAction(Placeable* placeable) {
 			ErrorWarningMessage(nextError->type, nextError->linenumber, ERROR);
 		}
 	} else {
+		// Si hay errores, no muestra los warnings
 		if(getSize(state.warning_list)) {
 			toBegin(state.warning_list);
 			while(hasNext(state.warning_list)){
@@ -76,6 +77,7 @@ Program* ProgramAction(Placeable* placeable) {
 	
 	return program;
 }
+
 
 Placeable* PlaceableAction(PlaceableHeader* header, anchor_t position, PlaceableList* mainBody) {
 	Placeable* placeable = calloc(1, sizeof(Placeable));
@@ -90,6 +92,7 @@ Placeable* PlaceableAction(PlaceableHeader* header, anchor_t position, Placeable
 	if(placeable->type==ROW || placeable->type==COLUMN) checkForNestedAlignments(mainBody);
 	return placeable;
 }
+
 
 PlaceableHeader* PlaceableHeaderAction(PlaceableType type, PropertyList* propertiesBody) {
 	PlaceableHeader* header = calloc(1, sizeof(PlaceableHeader));
@@ -106,8 +109,10 @@ PropertyList* PlaceablePropertyAction(Property* property, PropertyList* property
 	return propertyListNode;
 }
 
+
 Property* PropertyAction(PropertyType key, void* value) {
 	Property* property = calloc(1, sizeof(Property));
+	// El property->value es un unión, depende del tipo se le atribuye un tipo de valor u otro
 	switch (key) {
 		case COLOR_PROP:
 			property->value.color = *((color_t*) value);
@@ -163,9 +168,7 @@ PlaceableList* PlaceableBodyAction(Placeable* placeable, PlaceableList* placeabl
 }
 
 
-
-// No se puede tener un column directamente dentro de otra row o column
-// Tampoco una row directamente dentro de otra row o column
+// Únicamente revisa los hijos directos
 void checkForNestedAlignments(PlaceableList* list) {
 	PlaceableList* aux = list;
 	while(aux!=NULL) {
@@ -275,7 +278,7 @@ void typeToString(PlaceableType type, char* typeString) {
 		strcpy(typeString, "Row");
 		break;
 	case 1:
-		strcpy(typeString, "Cplumn");
+		strcpy(typeString, "Column");
 		break;
 	case 2:
 		strcpy(typeString, "Arrow");
@@ -331,6 +334,7 @@ void printTree(Program * program) {
 	printPlaceableNode(program->placeable, 1);
 }
 
+//Funcion para validar que no se esten repitiendo las propiedades y si esta ocurriendo mostrar un warning
 void validateRepeatedProperties(PropertyList* propertyList) {
 	char types[AMOUNT_PROPERTIES] = {0};
 	while(propertyList!=NULL) {
@@ -344,7 +348,7 @@ void validateRepeatedProperties(PropertyList* propertyList) {
 	}
 }
 
-
+//Funcion para imprimir el warning sobre las properties
 void ErrorWarningMessage(error_warning_type type, int line, problem problem) {
 	char* ew_message;
 	switch (type)

@@ -4,8 +4,7 @@
 #include "../support/shared.h"
 #include "./svg/draw.h"
 
-void Generator(int result);
-
+//Funcion root que genera todo el codigo SVG
 void generate_svg();
 
 #endif

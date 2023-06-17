@@ -208,9 +208,6 @@
 %type <radiusPropertyKeyValue> radiusPropertyKeyValue
 %type <visiblePropertyKeyValue> visiblePropertyKeyValue
 
-// Reglas de asociatividad y precedencia (de menor a mayor).
-/* %left ADD SUB
-%left MUL DIV */
 
 // El símbolo inicial de la gramatica.
 %start initial
