@@ -22,7 +22,10 @@
 //Esto lo realiza de manera recursiva, llamando la funcion para los hijos
 object_t handle_placeable(Placeable* placeable, anchor_t anchor, canvas_t canvas, object_t parent);
 
-//Estas fuciones de options devuelve el struct completado con las properties presentes y las que no estan presentes con sus defaults
+/*
+	Estas funciones de options devuelve el struct completado con las properties presentes, 
+	y las que no estan presentes con sus defaults
+*/
 block_opt get_block_options(PropertyList* list) {
 	block_opt options = (block_opt) {
 		.color = {255,255,255},
@@ -234,9 +237,12 @@ int calculate_width(Placeable *placeable) {
 	}
 }
 
-
+//Funcion para dibujar los elemntos en una row. Precalcula el ancho total (total_width) 
+// que van a ocupar los mismos uno al lado del otro, se traslada la mitad del total_width
+// hacia la izquierda (tienendo en cuenta la rotacion actual) y empieza a dibujar los hijos desde ahí.
 void handle_row(canvas_t canvas, general_opt general_options, PlaceableList* list) {
-	float rotation_needed_for_draw_from[] = {-180.0f, 0.0f, -90.0f, 90.0f, 0.0f, 0.0f, 0.0f};	PlaceableList *start_list = list;
+	float rotation_needed_for_draw_from[] = {-180.0f, 0.0f, -90.0f, 90.0f, 0.0f, 0.0f, 0.0f};	
+	PlaceableList *start_list = list;
 	anchor_t anchor = TOP;
 	int total_width = 0;
 	

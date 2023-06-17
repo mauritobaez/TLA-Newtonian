@@ -129,7 +129,7 @@
 %token <token> DOUBLE_ARROW_KEY
 %token <token> RADIUS_KEY
 %token <token> VISIBLE_KEY
-%token <token> YYUNDEF
+%token <token> U_ERROR
 
 %token <color> COLOR
 %token <string> STRING 

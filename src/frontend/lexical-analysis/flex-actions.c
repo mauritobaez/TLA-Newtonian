@@ -297,7 +297,7 @@ token DirectionAction(const char * lexeme, const direction_t direction) {
 
 token UnknownPatternAction(const char * lexeme, const int length) {
 	LogDebug("UnknownPatternAction: '%s' (length = %d).", lexeme, length);
-	yylval.token = YYUNDEF;
+	yylval.token = U_ERROR;
 	// Al emitir este token, el compilador aborta la ejecución.
 	return YYUNDEF;
 }

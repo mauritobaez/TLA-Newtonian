@@ -72,6 +72,8 @@ typedef union {
 	char* string;
 } PropertyValue;
 
+//Nodos del AST
+
 struct PlaceableList{
 	Placeable* placeable;
 	PlaceableList* next;
