@@ -38,7 +38,7 @@ Luego se deberá abrir la solución generada `bin\Compiler.sln` con el IDE _Micr
 
 ## Ejecución
 
-Para compilar un programa, primero cree un archivo con código soportado por Newtonian, para ver cómo escribir el mismo, consulte la documentación
+Para compilar un programa, primero cree un archivo con código soportado por Newtonian, para ver cómo escribir el mismo, consulte la documentación (archivo 'Documentation-Newtonian.pdf' en este directorio)
 
 Luego, ejecute el compilador desde el directorio raíz del proyecto, o desde cualquier otro lugar indicando el path hacia el script `start.sh` y pasando por parámetro el path hacia el programa a compilar:
 
