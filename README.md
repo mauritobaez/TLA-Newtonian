@@ -52,7 +52,7 @@ En Windows:
 user@machine:path/ $ script\start.bat program
 ```
 
-De estar correctamente formado, se obtendrá un svg en la carpeta principal del proyecto. Se puede visualizar con cualquier Navegador WEB 
+De estar correctamente formado, se obtendrá un archivo svg "image.svg" en la carpeta principal del proyecto. Se puede visualizar con cualquier Navegador WEB.
 
 ## Testing
 

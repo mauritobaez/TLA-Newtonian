@@ -256,7 +256,8 @@ token DefaultColorAction(const char *lexeme, const char r_val, const char g_val,
 //Function for String
 token StringAction(const char *lexeme, const int length){
     char* string = calloc(1, length + 1);
-    strncpy(string, (char*) lexeme, length);
+
+    strncpy(string, (char*) lexeme +1, length-2); //El +1 y -2 son para sacar las comillas "" inicial y final
     LogDebug("StringPatternAction: '%s'",lexeme);
     yylval.string = string;
     return STRING;
