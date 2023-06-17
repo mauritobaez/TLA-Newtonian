@@ -158,7 +158,7 @@ PlaceableList* PlaceableBodyAction(Placeable* placeable, PlaceableList* placeabl
 	PlaceableList* placeableListNode = calloc(1, sizeof(PlaceableList));
 	placeableListNode->next = placeableList;
 	placeableListNode->placeable = placeable;
-	if(placeable->type==ROW || placeable->type==COLUMN) checkForNestedAlignments(placeableList);
+	if(placeable->type==ROW || placeable->type==COLUMN) checkForNestedAlignments(placeable->composedPlaceables);
 	return placeableListNode;
 }
 
